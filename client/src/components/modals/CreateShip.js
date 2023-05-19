@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Modal, Form, Button, FormControl } from 'react-bootstrap'
 import { Context } from '../..'
 import { fetchTypes } from '../../http/typeAPI'
@@ -7,11 +7,16 @@ import { fetchTypes } from '../../http/typeAPI'
 
 const CreateShip = ({ show, onHide }) => {
     const { ship, type } = useContext(Context)
+    const [name, setName] = useState('');
+    const [number, setNumber] = useState('');
+    const [typeId, setTypeId] = useState('');
+    const [length, setLength] = useState('');
+    const [priceSummer, setPriceSummer] = useState('');
     useEffect(() => {
 
         fetchTypes().then(data => {
             if (type) {
-               type.setTypes(data.rows);
+                type.setTypes(data.rows);
             }
         });
     }, []);
