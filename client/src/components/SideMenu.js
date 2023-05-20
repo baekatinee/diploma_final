@@ -2,14 +2,12 @@ import React, { useContext } from 'react';
 import {
   CDBSidebar,
   CDBSidebarContent,
-  CDBSidebarFooter,
   CDBSidebarHeader,
   CDBSidebarMenu,
   CDBSidebarMenuItem,
 } from 'cdbreact';
 import { NavLink } from 'react-router-dom';
 import { Context } from '..';
-import { HiLogout, HiCog } from 'react-icons/hi';
 import { ADMIN_ROUTE, DASHBOARD_ROUTE, HOME_ROUTE, LOGIN_ROUTE, CLIENTS_ROUTE, PAYMENTS_ROUTE, ARCHIVE_ROUTE } from '../utils/consts';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, Link } from 'react-router-dom';
@@ -23,6 +21,7 @@ const Sidebar = observer(() => {
     user.setUser({});
     user.setIsAuth(false);
     await navigate(HOME_ROUTE);
+    localStorage.removeItem('token')
     console.log(user.isAuth);
   };
   return (

@@ -6,7 +6,7 @@ import { deleteClient, updateClient } from '../http/clientAPI';
 import EditClient from './modals/EditClient';
 const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
   const navigate = useNavigate();
-  // const [clientUpdateVisible, setUpdateClientVisible] = useState(false)
+  const [clientUpdateVisible, setUpdateClientVisible] = useState(false)
   useEffect(() => {
     
       try {
@@ -34,10 +34,10 @@ const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
       {isAllClients ?
         <td style={{ width: "100%" }} className='d-flex justify-content-around'> <Button
           variant="outline-dark"
-          // onClick={() => setUpdateClientVisible(true)}
+          onClick={() => setUpdateClientVisible(true)}
           >
           Изменить</Button>{' '}
-          {/* <EditClient show={clientUpdateVisible} onHide={() => setUpdateClientVisible(false)}></EditClient> */}
+          <EditClient key={client.id} client={client} show={clientUpdateVisible} onHide={() => setUpdateClientVisible(false)}></EditClient>
           <Button variant="outline-danger" onClick={deleteOne}>Удалить</Button></td>
         : ""
       }

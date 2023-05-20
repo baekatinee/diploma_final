@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Container, Card, Row, Form, Button, Badge, Table } from 'react-bootstrap'
 import checkedStatus from '../img/checked.png'
 import { observer } from 'mobx-react-lite';
@@ -10,15 +10,12 @@ import { fetchShips } from '../http/shipAPI';
 import RentalList from '../components/RentalList';
 
 const ClientPage = observer(() => {
-    const { client, rental, ship } = useContext(Context)
+    const {  rental, ship } = useContext(Context);
     const { clientId } = useParams();
+    const [client, setClientData] = useState('');
 
     useEffect(() => {
-        fetchOneClient(clientId).then(data => {
-            if (client) {
-                client.setClients(data.rows);
-            }
-        });
+        fetchOneClient(clientId).then(data => setClientData(data));
         fetchRentals().then(data => {
             if (rental) {
                 rental.setRentals(data.rows);
@@ -32,12 +29,12 @@ const ClientPage = observer(() => {
     }, []);
     const deleteOne = async () => {
         try {
-          await deleteClient(client.id);
+            await deleteClient(client.id);
         } catch (error) {
-          console.error(error);
-          alert('Произошла ошибка при удалении клиента');
+            console.error(error);
+            alert('Произошла ошибка при удалении клиента');
         }
-      };
+    };
 
     const status = "Оплачено"
     return (

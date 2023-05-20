@@ -8,9 +8,9 @@ export const fetchOneClient = async (id) => {
     const { data } = await $authHost.get('api/client', { id })
     return data
 }
-export const updateClient = async (id) => {
-    const { data } = await $authHost.put('api/client', { id })
-    return data
+export const updateClient = async (id, updatedData) => {
+    const { data } = await $authHost.put(`api/client/${id}`, updatedData);
+    return data;
 }
 export const deleteClient = async (id) => {
     const { data } = await $authHost.delete(`api/client/${id}`)
