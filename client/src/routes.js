@@ -6,7 +6,8 @@ import Payments from "./pages/Payments"
 import Dashboard from "./pages/Dashboard"
 import HomePage from "./pages/HomePage"
 import ArchiveClients from "./pages/ArchiveClients"
-import { HOME_ROUTE,ADMIN_ROUTE, ARCHIVE_ROUTE, CLIENTS_ROUTE, CLIENT_ROUTE, DASHBOARD_ROUTE, PAYMENTS_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from "./utils/consts"
+import { HOME_ROUTE,ADMIN_ROUTE, ARCHIVE_ROUTE, CLIENTS_ROUTE, CLIENT_ROUTE, DASHBOARD_ROUTE, PAYMENTS_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, SHIPS_ROUTE } from "./utils/consts"
+import ShipsPage from "./pages/ShipsPage"
 
 
 export const authRoutes = [
@@ -35,6 +36,10 @@ export const authRoutes = [
     {
         path: PAYMENTS_ROUTE,
         Component: Payments
+    },
+    {
+        path: SHIPS_ROUTE,
+        Component: ShipsPage
     },
 ]
 export const publicRoutes = [

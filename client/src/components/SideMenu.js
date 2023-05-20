@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -8,27 +8,38 @@ import {
 } from 'cdbreact';
 import { NavLink } from 'react-router-dom';
 import { Context } from '..';
-import { ADMIN_ROUTE, DASHBOARD_ROUTE, HOME_ROUTE, LOGIN_ROUTE, CLIENTS_ROUTE, PAYMENTS_ROUTE, ARCHIVE_ROUTE } from '../utils/consts';
+import { ADMIN_ROUTE, DASHBOARD_ROUTE, HOME_ROUTE, LOGIN_ROUTE, CLIENTS_ROUTE, PAYMENTS_ROUTE, ARCHIVE_ROUTE, SHIPS_ROUTE } from '../utils/consts';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, Link } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap';
 
 const Sidebar = observer(() => {
   const navigate = useNavigate();
   const { user } = useContext(Context);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const exit = async () => {
-    localStorage.removeItem('token')
+  const exit = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
+  const handleConfirm = async () => {
+    localStorage.removeItem('token');
     user.setUser({});
     user.setIsAuth(false);
     await navigate(HOME_ROUTE);
-    localStorage.removeItem('token')
-    console.log(user.isAuth);
+    localStorage.removeItem('token');
+    setShowConfirmation(false);
   };
+
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       <CDBSidebar className="" textColor="black" backgroundColor="white">
         <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-          <Link  style={{ textDecoration: 'none', color:"#000" }} to={user.isAuth ? DASHBOARD_ROUTE : HOME_ROUTE}>Sailing Center</Link>
+          <Link style={{ textDecoration: 'none', color: "#000" }} to={user.isAuth ? DASHBOARD_ROUTE : HOME_ROUTE}>Sailing Center</Link>
         </CDBSidebarHeader>
         <CDBSidebarContent className="sidebar-content">
           {user.isAuth ? (
@@ -40,18 +51,17 @@ const Sidebar = observer(() => {
                 <CDBSidebarMenuItem icon="table">Клиенты</CDBSidebarMenuItem>
               </NavLink>
               <NavLink to={PAYMENTS_ROUTE} activeclassname="activeClicked">
-                <CDBSidebarMenuItem icon="user">Оплаты</CDBSidebarMenuItem>
+                <CDBSidebarMenuItem icon="credit-card">Оплаты</CDBSidebarMenuItem>
               </NavLink>
               <NavLink to={ADMIN_ROUTE} activeclassname="activeClicked">
-                <CDBSidebarMenuItem icon="address-book">
-                  Админ панель
-                </CDBSidebarMenuItem>
+                <CDBSidebarMenuItem icon="address-book">Админ панель</CDBSidebarMenuItem>
               </NavLink>
-              <NavLink onClick={exit} activeclassname="activeClicked">
-                <CDBSidebarMenuItem icon="times" >
-                  Выйти
-                </CDBSidebarMenuItem>
+              <NavLink to={SHIPS_ROUTE} activeclassname="activeClicked">
+                <CDBSidebarMenuItem icon="ship">Судна</CDBSidebarMenuItem>
               </NavLink>
+              <CDBSidebarMenuItem icon="times" onClick={exit}>
+                Выйти
+              </CDBSidebarMenuItem>
             </CDBSidebarMenu>
           ) : (
             <CDBSidebarMenu>
@@ -61,8 +71,22 @@ const Sidebar = observer(() => {
             </CDBSidebarMenu>
           )}
         </CDBSidebarContent>
-
       </CDBSidebar>
+
+      <Modal show={showConfirmation} onHide={handleCancel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Подтверждение выхода</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Вы уверены, что хотите выйти?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleConfirm}>
+            Выйти
+          </Button>
+          <Button variant="secondary" onClick={handleCancel}>
+            Отмена
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 });

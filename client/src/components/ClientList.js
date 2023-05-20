@@ -47,7 +47,7 @@ const ClientList = observer(() => {
       <tbody>
         {console.log(client.clients)}
         {client.clients && Array.isArray(client.clients) && client.clients.map(client =>
-          <ClientItem key={client.id} isAllClients={isAllClients} iterator={iterator++} key={client.id} client={client} handleDelete={handleDelete}>
+          <ClientItem key={client.id} isAllClients={isAllClients} iterator={iterator++} client={client} handleDelete={handleDelete}>
           </ClientItem>
         )}
       </tbody>

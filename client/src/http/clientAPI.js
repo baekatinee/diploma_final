@@ -1,4 +1,4 @@
-import { $authHost, $host } from "./index";
+import { $authHost } from "./index";
 
 export const createClient = async (client) => {
     const { data } = await $authHost.post('api/client', client )
