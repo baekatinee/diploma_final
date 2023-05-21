@@ -37,11 +37,12 @@ const ShipList = observer(() => {
                     <th>Стоимость лето</th>
                     <th>Стомиость зима</th>
                     <th>Парковочное место</th>
+                    <th>Действия</th>
                 </tr>
             </thead>
             <tbody>
-                {console.log(ship.ships)}
-                {ship.ships && Array.isArray(ship.ships) && ship.ships.map(shipItem =>
+                {console.log(ship.Ships)}
+                {ship.Ships && Array.isArray(ship.Ships) && ship.Ships.map(shipItem =>
                     <ShipItem key={shipItem.id} iterator={iterator++} ship={shipItem} handleDelete={handleDelete}>
                     </ShipItem>
                 )}
