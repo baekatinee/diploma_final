@@ -1,21 +1,33 @@
 import { makeAutoObservable } from 'mobx'
 export default class ClientCrm {
     constructor() {
-      this._status=[
-        {
-            id:1, name:"Оплачено"
-        },
-        {
-            id:2, name:"Долг"
-        },
+        this._status = [
+            {
+                id: 1, name: "Оплачено"
+            },
+            {
+                id: 2, name: "Долг"
+            },
 
-      ]
-      this._selectedStatus={}
-      this._clients=[]
+        ]
+        this._page = 1
+        this._totalCount = 0
+        this._limit = 3
+        this._selectedStatus = {}
+        this._clients = []
         makeAutoObservable(this)//////будет следить за изменениями этих переменных
     }
     setStatus(status) {
         this._status = status;
+    }
+    setPage(page) {
+        this._page = page;
+    }
+    setTotalCount(totalCount) {
+        this._totalCount = totalCount;
+    }
+    setLimit(limit) {
+        this._limit = limit;
     }
     setClients(clients) {
         console.log("Setting clients:", clients);
@@ -25,12 +37,21 @@ export default class ClientCrm {
         this._selectedStatus = status;
     }
     get selectedStatus() {
-       return this._selectedStatus;
+        return this._selectedStatus;
     }
-    get status(){
+    get page() {
+        return this._page;
+    }
+    get totalCount() {
+        return this._totalCount;
+    }
+    get limit() {
+        return this._limit;
+    }
+    get status() {
         return this._status;
-    }/////////вызываются только в том случае, если переменная была изменена
-    get clients(){
+    }
+    get clients() {
         return this._clients;
     }
 }

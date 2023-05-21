@@ -4,8 +4,10 @@ export const createShip = async (ship) => {
     const { data } = await $authHost.post('api/ship', { ship})
     return data
 }
-export const fetchShips = async () => {
-    const { data } = await $authHost.get('api/ship')
+export const fetchShips = async (typeId, name, page, limit=5) => {
+    const { data } = await $authHost.get('api/ship', {params:{
+        typeId, name, page, limit
+    }})
     return data
 }
 export const updateShip = async (id, updatedData) => {
