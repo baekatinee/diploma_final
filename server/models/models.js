@@ -15,6 +15,7 @@ const Client = sequelize.define('client', {
     email: { type: DataTypes.STRING, unique: true, allowNull: false },
     phoneNumber: { type: DataTypes.STRING, allowNull: false },
     comment: { type: DataTypes.TEXT, allowNull: true },
+    //  hasPaid:{ type: DataTypes.BOOLEAN, allowNull: false },
 });
 
 const Payment = sequelize.define('payment', {
@@ -37,6 +38,7 @@ const Ship = sequelize.define('ship', {
     priceSummer: { type: DataTypes.INTEGER, allowNull: false },
     priceWinter: { type: DataTypes.INTEGER, allowNull: false },
     parkingNumber: { type: DataTypes.INTEGER, allowNull: false },
+   
 });
 
 const Type = sequelize.define('type', {

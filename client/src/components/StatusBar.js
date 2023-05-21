@@ -16,9 +16,9 @@ const StatusBar = observer(() => {
   }, []);
 
   return (
-    <ListGroup>
+    <ListGroup horizontal>
       {type.types.map((typeItem) => (
-        <ListGroupItem
+        <ListGroupItem 
           style={{ cursor: 'pointer' }}
           active={typeItem.id === type.selectedType?.id}
           onClick={() => type.setSelectedType(typeItem)}

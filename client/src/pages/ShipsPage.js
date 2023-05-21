@@ -10,14 +10,15 @@ const ShipsPage = () => {
             <h1>
                 Все судна
             </h1>
-            <Row>
-                <Col md={3}>
+            <Row className=' mb-2'>
+                <Col>
                     <StatusBar />
                 </Col>
+            </Row>
+            <Row>
                 <Col>
                     <ShipList></ShipList>
-                </Col>
-            </Row>
+                </Col></Row>
         </Container>
     )
 }

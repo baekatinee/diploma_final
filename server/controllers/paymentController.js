@@ -1,12 +1,11 @@
-const { Payment } = require('../models/models')
+const { Payment, Rental } = require('../models/models')
 const { Client } = require('../models/models')
-const { Ship } = require('../models/models')
 const apiError = require('../error/apiError')
 class paymentController {
     async create(req, res, next) {
         try {
-            const { sum, dateStart, clientId, shipId, rentalId } = req.body
-            const payment = await Payment.create({ sum, dateStart, clientId, shipId, rentalId })
+            const { sum, dateStart, clientId, rentalId } = req.body
+            const payment = await Payment.create({ sum, dateStart, clientId, rentalId })
             if (!payment) {
                 res.status(404).send('Не удалось создать оплату из-за неверно введенных данных')
             }
@@ -17,53 +16,53 @@ class paymentController {
     }
     async getAll(req, res, next) {
         try {
-            let { clientId, shipId, limit, page } = req.query;
+            let { clientId, rentalId, limit, page } = req.query;
             page = page || 1
             limit = limit || 9
             let offset = page * limit - limit
             let payments;
-            if (!clientId && !shipId) {
+            if (!clientId && !rentalId) {
                 payments = await Payment.findAndCountAll({
                     limit, offset,
                     include: [
                         {
-                            model: Ship,
+                            model: Rental,
                             model: Client
                         },
 
                     ]
                 })
             }
-            if (clientId && !shipId) {
+            if (clientId && !rentalId) {
                 payments = await Payment.findAndCountAll({
                     where: { clientId }, limit, offset,
                     include: [
                         {
-                            model: Ship,
+                            model: Rental,
                             model: Client
                         },
 
                     ]
                 })
             }
-            if (!clientId && shipId) {
+            if (!clientId && rentalId) {
                 payments = await Payment.findAndCountAll({
-                    where: { shipId }, limit, offset,
+                    where: { rentalId }, limit, offset,
                     include: [
                         {
-                            model: Ship,
+                            model: Rental,
                             model: Client
                         },
 
                     ]
                 })
             }
-            if (clientId && shipId) {
+            if (clientId && rentalId) {
                 payments = await Payment.findAndCountAll({
-                    where: { shipId, clientId }, limit, offset,
+                    where: { rentalId, clientId }, limit, offset,
                     include: [
                         {
-                            model: Ship,
+                            model: Rental,
                             model: Client
                         },
 
@@ -97,7 +96,7 @@ class paymentController {
     async updateOne(req, res, next) {
         try {
             const { id } = req.params;
-            const { sum, dateStart, clientId, shipId, rentalId } = req.body
+            const { sum, dateStart, clientId, rentalId } = req.body
             const findPaymentById = await Payment.findOne(
                 {
                     where: { id }
@@ -110,7 +109,6 @@ class paymentController {
             if (dateStart) findPaymentById.dateStart = dateStart;
             if (rentalId) findPaymentById.rentalId = rentalId;
             if ( clientId) findPaymentById. clientId=  clientId;
-            if ( shipId) findPaymentById. shipId =  shipId;
          
             const updatedPayment = await findPaymentById.save()
             if (!updatedPayment) {
