@@ -5,25 +5,28 @@ import ShipList from '../components/ShipList'
 import { Context } from '..'
 import { fetchShips } from '../http/shipAPI'
 import Pages from '../components/Pages'
+import { fetchTypes } from '../http/typeAPI'
 
 const ShipsPage = () => {
-    const { ship } = useContext(Context)
+    const { ship} = useContext(Context)
     useEffect(() => {
-        fetchShips(null, null, 1, 2).then(data => {
+        fetchShips(null,  1, 2).then(data => {
             if (ship) {
                 ship.setShips(data.rows);
                 ship.setTotalCount(data.count)
             }
         });
+        fetchTypes().then(data =>ship.setTypes(data))
     }, []);
     useEffect(() => {
-        fetchShips(null, ship.selectedType.id,ship.page, 2).then(data => {
-            if (ship) {
+        fetchShips(ship.selectedType.id, ship.page, 2).then(data => {
+    
                 ship.setShips(data.rows);
                 ship.setTotalCount(data.count)
-            }
+         
         });
-    }, [ship.page,ship.selectedType.idпш]);
+        
+    }, [ship.page, ship.selectedType,]);
     return (
         <Container>
             <h1>

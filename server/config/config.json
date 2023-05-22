@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "0808zhurka200zH",
+    "database": "sailing-yachts",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}

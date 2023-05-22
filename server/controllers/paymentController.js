@@ -4,8 +4,8 @@ const apiError = require('../error/apiError')
 class paymentController {
     async create(req, res, next) {
         try {
-            const { sum, dateStart, clientId, rentalId } = req.body
-            const payment = await Payment.create({ sum, dateStart, clientId, rentalId })
+            const { sum, dateStart, clientId, rentalId, hasPaid } = req.body
+            const payment = await Payment.create({ sum, dateStart, clientId, rentalId, hasPaid })
             if (!payment) {
                 res.status(404).send('Не удалось создать оплату из-за неверно введенных данных')
             }
@@ -96,7 +96,7 @@ class paymentController {
     async updateOne(req, res, next) {
         try {
             const { id } = req.params;
-            const { sum, dateStart, clientId, rentalId } = req.body
+            const { sum, dateStart, clientId, rentalId,  hasPaid } = req.body
             const findPaymentById = await Payment.findOne(
                 {
                     where: { id }
@@ -109,7 +109,7 @@ class paymentController {
             if (dateStart) findPaymentById.dateStart = dateStart;
             if (rentalId) findPaymentById.rentalId = rentalId;
             if ( clientId) findPaymentById. clientId=  clientId;
-         
+            if ( hasPaid) findPaymentById.  hasPaid=   hasPaid;
             const updatedPayment = await findPaymentById.save()
             if (!updatedPayment) {
                 res.status(400).send('Не удалось сохранить изменения')
@@ -145,6 +145,7 @@ class paymentController {
         }
     }
 
+    
 }
 
 module.exports = new paymentController()

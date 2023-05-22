@@ -3,15 +3,23 @@ export default class ShipCrm {
     constructor() {
         this._ships = [
         ]
+        this._types=[]
+        this._selectedType={}
         this._page = 1
         this._totalCount = 0
         this._limit = 3
-        this._selectedType={}
+
         makeAutoObservable(this)//////будет следить за изменениями этих переменных
     }
     setTypes(types) {
+    
         this._types = types;
     }
+    setSelectedType(type) {
+        this.setPage(1)
+        this._selectedType = type;
+    }
+
     setShips(ships) {
         this._ships = ships;
     }
@@ -25,9 +33,7 @@ export default class ShipCrm {
         this._limit = limit;
         
     }
-    setSelectedType(type) {
-        this._type = type;
-    }
+
     get Ships() {
         return this._ships;
     }
@@ -40,8 +46,12 @@ export default class ShipCrm {
     get limit() {
         return this._limit;
     }
+    get types(){
+        return this._types;
+    }
     get selectedType() {
         return this._selectedType;
-    }
-       
+     }
+
+
 }

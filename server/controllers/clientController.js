@@ -3,8 +3,8 @@ const apiError = require('../error/apiError')
 class clientController {
     async create(req, res, next) {
         try {
-            const { surname, name, fathersName, email, phoneNumber, comment } = req.body
-            const client = await Client.create({ surname, name, fathersName, email, phoneNumber, comment })
+            const { surname, name, fathersName, email, phoneNumber, comment, hasPaid } = req.body
+            const client = await Client.create({ surname, name, fathersName, email, phoneNumber, comment,hasPaid })
             if (!client) {
                 res.status(404).send('Не удалось создать клиента из-за неверно введенных данных')
             }
@@ -58,6 +58,34 @@ class clientController {
         }
 
     }
+    // async updateHasPaidStatus(req, res, next){
+    //     try {
+    //         const { id } = req.params
+    //         const client = await Client.findOne(
+    //             {
+    //                 where: { id },
+    //                 include: [
+    //                     {
+    //                         model: Rental,
+    //                         model:Payment
+    //                     },
+
+    //                 ]
+    //             }
+                
+    //         )
+    //         const hasUnpaidRentals = client.rentals.some((rental) => {
+    //             return rental.payments.length === 0; // Проверяем наличие неоплаченных стоянок
+    //           });
+          
+    //           await client.update({ hasPaid: !hasUnpaidRentals }); 
+              
+    //     }
+    //     catch (e) {
+    //         next(apiError.badRequest(e.message))
+    //     }
+    // }
+
     async updateOne(req, res, next) {
         try {
             const { id } = req.params;
@@ -111,6 +139,9 @@ class clientController {
             next(apiError.badRequest(e.message));
         }
     }
+
+
+      
 }
 
 module.exports = new clientController()

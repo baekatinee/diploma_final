@@ -2,24 +2,43 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Modal, Form, Button, FormControl } from 'react-bootstrap'
 import { Context } from '../..'
 import { fetchTypes } from '../../http/typeAPI'
+import { createShip } from '../../http/shipAPI'
 
 
 
 const CreateShip = ({ show, onHide }) => {
-    const { ship, type } = useContext(Context)
+    const { ship } = useContext(Context)
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
     const [typeId, setTypeId] = useState('');
     const [length, setLength] = useState('');
     const [priceSummer, setPriceSummer] = useState('');
+    const [priceWinter, setPriceWinter] = useState('');
+    const [parkingNumber, setParkingNumber] = useState('');
     useEffect(() => {
 
         fetchTypes().then(data => {
-            if (type) {
-                type.setTypes(data.rows);
+            if (ship) {
+                ship.setTypes(data);
             }
         });
     }, []);
+    const addShip = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('number', number);
+            formData.append('typeId', typeId);
+            formData.append('length', length);
+            formData.append('priceSummer', priceSummer);
+            formData.append('priceWinter', priceWinter);
+            const data = await createShip(formData);
+            onHide();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <Modal
             show={show}
@@ -38,20 +57,31 @@ const CreateShip = ({ show, onHide }) => {
                         <FormControl
                             required
                             className='mb-2'
+                            name="name"
                             type="text"
                             placeholder={"Введите название"}
+                            value={name}
+                            onChange={(e) => {
+                                setName(e.target.value);
+                            }}
                         />
                         <FormControl className='mb-2'
                             required
                             type="text"
                             placeholder={"Введите бортовой номер"}
+                            value={number}
+                            onChange={(e) => {
+                                setNumber(e.target.value);
+                            }}
                         />
 
                     </div>
                     <div className='d-flex'>
-                        <Form.Select aria-label="Default select example">
+                        <Form.Select name="typeId" value={typeId} onChange={(e) => {
+                            setTypeId(e.target.value);
+                        }} aria-label="Default select example">
                             <option>Выберите тип</option>
-                            {type.types.map(type =>
+                            {ship.types.map(type =>
                                 <option key={type.id}>{type.name}</option>)}
                         </Form.Select>
                         <FormControl
@@ -59,6 +89,11 @@ const CreateShip = ({ show, onHide }) => {
                             required
                             min={1}
                             type="number"
+                            name="length"
+                            value={length}
+                            onChange={(e) => {
+                                setLength(e.target.value);
+                            }}
                             placeholder={"Введите длину"}
                         />
                     </div>
@@ -69,6 +104,11 @@ const CreateShip = ({ show, onHide }) => {
                             min={1}
                             type="number"
                             placeholder={"Стоимость зима"}
+                            name="priceWinter"
+                            value={priceWinter}
+                            onChange={(e) => {
+                                setPriceWinter(e.target.value);
+                              }}
                         />
                         <FormControl
                             className='mb-2'
@@ -76,6 +116,11 @@ const CreateShip = ({ show, onHide }) => {
                             min={1}
                             type="number"
                             placeholder={"Стоимость лето"}
+                            name="priceSummer"
+                            value={priceSummer}
+                            onChange={(e) => {
+                                setPriceSummer(e.target.value);
+                              }}
                         />
                     </div>
                     <div className='d-flex'>
@@ -87,6 +132,11 @@ const CreateShip = ({ show, onHide }) => {
                             min={1}
                             max={90}
                             placeholder={"Парковочное место"}
+                            name="parkingNumber"
+                            value={parkingNumber}
+                            onChange={(e) => {
+                                setParkingNumber(e.target.value);
+                              }}
                         />
 
                     </div>

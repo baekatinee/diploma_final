@@ -24,18 +24,11 @@ class shipController {
             if (!name && !typeId) {
                 ships = await Ship.findAndCountAll({
                     limit, offset,
-                    include: [
-                        { model: Type },
-
-                    ]
                 })
             }
             if (name && !typeId) {
                 ships = await Ship.findAndCountAll({
                     where: { name }, limit, offset,
-                    include: [
-                        { model: Type },
-                    ]
                 })
             }
             if (!name && typeId) {

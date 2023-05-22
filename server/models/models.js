@@ -15,7 +15,7 @@ const Client = sequelize.define('client', {
     email: { type: DataTypes.STRING, unique: true, allowNull: false },
     phoneNumber: { type: DataTypes.STRING, allowNull: false },
     comment: { type: DataTypes.TEXT, allowNull: true },
-    //  hasPaid:{ type: DataTypes.BOOLEAN, allowNull: false },
+    hasPaid:{ type: DataTypes.BOOLEAN, allowNull: true , defaultValue: true},
 });
 
 const Payment = sequelize.define('payment', {
@@ -71,14 +71,11 @@ Rental.belongsTo(Client,  { foreignKey: { allowNull: false }, onDelete: 'CASCADE
 Ship.hasMany(Rental,{ onDelete: 'CASCADE' })
 Rental.belongsTo(Ship,  { foreignKey: { allowNull: false }, onDelete: 'CASCADE' })
 
-Rental.hasMany(Payment)
-Payment.belongsTo(Rental)
+Rental.hasMany(Payment, { onDelete: 'CASCADE' })
+Payment.belongsTo(Rental, {foreignKey: { allowNull: false }, onDelete: 'CASCADE'})
 
 Payment.belongsTo(Client,  { foreignKey: { allowNull: false }, onDelete: 'CASCADE' })
 Client.hasMany(Payment, { onDelete: 'CASCADE' })
-
-Payment.belongsTo(Ship, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' })
-Ship.hasMany(Payment, { onDelete: 'CASCADE' })
 
 
 module.exports = {

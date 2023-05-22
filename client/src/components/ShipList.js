@@ -43,7 +43,7 @@ const ShipList = observer(() => {
             <tbody>
                 {console.log(ship.Ships)}
                 {ship.Ships && Array.isArray(ship.Ships) && ship.Ships.map(shipItem =>
-                    <ShipItem key={shipItem.id} iterator={iterator++} ship={shipItem} handleDelete={handleDelete}>
+                    <ShipItem key={shipItem.id}  iterator={iterator++} ship={shipItem} handleDelete={handleDelete}>
                     </ShipItem>
                 )}
             </tbody>

@@ -14,23 +14,10 @@ class typeController {
             next(apiError.badRequest(e.message))
         }
     }
+
     async getAll(req, res, next) {
         try {
-            let { limit, page, name } = req.query;
-            page = page || 1
-            limit = limit || 9
-            let offset = page * limit - limit
-            let types;
-            if (!name) {
-                types = await Type.findAndCountAll({
-                   limit, offset
-                })
-            }
-            if (name) {
-                types = await Type.findAndCountAll({
-                    where: { name }, limit, offset,
-                })
-            }
+            const types = await Type.findAll()
             return res.json(types)
         } catch (e) {
             next(apiError.badRequest(e.message))
