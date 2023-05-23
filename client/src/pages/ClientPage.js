@@ -7,15 +7,22 @@ import { useParams } from 'react-router-dom';
 import { deleteClient, fetchOneClient } from '../http/clientAPI';
 import { fetchRentals } from '../http/rentalAPI';
 import { fetchShips } from '../http/shipAPI';
-import RentalList from '../components/RentalList';
+
+import EditClient from '../components/modals/EditClient';
+import ClientRentalList from '../components/ClientRentalList';
+import { fetchPayments } from '../http/paymentAPI';
+import CreateRental from '../components/modals/CreateRental';
+import PaymentList from '../components/PaymentList';
 
 const ClientPage = observer(() => {
-    const {  rental, ship } = useContext(Context);
-    const { clientId } = useParams();
+    const { rental, ship, payment } = useContext(Context);
+    const { id } = useParams();
     const [client, setClientData] = useState('');
+    const [clientUpdateVisible, setUpdateClientVisible] = useState(false);
+    const [rentalVisible, setRentalVisible] = useState(false)
 
     useEffect(() => {
-        fetchOneClient(clientId).then(data => setClientData(data));
+        fetchOneClient(id).then(data => setClientData(data));
         fetchRentals().then(data => {
             if (rental) {
                 rental.setRentals(data.rows);
@@ -24,6 +31,11 @@ const ClientPage = observer(() => {
         fetchShips().then(data => {
             if (ship) {
                 ship.setShips(data.rows);
+            }
+        });
+        fetchPayments().then(data => {
+            if (payment) {
+                payment.setPayments(data.rows);
             }
         });
     }, []);
@@ -42,16 +54,24 @@ const ClientPage = observer(() => {
             <Card className='bg-light mt-5 p-4' >
                 <Card className='p-4 mb-3'>
                     <Card.Header className='d-flex justify-content-between align-items-center'>
-                        <Form className='d-flex justify-content-between align-items-center' style={{ width: "35vw" }}>
-                            <div style={{ fontWeight: "bold", fontSize: "2rem" }}>{client.surname}</div>
-                            <div style={{ fontWeight: "bold", fontSize: "2rem" }}>{client.name}</div>
+                        <Form className='d-flex justify-content-between align-items-center' style={{ width: "40vw" }}>
+                            <div style={{ fontWeight: "bold", fontSize: "2rem" }}>{client.surname} </div>
+                            <div style={{ fontWeight: "bold", fontSize: "2rem" }}>{client.name} </div>
                             <div style={{ fontWeight: "bold", fontSize: "2rem" }}>{client.fathersName}</div>
                             <Badge pill bg="success">
                                 {status}
                             </Badge>{' '}
                         </Form>
                         <Form className='d-flex justify-content-between' style={{ width: "18vw" }}>
-                            <Button variant="primary">Изменить</Button>{' '}
+                            <Button variant="outline-dark" onClick={() => setUpdateClientVisible(true)}>
+                                Изменить
+                            </Button>{' '}
+                            <EditClient
+                                key={client.id}
+                                client={client}
+                                onHide={() => setUpdateClientVisible(false)}
+                                show={clientUpdateVisible}
+                            />
                             <Button variant="outline-secondary">Выезд</Button>{' '}
                             <Button variant="outline-danger" onClick={deleteOne}>Удалить</Button>{' '}
                         </Form></Card.Header>
@@ -74,35 +94,7 @@ const ClientPage = observer(() => {
                                 </tr>
                             </tbody>
                         </Table>
-                        <Table striped bordered hover style={{ width: "35vw" }} >
-                            <tbody>
-                                <tr>
-                                    <td>Судно</td>
-                                    <td>{ship.name}</td>
-                                </tr>
-                                <tr>
-                                    <td>Бортовой номер</td>
-                                    <td>{ship.number}</td>
-                                </tr>
-                                <tr>
-                                    <td>Место стоянки</td>
-                                    <td>{ship.parkingNumber}</td>
-                                </tr>
-                            </tbody>
-                        </Table>
                     </Form>
-                    <Table striped bordered hover style={{ width: "40vw" }} >
-                        <tbody>
-                            <tr>
-                                <td>Стоимость зима</td>
-                                <td>{ship.priceWinter}</td>
-                            </tr>
-                            <tr>
-                                <td>Стоимость лето</td>
-                                <td>{ship.priceSummer}</td>
-                            </tr>
-                        </tbody>
-                    </Table>
                     <Form className='d-flex justify-content-between align-items-center'>
                         <Form className='d-flex flex-row'>
                             <Card className='p-1 d-flex align-items-center' style={{ width: "15vw" }}>
@@ -132,41 +124,23 @@ const ClientPage = observer(() => {
                     </Form>
                 </Card>
                 <Card className='p-4 mb-3'>
-                    <Card.Title border="primary" >
-                        Аренда
+                    <Card.Title border="primary" className='d-flex justify-content-between align-items-center' >
+                        <div>   Текущие аренды</div>
+                        <Button
+                          
+                            className='mt-2'
+                            variant="outline-dark"
+                            onClick={() => setRentalVisible(true)}>
+                            Добавить аренду</Button>{' '}
+                        <CreateRental show={rentalVisible} onHide={() => setRentalVisible(false)}></CreateRental>
                     </Card.Title>
-                    <RentalList clientId={client.id}></RentalList>
+                    <ClientRentalList clientId={client.id}></ClientRentalList>
                 </Card>
                 <Card className='p-4 mb-3'>
                     <Card.Title border="primary" >
                         История оплат
                     </Card.Title>
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th>Дата оплаты</th>
-                                <th>Сумма</th>
-                                <th>Действия</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Дата оплаты</td>
-                                <td>Сумма</td>
-                                <td>Имя</td>
-                            </tr>
-                            <tr>
-                                <td>Дата оплаты</td>
-                                <td>Сумма</td>
-                                <td>Имя</td>
-                            </tr>
-                            <tr>
-                                <td>Дата оплаты</td>
-                                <td>Сумма</td>
-                                <td>Имя</td>
-                            </tr>
-                        </tbody>
-                    </Table>
+               <PaymentList></PaymentList>
                 </Card>
             </Card>
 

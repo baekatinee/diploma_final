@@ -9,6 +9,14 @@ export const fetchRentals = async () => {
     const { data } = await $authHost.get('api/rental')
     return data
 }
+export const deleteRental = async (id) => {
+  const { data } = await $authHost.delete(`api/rental/${id}`)
+  return data
+}
+export const updateRental = async (id, updatedData) => {
+  const { data } = await $authHost.put(`api/rental/${id}`, updatedData);
+  return data;
+}
 export const getAvailableShips = async () => {
     try {
       // Шаг 1: Запросить все активные аренды

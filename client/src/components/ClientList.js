@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { observer } from "mobx-react-lite"
 import { Context } from "../index"
 import { Table } from 'react-bootstrap';
@@ -9,14 +9,12 @@ import { CLIENTS_ROUTE } from '../utils/consts';
 import { useLocation } from 'react-router-dom';
 
 const ClientList = observer(() => {
+  const { client } = useContext(Context);
+  const [clients, setClients] = useState([]);
+
   useEffect(() => {
-    fetchClients().then(data => {
-        if (client) {
-            client.setClients(data.rows);
-        }
-    });
-}, []);
-  const { client } = useContext(Context)
+    setClients(Object.values(client.clients).filter((client) => typeof client === 'object'));
+  }, [client.clients]);
   const location = useLocation();
   const isAllClients = location.pathname === CLIENTS_ROUTE
   const clientsArray = Object.values(client.clients).filter(client => typeof client === 'object')
@@ -24,11 +22,11 @@ const ClientList = observer(() => {
   const handleDelete = async (id) => {
     try {
       await deleteClient(id);
-      fetchClients();
+      setClients((prevClients) => prevClients.filter((client) => client.id !== id));
     } catch (e) {
       console.log(e);
     }
-  }
+  };
   let iterator = 1;
   return (
     <Table striped bordered hover>
@@ -46,10 +44,9 @@ const ClientList = observer(() => {
       </thead>
       <tbody>
         {console.log(client.clients)}
-        {client.clients && Array.isArray(client.clients) && client.clients.map(client =>
-          <ClientItem key={client.id} isAllClients={isAllClients} iterator={iterator++} client={client} handleDelete={handleDelete}>
-          </ClientItem>
-        )}
+        {clients.map((client) => (
+          <ClientItem key={client.id} isAllClients={isAllClients} iterator={iterator++} client={client} handleDelete={handleDelete} />
+        ))}
       </tbody>
     </Table>
   )

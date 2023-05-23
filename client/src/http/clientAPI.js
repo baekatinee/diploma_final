@@ -5,7 +5,7 @@ export const createClient = async (client) => {
     return data
 }
 export const fetchOneClient = async (id) => {
-    const { data } = await $authHost.get('api/client', { id })
+    const { data } = await $authHost.get('api/client/' + id )
     return data
 }
 export const updateClient = async (id, updatedData) => {

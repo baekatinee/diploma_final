@@ -1,5 +1,7 @@
 const { Client, Rental, Payment } = require('../models/models')
 const apiError = require('../error/apiError')
+const { Op } = require('sequelize');
+
 class clientController {
     async create(req, res, next) {
         try {
@@ -58,33 +60,61 @@ class clientController {
         }
 
     }
-    // async updateHasPaidStatus(req, res, next){
-    //     try {
-    //         const { id } = req.params
-    //         const client = await Client.findOne(
-    //             {
-    //                 where: { id },
-    //                 include: [
-    //                     {
-    //                         model: Rental,
-    //                         model:Payment
-    //                     },
-
-    //                 ]
-    //             }
-                
-    //         )
-    //         const hasUnpaidRentals = client.rentals.some((rental) => {
-    //             return rental.payments.length === 0; // Проверяем наличие неоплаченных стоянок
-    //           });
-          
-    //           await client.update({ hasPaid: !hasUnpaidRentals }); 
-              
-    //     }
-    //     catch (e) {
-    //         next(apiError.badRequest(e.message))
-    //     }
-    // }
+    async updateHasPaidStatus(req, res, next) {
+        try {
+          const currentDate = new Date();
+      
+          // Получаем всех клиентов
+          const clients = await Client.findAll();
+      
+          for (const client of clients) {
+            let hasPaid = true;
+      
+            // Получаем все аренды клиента
+            const rentals = await Rental.findAll({
+              where: {
+                clientId: client.id,
+              },
+            });
+      
+            for (const rental of rentals) {
+              // Получаем все оплаты для аренды
+              const payments = await Payment.findAll({
+                where: {
+                  rentalId: rental.id,
+                },
+              });
+      
+              // Проверяем даты аренды и оплаты
+              for (const payment of payments) {
+                if (
+                  payment.paidDate < rental.startDate ||
+                  payment.paidDate > rental.endDate ||
+                  rental.endDate < currentDate
+                ) {
+                  hasPaid = false;
+                  break;
+                }
+              }
+      
+              if (!hasPaid) {
+                break;
+              }
+            }
+      
+            // Обновляем поле hasPaid для клиента
+            await client.update({ hasPaid });
+          }
+      
+          return res.status(200).json({
+            status: 'success',
+            message: 'Successfully updated hasPaid statuses for clients.',
+          });
+        } catch (e) {
+          next(apiError.badRequest(e.message));
+        }
+      }
+    
 
     async updateOne(req, res, next) {
         try {
