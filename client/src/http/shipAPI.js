@@ -1,7 +1,11 @@
 import { $authHost} from "./index";
 
 export const createShip = async (ship) => {
-    const { data } = await $authHost.post('api/ship', { ship})
+    const { data } = await $authHost.post('api/ship', ship)
+    return data
+}
+export const fetchOneShip = async (id) => {
+    const { data } = await $authHost.get('api/ship/' + id )
     return data
 }
 export const fetchShips = async (typeId, page, limit=5) => {

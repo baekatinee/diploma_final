@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../index';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 import PaymentItem from './PaymentItem';
 
 const PaymentList = observer(({ clientId }) => {
@@ -23,7 +23,8 @@ const PaymentList = observer(({ clientId }) => {
           <th>ID</th>
           <th>Дата оплаты</th>
           <th>Сумма</th>
-          <th>Клиент</th>
+          {clientId && <th>Действия</th>}
+          {!clientId && <th>Клиент</th>}
           <th>Аренда</th>
         </tr>
       </thead>
@@ -42,6 +43,7 @@ const PaymentList = observer(({ clientId }) => {
                 rentalObj={rentalObj}
                 clientSurname={clientSurname}
                 shipName={shipName}
+                clientId={clientId}
               />
             );
           })}

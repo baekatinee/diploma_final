@@ -8,3 +8,11 @@ export const fetchPayments = async () => {
     const { data } = await $authHost.get('api/payment')
     return data
 }
+export const updatePayment = async (id, updatedData) => {
+    const { data } = await $authHost.put(`api/payment/${id}`, updatedData);
+    return data;
+  }
+  export const deletePayment = async (id) => {
+    const { data } = await $authHost.delete(`api/payment/${id}`)
+    return data
+  }

@@ -13,6 +13,7 @@ import ClientRentalList from '../components/ClientRentalList';
 import { fetchPayments } from '../http/paymentAPI';
 import CreateRental from '../components/modals/CreateRental';
 import PaymentList from '../components/PaymentList';
+import ClientPaymentList from '../components/ClientPaymentList';
 
 const ClientPage = observer(() => {
     const { rental, ship, payment } = useContext(Context);
@@ -140,7 +141,7 @@ const ClientPage = observer(() => {
                     <Card.Title border="primary" >
                         История оплат
                     </Card.Title>
-               <PaymentList></PaymentList>
+             <ClientPaymentList  clientId={client.id}></ClientPaymentList>
                 </Card>
             </Card>
 
