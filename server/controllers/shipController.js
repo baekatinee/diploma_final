@@ -105,16 +105,13 @@ class shipController {
             const { id } = req.params;
             const ship = await Ship.findOne({
                 where: { id },
-                include: [{ model: Rental }, { model: Payment }]
+                include: [{ model: Rental },]
             });
             if (!ship) {
                 res.status(404).send('Нет судна с указанным id');
             } else {
                 for (const rental of ship.rentals) {
                     await rental.destroy({ cascade: true });
-                }
-                for (const payment of ship.payments) {
-                    await payment.destroy({ cascade: true });
                 }
                 await ship.destroy({ cascade: true });
                 res.status(200).send({

@@ -8,6 +8,10 @@ export const fetchPayments = async () => {
     const { data } = await $authHost.get('api/payment')
     return data
 }
+export const fetchOnePayment = async (id) => {
+  const { data } = await $authHost.get('api/payment/' + id )
+  return data
+}
 export const updatePayment = async (id, updatedData) => {
     const { data } = await $authHost.put(`api/payment/${id}`, updatedData);
     return data;

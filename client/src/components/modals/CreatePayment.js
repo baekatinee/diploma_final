@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Modal, Form, Button, FormControl, Toast } from 'react-bootstrap';
+import { Modal, Form, Button, FormControl, Col, Row} from 'react-bootstrap';
 import { Context } from '../..';
 
 import { createPayment } from '../../http/paymentAPI';
+import { fetchRentals } from '../../http/rentalAPI';
+import { fetchClients } from '../../http/clientAPI';
 
 const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
   const { rental, client } = useContext(Context);
@@ -13,7 +15,20 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [isAddingPayment, setIsAddingPayment] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
 
+  useEffect(() => {
+    fetchClients().then(data => {
+      if (client) {
+        client.setClients(data.rows);
+      }
+    });
+    fetchRentals().then(data => {
+      if (rental) {
+        rental.setRentals(data.rows);
+      }
+    });
+  }, []);
   useEffect(() => {
     if (clientId) {
       setSelectedClient(clientId.toString());
@@ -25,33 +40,43 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
 
   const clientRentals = rental.rentals.filter((rental) => rental.clientId === +selectedClient);
 
+  const validateForm = () => {
+    const errors = {};
+
+    if (!dateStart) {
+      errors.dateStart = 'Введите дату оплаты';
+    }
+
+    if (!sum) {
+      errors.sum = 'Введите сумму';
+    }
+    if (!clientId) {
+      errors.clientId = 'Выберите клиента';
+    }
+    if (!rentalId) {
+      errors.rentalId = 'Выберите аренду';
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const addPayment = async () => {
     setIsAddingPayment(true);
+    if (!validateForm()) {
+      return;
+    }
 
     try {
-      const formData = new FormData();
-      formData.append('dateStart', dateStart);
-      formData.append('sum', sum);
-      formData.append('clientId', selectedClient);
-      formData.append('rentalId', selectedRental);
+      const formData = {
+        dateStart,
+        sum,
+        clientId,
+        rentalId,
+      };
 
-      const response = await createPayment(formData);
-      if (response.data.success) {
-        setSuccess(true);
-        setStartDate('');
-        setSum('');
-        setSelectedClient('');
-        setSelectedRental('');
-        setError('');
-        setTimeout(() => {
-          setSuccess(false);
-          onHide();
-        }, 3000);
-      } else {
-        setError(response.data.message);
-      }
+      const data = await createPayment(formData);
+      onHide();
     } catch (error) {
-      setError('Произошла ошибка при добавлении платежа');
       console.error(error);
     }
 
@@ -69,7 +94,8 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <div className="d-flex">
+        <Row className="mb-2">
+            <Col>
             <FormControl
               className="mb-2"
               required
@@ -77,8 +103,14 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
               type="date"
               placeholder="Дата оплаты"
               value={dateStart}
+              isInvalid={!!formErrors.dateStart}
               onChange={(e) => setStartDate(e.target.value)}
             />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.dateStart}
+              </Form.Control.Feedback>
+              </Col>
+            <Col>
             <FormControl
               className="mb-2"
               required
@@ -86,15 +118,22 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
               type="number"
               placeholder="Сумма"
               value={sum}
+              isInvalid={!!formErrors.sum}
               onChange={(e) => setSum(e.target.value)}
             />
-          </div>
-          <div className="d-flex">
+              <Form.Control.Feedback type="invalid">
+                {formErrors.sum}
+              </Form.Control.Feedback>
+              </Col>
+          </Row>
+          <Row className="mb-2">
+            <Col>
             <Form.Select
               aria-label="Default select example"
               value={selectedClient}
               onChange={(e) => setSelectedClient(e.target.value)}
               disabled={clientId}
+              isInvalid={!!formErrors.clientId}
             >
               <option>Выберите клиента</option>
               {client.clients.map((client) => (
@@ -103,11 +142,17 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
                 </option>
               ))}
             </Form.Select>
+            <Form.Control.Feedback type="invalid">
+                {formErrors.clientId}
+              </Form.Control.Feedback>
+              </Col>
+            <Col>
             <Form.Select
               aria-label="Default select example"
               value={selectedRental}
               onChange={(e) => setSelectedRental(e.target.value)}
               disabled={!selectedClient}
+              isInvalid={!!formErrors.rentalId}
             >
               <option>Выберите аренду</option>
               {clientRentals.map((rental) => (
@@ -116,7 +161,11 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
                 </option>
               ))}
             </Form.Select>
-          </div>
+            <Form.Control.Feedback type="invalid">
+                {formErrors.rentalId}
+              </Form.Control.Feedback>
+              </Col>
+          </Row>
         </Form>
       </Modal.Body>
       <Modal.Footer>
@@ -127,18 +176,6 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
           Закрыть
         </Button>
       </Modal.Footer>
-      <Toast show={success} onClose={() => setSuccess(false)} delay={3000} autohide>
-        <Toast.Header>
-          <strong className="me-auto">Успешно</strong>
-        </Toast.Header>
-        <Toast.Body>Платеж успешно добавлен.</Toast.Body>
-      </Toast>
-      <Toast show={error !== ''} onClose={resetError} bg="danger" text="white" delay={5000} autohide>
-        <Toast.Header>
-          <strong className="me-auto">Ошибка</strong>
-        </Toast.Header>
-        <Toast.Body>{error}</Toast.Body>
-      </Toast>
     </Modal>
   );
 };

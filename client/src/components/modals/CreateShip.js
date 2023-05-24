@@ -12,18 +12,21 @@ const CreateShip = ({ show, onHide }) => {
   const [length, setLength] = useState('');
   const [priceSummer, setPriceSummer] = useState('');
   const [priceWinter, setPriceWinter] = useState('');
-  const [parkingNumber, setParkingNumber] = useState('');
-  const [formErrors, setFormErrors] = useState({});
   const [existingNumbers, setExistingNumbers] = useState([]);
   const [existingParkingNumbers, setExistingParkingNumbers] = useState([]);
+  const [parkingNumber, setParkingNumber] = useState('');
+  const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     fetchTypes().then(data => {
       ship.setTypes(data);
     });
     fetchShips().then(data => {
-      setExistingNumbers(data.map(ship => ship.number));
-      setExistingParkingNumbers(data.map(ship => ship.parkingNumber));
+      if (ship) {
+        ship.setShips(data.rows);
+        setExistingNumbers(ship.Ships.map(shipItem => shipItem.number.toLowerCase()));
+        setExistingParkingNumbers(ship.Ships.map(shipItem => shipItem.parkingNumber));
+      }
     });
   }, []);
 
@@ -36,8 +39,8 @@ const CreateShip = ({ show, onHide }) => {
 
     if (!number) {
       errors.number = 'Введите бортовой номер';
-    } else if (existingNumbers.includes(number)) {
-      errors.number = 'Судно с таким бортовым номером уже существует';
+    } else if (existingNumbers.includes(number.toLowerCase())) {
+      errors.number = 'Яхта с таким бортовым номером уже существует';
     }
 
     if (!typeId) {
@@ -58,8 +61,8 @@ const CreateShip = ({ show, onHide }) => {
 
     if (!parkingNumber || parkingNumber <= 0 || parkingNumber > 90) {
       errors.parkingNumber = 'Введите корректное парковочное место';
-    } else if (existingParkingNumbers.includes(parkingNumber)) {
-      errors.parkingNumber = 'Судно с таким парковочным номером уже существует';
+    } else if (existingParkingNumbers.includes(Number(parkingNumber))) {
+      errors.parkingNumber = 'Это место уже занято';
     }
 
     setFormErrors(errors);
@@ -136,7 +139,7 @@ const CreateShip = ({ show, onHide }) => {
                 isInvalid={!!formErrors.typeId}
               >
                 <option value="">Выберите тип</option>
-                {ship.types.map(type => (
+                {ship.types && ship.types.map(type => (
                   <option key={type.id} value={type.id}>
                     {type.name}
                   </option>

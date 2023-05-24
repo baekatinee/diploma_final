@@ -9,6 +9,10 @@ export const fetchRentals = async () => {
     const { data } = await $authHost.get('api/rental')
     return data
 }
+export const fetchOneRental = async (id) => {
+  const { data } = await $authHost.get('api/rental/' + id )
+  return data
+}
 export const deleteRental = async (id) => {
   const { data } = await $authHost.delete(`api/rental/${id}`)
   return data
