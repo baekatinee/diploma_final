@@ -7,5 +7,5 @@ router.post('/', checkRole('ADMIN'), shipController.create)//////создани�
 router.get('/',checkRole('ADMIN'),  shipController.getAll) /////получение списка яхт
 router.get('/:id', checkRole('ADMIN'), shipController.getOne)/////получение одной яхты
 router.delete('/:id', checkRole('ADMIN'), shipController.destroy)////удаление яхты
-
+router.put('/:id', checkRole('ADMIN'), shipController.updateOne)
 module.exports = router

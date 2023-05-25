@@ -13,7 +13,6 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
   const [selectedClient, setSelectedClient] = useState('');
   const [selectedRental, setSelectedRental] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
   const [isAddingPayment, setIsAddingPayment] = useState(false);
   const [formErrors, setFormErrors] = useState({});
 
@@ -83,9 +82,6 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
     setIsAddingPayment(false);
   };
 
-  const resetError = () => {
-    setError('');
-  };
 
   return (
     <Modal show={show} onHide={onHide} size="lg" centered>

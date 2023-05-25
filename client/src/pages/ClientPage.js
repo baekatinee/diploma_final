@@ -7,7 +7,6 @@ import { useParams } from 'react-router-dom';
 import { deleteClient, fetchOneClient } from '../http/clientAPI';
 import { fetchRentals } from '../http/rentalAPI';
 import { fetchShips } from '../http/shipAPI';
-
 import EditClient from '../components/modals/EditClient';
 import ClientRentalList from '../components/ClientRentalList';
 import { fetchPayments } from '../http/paymentAPI';
@@ -40,6 +39,7 @@ const ClientPage = observer(() => {
             }
         });
     }, []);
+
     const deleteOne = async () => {
         try {
             await deleteClient(client.id);
@@ -96,7 +96,7 @@ const ClientPage = observer(() => {
                             </tbody>
                         </Table>
                     </Form>
-                    <Form className='d-flex justify-content-between align-items-center'>
+                    <div className='d-flex justify-content-between align-items-center'>
                         <Form className='d-flex flex-row'>
                             <Card className='p-1 d-flex align-items-center' style={{ width: "15vw" }}>
                                 <Card.Img variant="top" src={checkedStatus} style={{ width: "3vw", height: "3vw" }} />
@@ -119,21 +119,20 @@ const ClientPage = observer(() => {
                                 </Card.Body>
                             </Card>
                         </Form>
-                        <Form>
+                    
                             <Button variant="primary">Внести оплату</Button>{' '}
-                        </Form>
-                    </Form>
+                   
+                    </div>
                 </Card>
                 <Card className='p-4 mb-3'>
                     <Card.Title border="primary" className='d-flex justify-content-between align-items-center' >
                         <div>   Текущие аренды</div>
                         <Button
-                          
                             className='mt-2'
                             variant="outline-dark"
                             onClick={() => setRentalVisible(true)}>
                             Добавить аренду</Button>{' '}
-                        <CreateRental show={rentalVisible} onHide={() => setRentalVisible(false)}></CreateRental>
+                        <CreateRental clientId={client.id} show={rentalVisible} onHide={() => setRentalVisible(false)}></CreateRental>
                     </Card.Title>
                     <ClientRentalList clientId={client.id}></ClientRentalList>
                 </Card>

@@ -73,33 +73,34 @@ class shipController {
     }
     async updateOne(req, res, next) {
         try {
-            const { id } = req.params;
-            const { length, name, typeId, priceSummer, priceWinter, number, parkingNumber } = req.body
-            const findShipById = await Ship.findOne(
-                {
-                    where: { id }
-                }
-            )
-            if (!findShipById) {
-                res.status(404).send('Такого судна не существует в базе')
-            }
-            if (name) findShipById.name = name;
-            if (length) findShipById.length = length;
-            if (typeId) findShipById.typeId = typeId;
-            if (number) findShipById.number = number;
-            if (priceSummer) findShipById.priceSummer = priceSummer;
-            if (priceWinter) findShipById.priceWinter = priceWinter;
-            if (parkingNumber) findShipById.parkingNumber = parkingNumber;
-            const updatedShip = await findShipById.save()
-            if (!updatedShip) {
-                res.status(400).send('Не удалось сохранить изменения')
-            }
-            return res.json(updatedShip);
-
+          const { id } = req.params;
+          const { length, name, typeId, priceSummer, priceWinter, number, parkingNumber } = req.body;
+      
+          const findShipById = await Ship.findOne({ where: { id } });
+      
+          if (!findShipById) {
+            return res.status(404).send('Такого судна не существует в базе');
+          }
+      
+          if (name) findShipById.name = name;
+          if (length) findShipById.length = length;
+          if (typeId) findShipById.typeId = typeId;
+          if (number) findShipById.number = number;
+          if (priceSummer) findShipById.priceSummer = priceSummer;
+          if (priceWinter) findShipById.priceWinter = priceWinter;
+          if (parkingNumber) findShipById.parkingNumber = parkingNumber;
+      
+          const updatedShip = await findShipById.save();
+      
+          if (!updatedShip) {
+            return res.status(400).send('Не удалось сохранить изменения');
+          }
+      
+          return res.json(updatedShip);
         } catch (e) {
-            next(apiError.badRequest(e.message))
+          next(apiError.badRequest(e.message));
         }
-    }
+      }
     async destroy(req, res, next) {
         try {
             const { id } = req.params;

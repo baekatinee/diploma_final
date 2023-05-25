@@ -1,19 +1,34 @@
 import React, { useState } from 'react';
-import { Modal, Form, Button, FormControl, FormLabel } from 'react-bootstrap';
+import { Modal, Form, Button, FormControl } from 'react-bootstrap';
 import { updateType } from '../../http/typeAPI';
 
 const EditType = ({ show, onHide, type }) => {
-    
-
   const [name, setName] = useState(type.name);
+  const [formErrors, setFormErrors] = useState({});
 
-  const updateData = () => {
+  const validateForm = () => {
+    const errors = {};
+
+    if (!name) {
+      errors.name = 'Введите название типа';
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const updateData = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
     try {
-      const formData = new FormData();
-      formData.append('name', name);
-      updateType(type.id, formData).then((data) => {
-        onHide();
-      });
+      const formData = {
+        name,
+      };
+
+      await updateType(type.id, formData);
+      onHide();
     } catch (error) {
       console.error(error);
     }
@@ -22,32 +37,27 @@ const EditType = ({ show, onHide, type }) => {
   return (
     <Modal show={show} onHide={onHide} size="lg" centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Редактировать тип
-        </Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Редактировать тип</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={updateData}>
-          <div className="d-flex">
-            <FormLabel>Название типа</FormLabel>
-            <FormControl
-              className="mb-2"
-              required
-              type="text"
-              name="name"
-              placeholder="Введите название типа"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <Button type="submit" variant="outline-success">
-            Сохранить изменения
-          </Button>
-          <Button onClick={onHide} variant="outline-danger">
-            Закрыть
-          </Button>
+        <Form>
+          <FormControl
+            placeholder="Название типа"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            isInvalid={!!formErrors.name}
+          />
+          {formErrors.name && <Form.Text className="text-danger">{formErrors.name}</Form.Text>}
         </Form>
       </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={updateData} variant="outline-success">
+          Сохранить изменения
+        </Button>
+        <Button onClick={onHide} variant="outline-danger">
+          Закрыть
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

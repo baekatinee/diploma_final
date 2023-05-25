@@ -5,7 +5,7 @@ import { createRental } from '../../http/rentalAPI';
 import { fetchClients } from '../../http/clientAPI';
 import { fetchShips } from '../../http/shipAPI';
 
-const CreateRental = ({ show, onHide }) => {
+const CreateRental = ({ show, onHide, clientId }) => {
   const { ship, client } = useContext(Context);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -19,12 +19,19 @@ const CreateRental = ({ show, onHide }) => {
         client.setClients(data.rows);
       }
     });
+
     fetchShips().then(data => {
       if (ship) {
         ship.setShips(data.rows);
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (clientId) {
+      setSelectedClient(clientId.toString());
+    }
+  }, [clientId]);
 
   const validateForm = () => {
     const errors = {};
@@ -115,7 +122,8 @@ const CreateRental = ({ show, onHide }) => {
                 value={selectedClient}
                 onChange={(e) => setSelectedClient(e.target.value)}
                 isInvalid={!!formErrors.selectedClient}
-              >
+                disabled={clientId}
+              >Ч
                 <option>Выберите клиента</option>
                 {client.clients.map((client) => (
                   <option key={client.id} value={client.id}>
