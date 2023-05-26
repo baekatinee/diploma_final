@@ -20,7 +20,7 @@ class rentalController {
         try {
           let { clientId, shipId, limit, page } = req.query;
           page = page || 1;
-          limit = limit || 9;
+          limit = limit ||17;
           const offset = (page - 1) * limit;
           let rentals;
           const whereClause = {};

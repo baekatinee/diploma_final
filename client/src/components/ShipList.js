@@ -7,6 +7,7 @@ import { fetchShips } from '../http/shipAPI';
 import { deleteShip } from '../http/shipAPI';
 
 const ShipList = observer(() => {
+    const { ship } = useContext(Context)
     useEffect(() => {
         fetchShips().then(data => {
             if (ship) {
@@ -14,9 +15,6 @@ const ShipList = observer(() => {
             }
         });
     }, []);
-    const { ship } = useContext(Context)
-    const shipsArray = Object.values(ship.Ships).filter(ship => typeof ship === 'object')
-    console.log('shipsArray:', shipsArray);
     const handleDelete = async (id) => {
         try {
             await deleteShip(id);
@@ -41,8 +39,8 @@ const ShipList = observer(() => {
                 </tr>
             </thead>
             <tbody>
-                {console.log(ship.Ships)}
-                {ship.Ships && Array.isArray(ship.Ships) && ship.Ships.map(shipItem =>
+             
+                {ship.Ships.map(shipItem =>
                     <ShipItem key={shipItem.id}  iterator={iterator++} ship={shipItem} handleDelete={handleDelete}>
                     </ShipItem>
                 )}

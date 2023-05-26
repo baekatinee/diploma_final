@@ -47,14 +47,14 @@ const Sidebar = observer(() => {
               <NavLink to={DASHBOARD_ROUTE} activeclassname="activeClicked">
                 <CDBSidebarMenuItem icon="columns">Дашборд</CDBSidebarMenuItem>
               </NavLink>
+              <NavLink to={ADMIN_ROUTE} activeclassname="activeClicked">
+                <CDBSidebarMenuItem icon="address-book">Админ панель</CDBSidebarMenuItem>
+              </NavLink>
               <NavLink to={CLIENTS_ROUTE} activeclassname="activeClicked">
                 <CDBSidebarMenuItem icon="table">Клиенты</CDBSidebarMenuItem>
               </NavLink>
               <NavLink to={PAYMENTS_ROUTE} activeclassname="activeClicked">
                 <CDBSidebarMenuItem icon="credit-card">Оплаты</CDBSidebarMenuItem>
-              </NavLink>
-              <NavLink to={ADMIN_ROUTE} activeclassname="activeClicked">
-                <CDBSidebarMenuItem icon="address-book">Админ панель</CDBSidebarMenuItem>
               </NavLink>
               <NavLink to={SHIPS_ROUTE} activeclassname="activeClicked">
                 <CDBSidebarMenuItem icon="ship">Судна</CDBSidebarMenuItem>

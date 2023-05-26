@@ -19,7 +19,7 @@ class clientController {
         try {
             let { surname, name, limit, page } = req.query;
             page = page || 1
-            limit = limit || 9
+            limit = limit || 15
             let offset = page * limit - limit
             let clients;
             if (!surname && !name) {

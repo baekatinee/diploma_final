@@ -1,14 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../index';
 import { Table, Button } from 'react-bootstrap';
 import PaymentItem from './PaymentItem';
+import { fetchPayments } from '../http/paymentAPI';
 
 const PaymentList = observer(({ clientId }) => {
   const { payment, client, ship, rental } = useContext(Context);
   const paymentsArray = Object.values(payment.payments).filter(payment => typeof payment === 'object');
   console.log('paymentsArray:', paymentsArray);
-
+  useEffect(() => {
+    fetchPayments().then(data => {
+      if (payment) {
+        payment.setPayments(data.rows);
+      }
+    });
+  }, [])
   let filteredPayments;
   if (clientId) {
     filteredPayments = paymentsArray.filter(payment => payment.clientId === clientId);

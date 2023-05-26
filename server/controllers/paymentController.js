@@ -18,7 +18,7 @@ class paymentController {
         try {
             let { clientId, rentalId, limit, page } = req.query;
             page = page || 1
-            limit = limit || 9
+            limit = limit || 19
             let offset = page * limit - limit
             let payments;
             if (!clientId && !rentalId) {

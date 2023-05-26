@@ -18,7 +18,7 @@ class shipController {
         try {
             let { name, typeId, limit, page } = req.query;
             page = page || 1
-            limit = limit || 9
+            limit = limit || 19
             let offset = page * limit - limit
             let ships;
             if (!name && !typeId) {
