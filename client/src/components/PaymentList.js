@@ -7,8 +7,7 @@ import { fetchPayments } from '../http/paymentAPI';
 
 const PaymentList = observer(({ clientId }) => {
   const { payment, client, ship, rental } = useContext(Context);
-  const paymentsArray = Object.values(payment.payments).filter(payment => typeof payment === 'object');
-  console.log('paymentsArray:', paymentsArray);
+
   useEffect(() => {
     fetchPayments().then(data => {
       if (payment) {
@@ -18,9 +17,9 @@ const PaymentList = observer(({ clientId }) => {
   }, [])
   let filteredPayments;
   if (clientId) {
-    filteredPayments = paymentsArray.filter(payment => payment.clientId === clientId);
+    filteredPayments = payment.payments.filter(payment => payment.clientId === clientId);
   } else {
-    filteredPayments = paymentsArray;
+    filteredPayments = payment.payments;
   }
 
   return (

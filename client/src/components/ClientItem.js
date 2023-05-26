@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CLIENT_ROUTE } from '../utils/consts';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Badge } from 'react-bootstrap';
 import EditClient from './modals/EditClient';
 
 const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
@@ -40,11 +40,11 @@ const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
     e.stopPropagation();
     setConfirmDeleteVisible(true);
   };
-  
+
   const closeConfirmDeleteModal = () => {
     setConfirmDeleteVisible(false);
   };
-  
+
   const confirmDelete = () => {
     deleteOne();
   };
@@ -56,6 +56,17 @@ const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
       <td>{client.fathersName}</td>
       <td>{client.phoneNumber}</td>
       <td>{client.email}</td>
+      <td>
+        {client.hasPaid ? (
+          <Badge pill bg="success">
+            Оплачено
+          </Badge>
+        ) : (
+          <Badge pill bg="danger">
+            Долг
+          </Badge>
+        )}
+      </td>
       {isAllClients ? (
         <td style={{ width: '100%' }} className="d-flex justify-content-around">
           <Button variant="outline-dark" onClick={openEditModal}>

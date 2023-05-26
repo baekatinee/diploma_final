@@ -59,9 +59,15 @@ const ClientPage = observer(() => {
                             <div style={{ fontWeight: "bold", fontSize: "2rem" }}>{client.surname} </div>
                             <div style={{ fontWeight: "bold", fontSize: "2rem" }}>{client.name} </div>
                             <div style={{ fontWeight: "bold", fontSize: "2rem" }}>{client.fathersName}</div>
-                            <Badge pill bg="success">
-                                {status}
-                            </Badge>{' '}
+                            {client.hasPaid ? (
+                                <Badge pill bg="success">
+                                    Оплачено
+                                </Badge>
+                            ) : (
+                                <Badge pill bg="danger">
+                                    Долг
+                                </Badge>
+                            )}
                         </Form>
                         <Form className='d-flex justify-content-between' style={{ width: "18vw" }}>
                             <Button variant="outline-dark" onClick={() => setUpdateClientVisible(true)}>
@@ -119,9 +125,9 @@ const ClientPage = observer(() => {
                                 </Card.Body>
                             </Card>
                         </Form>
-                    
-                            <Button variant="primary">Внести оплату</Button>{' '}
-                   
+
+                        <Button variant="primary">Внести оплату</Button>{' '}
+
                     </div>
                 </Card>
                 <Card className='p-4 mb-3'>
@@ -140,7 +146,7 @@ const ClientPage = observer(() => {
                     <Card.Title border="primary" >
                         История оплат
                     </Card.Title>
-             <ClientPaymentList  clientId={client.id}></ClientPaymentList>
+                    <ClientPaymentList clientId={client.id}></ClientPaymentList>
                 </Card>
             </Card>
 

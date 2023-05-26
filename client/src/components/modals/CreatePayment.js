@@ -49,11 +49,11 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
     if (!sum) {
       errors.sum = 'Введите сумму';
     }
-    if (!clientId) {
-      errors.clientId = 'Выберите клиента';
+    if (!selectedClient) {
+      errors.selectedClient = 'Выберите клиента';
     }
-    if (!rentalId) {
-      errors.rentalId = 'Выберите аренду';
+    if (!selectedRental) {
+      errors.selectedRental = 'Выберите аренду';
     }
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -69,8 +69,8 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
       const formData = {
         dateStart,
         sum,
-        clientId,
-        rentalId,
+        clientId: clientId || selectedClient,
+      rentalId: rentalId || selectedRental,
       };
 
       const data = await createPayment(formData);
@@ -129,7 +129,7 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
               value={selectedClient}
               onChange={(e) => setSelectedClient(e.target.value)}
               disabled={clientId}
-              isInvalid={!!formErrors.clientId}
+              isInvalid={!!formErrors.selectedClient}
             >
               <option>Выберите клиента</option>
               {client.clients.map((client) => (
@@ -148,7 +148,7 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
               value={selectedRental}
               onChange={(e) => setSelectedRental(e.target.value)}
               disabled={!selectedClient}
-              isInvalid={!!formErrors.rentalId}
+              isInvalid={!!formErrors.selectedRental}
             >
               <option>Выберите аренду</option>
               {clientRentals.map((rental) => (
