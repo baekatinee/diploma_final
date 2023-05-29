@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Container, Card, Row, Form, Button, Badge, Table } from 'react-bootstrap'
+import { Container, Card, Row, Form, Button, Badge, Table, Col } from 'react-bootstrap'
 import checkedStatus from '../img/checked.png'
+import uncheckedStatus from '../img/warning.png'
+import debt from '../img/debt.png'
 import { observer } from 'mobx-react-lite';
 import { Context } from '..';
 import { useParams } from 'react-router-dom';
@@ -55,33 +57,37 @@ const ClientPage = observer(() => {
             <Card className='bg-light mt-5 p-4' >
                 <Card className='p-4 mb-3'>
                     <Card.Header className='d-flex justify-content-between align-items-center'>
-                        <Form className='d-flex justify-content-between align-items-center' style={{ width: "40vw" }}>
-                            <div style={{ fontWeight: "bold", fontSize: "2rem" }}>{client.surname} </div>
-                            <div style={{ fontWeight: "bold", fontSize: "2rem" }}>{client.name} </div>
-                            <div style={{ fontWeight: "bold", fontSize: "2rem" }}>{client.fathersName}</div>
-                            {client.hasPaid ? (
-                                <Badge pill bg="success">
-                                    Оплачено
-                                </Badge>
-                            ) : (
-                                <Badge pill bg="danger">
-                                    Долг
-                                </Badge>
-                            )}
-                        </Form>
-                        <Form className='d-flex justify-content-between' style={{ width: "18vw" }}>
-                            <Button variant="outline-dark" onClick={() => setUpdateClientVisible(true)}>
-                                Изменить
-                            </Button>{' '}
-                            <EditClient
-                                key={client.id}
-                                client={client}
-                                onHide={() => setUpdateClientVisible(false)}
-                                show={clientUpdateVisible}
-                            />
-                            <Button variant="outline-secondary">Выезд</Button>{' '}
-                            <Button variant="outline-danger" onClick={deleteOne}>Удалить</Button>{' '}
-                        </Form></Card.Header>
+                        <Row className='d-flex justify-content-between align-items-center' style={{ width: "100%" }}>
+                            <Col md={9} className='d-flex align-items-center'>
+
+                                <div style={{ fontWeight: "bold", fontSize: "2rem", marginRight: "1rem" }}>{client.surname} </div>
+                                <div style={{ fontWeight: "bold", fontSize: "2rem", marginRight: "1rem" }}>{client.name} </div>
+                                <div style={{ fontWeight: "bold", fontSize: "2rem", marginRight: "1rem" }}>{client.fathersName}</div>
+                                {client.hasPaid ? (
+                                    <Badge pill bg="danger" style={{ width: "5rem" }}>
+                                        Долг
+                                    </Badge>
+
+                                ) : (
+                                    <Badge pill bg="success">
+                                        Оплачено
+                                    </Badge>
+                                )}
+
+                            </Col>
+                            <Col md={3} className='d-flex align-items-center justify-content-end'>
+                                <Button variant="outline-dark" onClick={() => setUpdateClientVisible(true)}>
+                                    Изменить
+                                </Button>{' '}
+                                <EditClient
+                                    key={client.id}
+                                    client={client}
+                                    onHide={() => setUpdateClientVisible(false)}
+                                    show={clientUpdateVisible}
+                                />
+                                <Button variant="outline-danger" style={{ marginLeft: "1rem" }} onClick={deleteOne}>Удалить</Button>{' '}
+                            </Col>
+                        </Row></Card.Header>
                     <Card.Title border="primary" >
                     </Card.Title>
                     <Form className='d-flex justify-content-between'>
@@ -102,33 +108,35 @@ const ClientPage = observer(() => {
                             </tbody>
                         </Table>
                     </Form>
-                    <div className='d-flex justify-content-between align-items-center'>
-                        <Form className='d-flex flex-row'>
-                            <Card className='p-1 d-flex align-items-center' style={{ width: "15vw" }}>
-                                <Card.Img variant="top" src={checkedStatus} style={{ width: "3vw", height: "3vw" }} />
-                                <Card.Body>
-                                    <Card.Title>Статус оплаты</Card.Title>
-                                    <Card.Text>
-                                        <Badge bg="success">
-                                            {status}
-                                        </Badge>{' '}
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                            <Card className='p-1 d-flex align-items-center' style={{ width: "15vw" }}>
-                                <Card.Img variant="top" src={checkedStatus} style={{ width: "3vw", height: "3vw" }} />
-                                <Card.Body>
-                                    <Card.Title>Задолженность</Card.Title>
-                                    <Card.Text>
-                                        0 BYN
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Form>
+                        <Row>
+                            <Col className='d-flex' md={8}>
+                                <Card className='p-1 d-flex align-items-center' style={{ width: "15vw",  marginRight: "1rem"  }}>
+                                    <Card.Img src={uncheckedStatus} variant="top" style={{ width: "3vw", height: "3vw" }} />
+                                    <Card.Body>
+                                        <Card.Title>Статус оплаты</Card.Title>
+                                        <Card.Text>
+                                            <Badge bg="danger">
+                                                Долг
+                                            </Badge>{' '}
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                                <Card className='p-1 d-flex align-items-center' style={{ width: "15vw" }}>
+                                    <Card.Img icon="ship" variant="top" src={debt} style={{ width: "3vw", height: "3vw" }} />
+                                    <Card.Body>
+                                        <Card.Title>Задолженность</Card.Title>
+                                        <Card.Text>
+                                            350 BYN
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                            <Col md={4} className='d-flex align-items-center justify-content-end'>
 
-                        <Button variant="primary">Внести оплату</Button>{' '}
-
-                    </div>
+                                <Button style={{ marginRight: "1rem" }} variant="primary">Внести оплату</Button>{' '}
+                                <Button variant="outline-dark">Уведомить клиента</Button>{' '}
+                            </Col>
+                        </Row>
                 </Card>
                 <Card className='p-4 mb-3'>
                     <Card.Title border="primary" className='d-flex justify-content-between align-items-center' >

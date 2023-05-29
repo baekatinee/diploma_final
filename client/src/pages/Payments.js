@@ -27,7 +27,7 @@ const Payments =observer(()=> {
          <Row  className='mb-2'>
                 <Col md={10}>
                     <h1>
-                        Все клиенты
+                        Все оплаты
                     </h1>
                 </Col>
                 <Col md={2} className='d-flex align-items-center'>

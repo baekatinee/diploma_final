@@ -78,7 +78,7 @@ const ClientRentalItem = ({ rental, clientObj, shipObj }) => {
                     >
                         Добавить оплату
                     </Button>{' '}
-                        <CreatePayment 
+                        <CreatePayment
                             show={paymentVisible}
                             clientId={clientObj.id}
                             rentalId={rental.id}
@@ -86,6 +86,7 @@ const ClientRentalItem = ({ rental, clientObj, shipObj }) => {
                         /></Col>
                     <Col md={3} className='d-flex justify-content-end'>
                         <Button
+                            style={{ marginRight: "1rem" }}
                             className='mt-2'
                             variant="outline-dark"
                             onClick={() => setRentalVisible(true)}

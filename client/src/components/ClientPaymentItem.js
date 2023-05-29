@@ -44,7 +44,7 @@ const ClientPaymentItem = ({ payment, clientObj, shipObj, onDeletePayment }) => 
               <td>{payment.sum}</td>
               <td>{payment.rentalId}</td>
               <td>
-                <Button variant="outline-dark" onClick={handleUpdatePayment}>
+                <Button style={{marginRight:"1rem"}} variant="outline-dark" onClick={handleUpdatePayment}>
                   Изменить
                 </Button>{' '}
                 <EditPayment

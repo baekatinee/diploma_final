@@ -1,4 +1,6 @@
+
 import { makeAutoObservable } from 'mobx'
+import { fetchShips } from '../http/shipAPI'
 export default class ShipCrm {
     constructor() {
         this._ships = [
@@ -7,8 +9,7 @@ export default class ShipCrm {
         this._selectedType={}
         this._page = 1
         this._totalCount = 0
-        this._limit = 3
-
+        this._limit = 5
         makeAutoObservable(this)//////будет следить за изменениями этих переменных
     }
     setTypes(types) {
@@ -25,7 +26,11 @@ export default class ShipCrm {
     }
     setPage(page) {
         this._page = page;
-    }
+        fetchShips(this._selectedType.id, page, this._limit).then(data => {
+          this.setShips(data.rows);
+          this.setTotalCount(data.count);
+        });
+      }
     setTotalCount(totalCount) {
         this._totalCount = totalCount;
     }

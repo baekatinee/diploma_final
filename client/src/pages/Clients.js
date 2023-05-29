@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, Breadcrumb } from 'react-bootstrap';
 import ClientList from '../components/ClientList';
 import Pages from '../components/Pages';
 import { observer } from 'mobx-react-lite';
 import { Context } from '..';
 import CreateClient from '../components/modals/CreateClient';
 import { fetchClients } from '../http/clientAPI';
+import StatusClient from '../components/StatusClient';
 
 
 const Clients = observer(() => {
@@ -20,7 +21,14 @@ const Clients = observer(() => {
     },);
     return (
         <Container>
-            <Row  className='mb-2'>
+            <Breadcrumb>
+                <Breadcrumb.Item href="/">Дашборд</Breadcrumb.Item>
+                <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
+                    Клиенты
+                </Breadcrumb.Item>
+            </Breadcrumb>
+
+            <Row className='mb-2'>
                 <Col md={10}>
                     <h1>
                         Все клиенты
@@ -31,6 +39,11 @@ const Clients = observer(() => {
                         Добавить клиента
                     </Button>
                     <CreateClient show={clientVisible} onHide={() => setClientVisible(false)} />
+                </Col>
+            </Row>
+            <Row className='mb-2'>
+                <Col>
+                    <StatusClient />
                 </Col>
             </Row>
             <ClientList>
