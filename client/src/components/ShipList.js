@@ -25,7 +25,7 @@ const ShipList = observer(() => {
     }
     let iterator = 1;
     return (
-        <Table striped bordered hover>
+        <Table hover>
             <thead>
                 <tr>
                     <th>№</th>

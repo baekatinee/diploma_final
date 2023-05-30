@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Container, Button, Breadcrumb } from 'react-bootstrap'
+import { Container, Button, Breadcrumb, Row, Col } from 'react-bootstrap'
 import CreateClient from '../components/modals/CreateClient';
 import CreateShip from '../components/modals/CreateShip';
 import CreateType from '../components/modals/CreateType';
@@ -41,52 +41,76 @@ const Admin = () => {
     const [paymentVisible, setPaymentVisible] = useState(false)
     const [rentalVisible, setRentalVisible] = useState(false)
 
-    const [isHovered, setIsHovered] = useState(false);
-
+    const [isHovered1, setIsHovered1] = useState(false);
+    const [isHovered2, setIsHovered2] = useState(false);
+    const [isHovered3, setIsHovered3] = useState(false);
+    const [isHovered4, setIsHovered4] = useState(false);
+    const [isHovered5, setIsHovered5] = useState(false);
     return (
         <Container className='d-flex flex-column'>
-  <Breadcrumb>
+            <Breadcrumb>
                 <Breadcrumb.Item href="/">Дашборд</Breadcrumb.Item>
                 <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-                   Админ панель
+                    Админ панель
                 </Breadcrumb.Item>
             </Breadcrumb>
-            <div className='d-flex'>
+            <Row className='mb-2'>
+                <Col >
+                    <h1>
+                        Добавить
+                    </h1>
+                </Col>
+
+            </Row>
+            <div className='d-flex flex-wrap'>
                 <div onClick={() => setClientVisible(true)}
-                    style={{
-                        ...styles.container,
-                        ...(isHovered ? styles.containerHover : {})
-                    }}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}>
-                    <div style={{ ...styles.square, ...styles.squareClient }}>
-                        <PersonAdd size={35} color="Coral" />
+                    style={
+                        styles.container}>
+                    <div style={{ ...styles.square, ...styles.squareClient, ...(isHovered1 ? styles.containerHover1 : {}) }}
+                        onMouseEnter={() => setIsHovered1(true)}
+                        onMouseLeave={() => setIsHovered1(false)}>
+                        <PersonAdd size={50} color="Coral" />
 
                     </div>
                     <div style={styles.text}>Клиенты</div>
                 </div>
-                <div onClick={() => setShipVisible(true)} style={styles.container}>
-                    <div style={{ ...styles.square, ...styles.squareShip }}>
+                <div onClick={() => setShipVisible(true)} style={
+                    styles.container}>
+                    <div style={{ ...styles.square, ...styles.squareShip, 
+                    ...(isHovered2 ? styles.containerHover2 : {}) }}
+                        onMouseEnter={() => setIsHovered2(true)}
+                        onMouseLeave={() => setIsHovered2(false)}>
 
-                        <TruckFront size={35} color="ForestGreen" />
+                        <TruckFront size={50} color="ForestGreen" />
                     </div>
                     <div style={styles.text}>Судна</div>
                 </div>
-                <div onClick={() => setPaymentVisible(true)} style={styles.container}>
-                    <div style={{ ...styles.square, ...styles.squarePayment }}>
-                        <CreditCard size={35} color="#5375c6" />
+                <div onClick={() => setPaymentVisible(true)} style={
+                    styles.container}>
+                    <div style={{ ...styles.square, ...styles.squarePayment, 
+                    ...(isHovered3 ? styles.containerHover3 : {}) }}
+                        onMouseEnter={() => setIsHovered3(true)}
+                        onMouseLeave={() => setIsHovered3(false)}>
+                        <CreditCard size={50} color="#5375c6" />
                     </div>
                     <div style={styles.text}>Оплаты</div>
                 </div>
-                <div onClick={() => setTypeVisible(true)} style={styles.container}>
-                    <div style={{ ...styles.square, ...styles.squareType }}>
-                        <ListUl size={35} color="#f287f8" />
+                <div onClick={() => setTypeVisible(true)} style={
+                    styles.container}>
+                    <div style={{ ...styles.square, ...styles.squareType, 
+                    ...(isHovered4? styles.containerHover4 : {}) }}
+                        onMouseEnter={() => setIsHovered4(true)}
+                        onMouseLeave={() => setIsHovered4(false)}>
+                        <ListUl size={50} color="#f287f8" />
                     </div>
                     <div style={styles.text}>Тип судна</div>
                 </div>
-                <div onClick={() => setRentalVisible(true)} style={styles.container}>
-                    <div style={{ ...styles.square, ...styles.squareRental }}>
-                        <HouseAdd size={35} color="#f96262" />
+                <div onClick={() => setRentalVisible(true)} style={
+                    styles.container}>
+                    <div style={{ ...styles.square, ...styles.squareRental, ...(isHovered5 ? styles.containerHover5 : {}) }}
+                        onMouseEnter={() => setIsHovered5(true)}
+                        onMouseLeave={() => setIsHovered5(false)}>
+                        <HouseAdd size={50} color="#f96262" />
                     </div>
                     <div style={styles.text}>Аренда</div>
                 </div>
@@ -109,12 +133,24 @@ const styles = {
         alignItems: 'center',
         padding: '10px',
     },
-    containerHover: {
-        opacity: 0.8,
+    containerHover1: {
+        backgroundColor: '#f6e9d6',
+    },
+    containerHover2: {
+        backgroundColor: '#eaf7e3',
+    },
+    containerHover3: {
+        backgroundColor: '#e2e8f8',
+    },
+    containerHover4: {
+        backgroundColor: '#f7eef7',
+    },
+    containerHover5: {
+        backgroundColor: '#f1e4e4',
     },
     square: {
-        width: '80px',
-        height: '80px',
+        width: '200px',
+        height: '200px',
         borderRadius: '20px',
         display: 'flex',
         justifyContent: 'center',

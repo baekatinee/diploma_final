@@ -56,6 +56,7 @@ const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
       <td>{client.fathersName}</td>
       <td>{client.phoneNumber}</td>
       <td>{client.email}</td>
+      {isAllClients ? (
       <td>
         {client.hasPaid ? (
           <Badge pill bg="success">
@@ -66,7 +67,7 @@ const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
             Долг
           </Badge>
         )}
-      </td>
+      </td>) : ( '')}
       {isAllClients ? (
         <td style={{ width: '100%' }} className="d-flex justify-content-around">
           <Button variant="outline-dark" onClick={openEditModal}>

@@ -12,6 +12,7 @@ import RentalList from '../components/RentalList';
 import PaymentList from '../components/PaymentList';
 import { fetchPayments } from '../http/paymentAPI';
 import CustomRadialBarChart from '../components/diagramma/CustomRadialBarChart';
+import renderLineChart from '../components/diagramma/renderLineChart';
 
 const Dashboard = observer(() => {
   const { client, rental, ship, payment } = useContext(Context);
@@ -70,24 +71,27 @@ const Dashboard = observer(() => {
 
   return (
     <Container>
-      <Card className="p-5" style={{ backgroundColor: '#F8F8F8' }}>
-        <Row className="mb-4">
-          <CardGroup className="justify-content-between">
-            <Card className="shadow" style={{ flex: '0 0 30%' }}>
-              <CustomRadialBarChart />
-            </Card>
-            <Card className="shadow" style={{ flex: '0 0 30%' }}>
-              <CustomRadialBarChart />
-            </Card>
-            <Card className="shadow" style={{ flex: '0 0 30%' }}>
-              <CustomRadialBarChart />
-            </Card>
-          </CardGroup>
+      <Card className="p-5" >
+        {/* <Row className="mb-4 d-flex">
+          <Col>
+          <CustomRadialBarChart />
+          </Col>
+          <Col>
+          <CustomRadialBarChart />
+          </Col>
+          <Col>
+          <CustomRadialBarChart />
+          </Col>
+        </Row> */}
+        <Row>
+          <Col md={8}>
+            <renderLineChart/>
+          </Col>
         </Row>
         <Row className="mb-3">
           <Col md={10}>
             <CardGroup className="justify-content-between">
-              <Card bg="light" className="shadow" style={{ flex: '1' }}>
+              <Card  className="shadow" style={{ flex: '1' }}>
                 <Card.Header>Общая выручка за сезон</Card.Header>
                 <Card.Body>
                   <Card.Title>3000 BYN</Card.Title>
@@ -119,7 +123,7 @@ const Dashboard = observer(() => {
         </Row>
         <Row className="my-3">
           <Col md={12}>
-            <Card className="shadow p-4">
+            <Card className="shadow p-4 border-0" >
               <Card.Title className="p-3">Клиенты с задолженностью</Card.Title>
               <ClientList updateFlag={updateFlag} />
             </Card>
@@ -127,13 +131,13 @@ const Dashboard = observer(() => {
         </Row>
         <Row>
           <Col md={6}>
-            <Card className="shadow p-4">
+            <Card className="shadow p-4 border-0">
               <Card.Title className="p-3">Последние аренды</Card.Title>
               <RentalList />
             </Card>
           </Col>
           <Col md={6}>
-            <Card className="shadow p-4">
+            <Card className="shadow p-4 border-0">
               <Card.Title className="p-3">Последние оплаты</Card.Title>
               <PaymentList />
             </Card>

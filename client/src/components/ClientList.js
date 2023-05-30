@@ -34,7 +34,7 @@ const ClientList = observer(() => {
   };
 
   return (
-    <Table striped bordered hover>
+    <Table   hover>
       <thead>
         <tr>
           <th>№</th>
@@ -43,7 +43,7 @@ const ClientList = observer(() => {
           <th>Отчество</th>
           <th>Номер телефона</th>
           <th>Email</th>
-          <th>Статус оплаты</th>
+          {isAllClients &&<th>Статус оплаты</th>}
           {isAllClients && <th>Действия</th>}
         </tr>
       </thead>

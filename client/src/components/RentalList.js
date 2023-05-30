@@ -25,7 +25,7 @@ const RentalList = observer(({ clientId }) => {
   }
 
   return (
-    <Table striped bordered hover>
+    <Table hover>
       <thead>
         <tr>
           <th>ID</th>

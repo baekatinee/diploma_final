@@ -54,8 +54,8 @@ const ClientPage = observer(() => {
     const status = "Оплачено"
     return (
         <Container>
-            <Card className='bg-light mt-5 p-4' >
-                <Card className='p-4 mb-3'>
+            <Card className='border-0 bg-light mt-5 p-4' >
+                <Card className='border-0 p-4 mb-3'>
                     <Card.Header className='d-flex justify-content-between align-items-center'>
                         <Row className='d-flex justify-content-between align-items-center' style={{ width: "100%" }}>
                             <Col md={9} className='d-flex align-items-center'>
@@ -91,7 +91,7 @@ const ClientPage = observer(() => {
                     <Card.Title border="primary" >
                     </Card.Title>
                     <Form className='d-flex justify-content-between'>
-                        <Table striped bordered hover style={{ width: "40vw" }} >
+                        <Table  hover style={{ width: "40vw" }} >
                             <tbody>
                                 <tr>
                                     <td>Номер телефона</td>
@@ -109,8 +109,8 @@ const ClientPage = observer(() => {
                         </Table>
                     </Form>
                         <Row>
-                            <Col className='d-flex' md={8}>
-                                <Card className='p-1 d-flex align-items-center' style={{ width: "15vw",  marginRight: "1rem"  }}>
+                            <Col className='d-flex ' md={8}>
+                                <Card className='border-0 p-1 d-flex align-items-center' style={{ width: "15vw",  marginRight: "1rem"  }}>
                                     <Card.Img src={uncheckedStatus} variant="top" style={{ width: "3vw", height: "3vw" }} />
                                     <Card.Body>
                                         <Card.Title>Статус оплаты</Card.Title>
@@ -121,7 +121,7 @@ const ClientPage = observer(() => {
                                         </Card.Text>
                                     </Card.Body>
                                 </Card>
-                                <Card className='p-1 d-flex align-items-center' style={{ width: "15vw" }}>
+                                <Card className='border-0 p-1 d-flex align-items-center' style={{ width: "15vw" }}>
                                     <Card.Img icon="ship" variant="top" src={debt} style={{ width: "3vw", height: "3vw" }} />
                                     <Card.Body>
                                         <Card.Title>Задолженность</Card.Title>
@@ -138,7 +138,7 @@ const ClientPage = observer(() => {
                             </Col>
                         </Row>
                 </Card>
-                <Card className='p-4 mb-3'>
+                <Card className=' border-0 p-4 mb-3'>
                     <Card.Title border="primary" className='d-flex justify-content-between align-items-center' >
                         <div>   Текущие аренды</div>
                         <Button
@@ -150,7 +150,7 @@ const ClientPage = observer(() => {
                     </Card.Title>
                     <ClientRentalList clientId={client.id}></ClientRentalList>
                 </Card>
-                <Card className='p-4 mb-3'>
+                <Card className=' border-0 p-4 mb-3'>
                     <Card.Title border="primary" >
                         История оплат
                     </Card.Title>
