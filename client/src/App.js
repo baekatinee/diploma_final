@@ -26,11 +26,11 @@ const App = observer(() => {
   return (
     <BrowserRouter>
       <Row>
-        <Col md={2} className="me-4"> {/* Add `me-4` class for right margin */}
+      <Col md={2} className={user.isAuth ? "me-4" : ""}>
           <SideMenu></SideMenu>
         </Col>
-        <Col md={9}>
-          <Row className="mb-3"> {/* Add `mb-3` class for bottom margin */}
+        <Col md={user.isAuth ? 9 : 12}>
+          <Row className="mb-3">
             <NavBar />
           </Row>
           <Row>

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Container, Button } from 'react-bootstrap'
+import { Container, Button, Breadcrumb } from 'react-bootstrap'
 import CreateClient from '../components/modals/CreateClient';
 import CreateShip from '../components/modals/CreateShip';
 import CreateType from '../components/modals/CreateType';
 import CreateRental from '../components/modals/CreateRental';
+import { CreditCard, HouseAdd, ListUl, PersonAdd, TruckFront } from 'react-bootstrap-icons'
 import { Context } from '..';
 import { fetchClients } from '../http/clientAPI';
 import { fetchRentals } from '../http/rentalAPI';
@@ -40,35 +41,57 @@ const Admin = () => {
     const [paymentVisible, setPaymentVisible] = useState(false)
     const [rentalVisible, setRentalVisible] = useState(false)
 
-
+    const [isHovered, setIsHovered] = useState(false);
 
     return (
         <Container className='d-flex flex-column'>
-            <Button
-                className='mt-2'
-                variant="outline-dark"
-                onClick={()=>setClientVisible(true)}>
-                Добавить клиента</Button>{' '}
-            <Button
-                className='mt-2'
-                variant="outline-dark"
-                onClick={()=>setShipVisible(true)}>
-                Добавить судно</Button>{' '}
-            <Button
-                className='mt-2'
-                variant="outline-dark"
-                onClick={()=>setPaymentVisible(true)}>
-                Добавить оплату</Button>{' '}
-            <Button
-                className='mt-2'
-                variant="outline-dark"
-                onClick={()=>setTypeVisible(true)}>
-                Добавить тип судна</Button>{' '}
-            <Button
-                className='mt-2'
-                variant="outline-dark"
-                onClick={()=>setRentalVisible(true)}>
-                Добавить аренду</Button>{' '}
+  <Breadcrumb>
+                <Breadcrumb.Item href="/">Дашборд</Breadcrumb.Item>
+                <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
+                   Админ панель
+                </Breadcrumb.Item>
+            </Breadcrumb>
+            <div className='d-flex'>
+                <div onClick={() => setClientVisible(true)}
+                    style={{
+                        ...styles.container,
+                        ...(isHovered ? styles.containerHover : {})
+                    }}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}>
+                    <div style={{ ...styles.square, ...styles.squareClient }}>
+                        <PersonAdd size={35} color="Coral" />
+
+                    </div>
+                    <div style={styles.text}>Клиенты</div>
+                </div>
+                <div onClick={() => setShipVisible(true)} style={styles.container}>
+                    <div style={{ ...styles.square, ...styles.squareShip }}>
+
+                        <TruckFront size={35} color="ForestGreen" />
+                    </div>
+                    <div style={styles.text}>Судна</div>
+                </div>
+                <div onClick={() => setPaymentVisible(true)} style={styles.container}>
+                    <div style={{ ...styles.square, ...styles.squarePayment }}>
+                        <CreditCard size={35} color="#5375c6" />
+                    </div>
+                    <div style={styles.text}>Оплаты</div>
+                </div>
+                <div onClick={() => setTypeVisible(true)} style={styles.container}>
+                    <div style={{ ...styles.square, ...styles.squareType }}>
+                        <ListUl size={35} color="#f287f8" />
+                    </div>
+                    <div style={styles.text}>Тип судна</div>
+                </div>
+                <div onClick={() => setRentalVisible(true)} style={styles.container}>
+                    <div style={{ ...styles.square, ...styles.squareRental }}>
+                        <HouseAdd size={35} color="#f96262" />
+                    </div>
+                    <div style={styles.text}>Аренда</div>
+                </div>
+            </div>
+
             <CreateClient show={clientVisible} onHide={() => setClientVisible(false)}></CreateClient>
             <CreateShip show={shipVisible} onHide={() => setShipVisible(false)}></CreateShip>
             <CreateType show={typeVisible} onHide={() => setTypeVisible(false)}></CreateType>
@@ -76,5 +99,47 @@ const Admin = () => {
             <CreatePayment show={paymentVisible} onHide={() => setPaymentVisible(false)}></CreatePayment>
         </Container>
     )
+
+
 }
+const styles = {
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '10px',
+    },
+    containerHover: {
+        opacity: 0.8,
+    },
+    square: {
+        width: '80px',
+        height: '80px',
+        borderRadius: '20px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    squarePayment: {
+        backgroundColor: '#dbe6ff',
+    },
+    squareClient: {
+        backgroundColor: 'BlanchedAlmond',
+    },
+    squareShip: {
+        backgroundColor: '#e8fddd',
+    },
+    squareType: {
+        backgroundColor: '#fce8fd',
+    },
+    squareRental: {
+        backgroundColor: '#ffd6d6',
+    },
+    text: {
+        marginTop: '10px',
+        fontSize: '16px',
+        fontWeight: '600',
+    },
+};
+
 export default Admin;

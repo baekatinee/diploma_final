@@ -35,41 +35,38 @@ const Sidebar = observer(() => {
     setShowConfirmation(false);
   };
 
+  if (!user.isAuth) {
+    return null;
+  }
+
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       <CDBSidebar className="" textColor="black" backgroundColor="white">
         <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-          <Link style={{ textDecoration: 'none', color: "#000" }} to={user.isAuth ? DASHBOARD_ROUTE : HOME_ROUTE}>Sailing Center</Link>
+          <Link style={{ textDecoration: 'none', color: "#000" }} to={user.isAuth 
+            ? DASHBOARD_ROUTE : HOME_ROUTE}>Sailing Center</Link>
         </CDBSidebarHeader>
         <CDBSidebarContent className="sidebar-content">
-          {user.isAuth ? (
-            <CDBSidebarMenu>
-              <NavLink to={DASHBOARD_ROUTE} activeclassname="activeClicked">
-                <CDBSidebarMenuItem icon="columns">Дашборд</CDBSidebarMenuItem>
-              </NavLink>
-              <NavLink to={ADMIN_ROUTE} activeclassname="activeClicked">
-                <CDBSidebarMenuItem icon="address-book">Админ панель</CDBSidebarMenuItem>
-              </NavLink>
-              <NavLink to={CLIENTS_ROUTE} activeclassname="activeClicked">
-                <CDBSidebarMenuItem icon="table">Клиенты</CDBSidebarMenuItem>
-              </NavLink>
-              <NavLink to={PAYMENTS_ROUTE} activeclassname="activeClicked">
-                <CDBSidebarMenuItem icon="credit-card">Оплаты</CDBSidebarMenuItem>
-              </NavLink>
-              <NavLink to={SHIPS_ROUTE} activeclassname="activeClicked">
-                <CDBSidebarMenuItem icon="ship">Судна</CDBSidebarMenuItem>
-              </NavLink>
-              <CDBSidebarMenuItem icon="times" onClick={exit}>
-                Выйти
-              </CDBSidebarMenuItem>
-            </CDBSidebarMenu>
-          ) : (
-            <CDBSidebarMenu>
-              <NavLink to={LOGIN_ROUTE}>
-                <CDBSidebarMenuItem icon="user">Авторизация</CDBSidebarMenuItem>
-              </NavLink>
-            </CDBSidebarMenu>
-          )}
+          <CDBSidebarMenu>
+            <NavLink to={DASHBOARD_ROUTE} activeclassname="activeClicked">
+              <CDBSidebarMenuItem icon="columns">Дашборд</CDBSidebarMenuItem>
+            </NavLink>
+            <NavLink to={ADMIN_ROUTE} activeclassname="activeClicked">
+              <CDBSidebarMenuItem icon="address-book">Админ панель</CDBSidebarMenuItem>
+            </NavLink>
+            <NavLink to={CLIENTS_ROUTE} activeclassname="activeClicked">
+              <CDBSidebarMenuItem icon="table">Клиенты</CDBSidebarMenuItem>
+            </NavLink>
+            <NavLink to={PAYMENTS_ROUTE} activeclassname="activeClicked">
+              <CDBSidebarMenuItem icon="credit-card">Оплаты</CDBSidebarMenuItem>
+            </NavLink>
+            <NavLink to={SHIPS_ROUTE} activeclassname="activeClicked">
+              <CDBSidebarMenuItem icon="ship">Судна</CDBSidebarMenuItem>
+            </NavLink>
+            <CDBSidebarMenuItem icon="times" onClick={exit}>
+              Выйти
+            </CDBSidebarMenuItem>
+          </CDBSidebarMenu>
         </CDBSidebarContent>
       </CDBSidebar>
 
