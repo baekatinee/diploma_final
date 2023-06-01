@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect  } from 'react';
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -6,9 +6,9 @@ import {
   CDBSidebarMenu,
   CDBSidebarMenuItem,
 } from 'cdbreact';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Context } from '..';
-import { ADMIN_ROUTE, DASHBOARD_ROUTE, HOME_ROUTE, LOGIN_ROUTE, CLIENTS_ROUTE, PAYMENTS_ROUTE, ARCHIVE_ROUTE, SHIPS_ROUTE } from '../utils/consts';
+import { DASHBOARD_ROUTE, ADMIN_ROUTE, CLIENTS_ROUTE, PAYMENTS_ROUTE, SHIPS_ROUTE } from '../utils/consts';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, Link } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
@@ -17,6 +17,8 @@ const Sidebar = observer(() => {
   const navigate = useNavigate();
   const { user } = useContext(Context);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedMenu, setSelectedMenu] = useState('');
+  const page = useLocation().pathname;
 
   const exit = () => {
     setShowConfirmation(true);
@@ -30,9 +32,25 @@ const Sidebar = observer(() => {
     localStorage.removeItem('token');
     user.setUser({});
     user.setIsAuth(false);
-    await navigate(HOME_ROUTE);
-    localStorage.removeItem('token');
+    await navigate('/');
     setShowConfirmation(false);
+  };
+
+  useEffect(() => {
+    if (page === DASHBOARD_ROUTE) {
+      handleMenuClick('dashboard');
+    } else if (page === CLIENTS_ROUTE) {
+      handleMenuClick('clients');
+    } else if (page === ADMIN_ROUTE) {
+      handleMenuClick('admin');
+    } else if (page === PAYMENTS_ROUTE) {
+      handleMenuClick('payments');
+    } else if (page === SHIPS_ROUTE) {
+      handleMenuClick('ships');
+    }
+  }, [page]);
+  const handleMenuClick = (menuName) => {
+    setSelectedMenu(menuName);
   };
 
   if (!user.isAuth) {
@@ -41,29 +59,90 @@ const Sidebar = observer(() => {
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <CDBSidebar className="" textColor="black" backgroundColor="white">
+      <CDBSidebar className="" textColor="black" backgroundColor="#F6F8FC">
         <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-          <Link style={{ textDecoration: 'none', color: "#000" }} to={user.isAuth 
-            ? DASHBOARD_ROUTE : HOME_ROUTE}>Sailing Center</Link>
+          <Link style={{ textDecoration: 'none', color: '#000' }} to={user.isAuth ? DASHBOARD_ROUTE : '/'}>
+            Sailing Center
+          </Link>
         </CDBSidebarHeader>
         <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
-            <NavLink to={DASHBOARD_ROUTE} activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="columns">Дашборд</CDBSidebarMenuItem>
+            <NavLink
+              to={DASHBOARD_ROUTE}
+              activeClassName="activeClicked"
+              style={{ textDecoration: 'none' }}
+              onClick={() => handleMenuClick('dashboard')}
+            >
+              <CDBSidebarMenuItem
+                icon="columns"
+                style={selectedMenu === 'dashboard' ? { backgroundColor: '#fce8fd', fontWeight: 'bold' } : {}}
+                className={selectedMenu === 'dashboard' ? 'hovered' : ''}
+              >
+                Дашборд
+              </CDBSidebarMenuItem>
             </NavLink>
-            <NavLink to={ADMIN_ROUTE} activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="address-book">Админ панель</CDBSidebarMenuItem>
+            <NavLink
+              to={ADMIN_ROUTE}
+              activeClassName="activeClicked"
+              style={{ textDecoration: 'none' }}
+              onClick={() => handleMenuClick('admin')}
+            >
+              <CDBSidebarMenuItem
+                icon="address-book"
+                style={selectedMenu === 'admin' ? { backgroundColor: '#ffd6d6', fontWeight: 'bold' } : {}}
+                className={selectedMenu === 'admin' ? 'hovered' : ''}
+              >
+                Админ панель
+              </CDBSidebarMenuItem>
             </NavLink>
-            <NavLink to={CLIENTS_ROUTE} activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="table">Клиенты</CDBSidebarMenuItem>
+            <NavLink
+              to={CLIENTS_ROUTE}
+              activeClassName="activeClicked"
+              style={{ textDecoration: 'none' }}
+              onClick={() => handleMenuClick('clients')}
+            >
+              <CDBSidebarMenuItem
+                icon="table"
+                style={selectedMenu === 'clients' ? { backgroundColor: 'BlanchedAlmond', fontWeight: 'bold' } : {}}
+                className={selectedMenu === 'clients' ? 'hovered' : ''}
+              >
+                Клиенты
+              </CDBSidebarMenuItem>
             </NavLink>
-            <NavLink to={PAYMENTS_ROUTE} activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="credit-card">Оплаты</CDBSidebarMenuItem>
+            <NavLink
+              to={PAYMENTS_ROUTE}
+              activeClassName="activeClicked"
+              style={{ textDecoration: 'none' }}
+              onClick={() => handleMenuClick('payments')}
+            >
+              <CDBSidebarMenuItem
+                icon="credit-card"
+                style={selectedMenu === 'payments' ? { backgroundColor: '#dbe6ff', fontWeight: 'bold' } : {}}
+                className={selectedMenu === 'payments' ? 'hovered' : ''}
+              >
+                Оплаты
+              </CDBSidebarMenuItem>
             </NavLink>
-            <NavLink to={SHIPS_ROUTE} activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="ship">Судна</CDBSidebarMenuItem>
+            <NavLink
+              to={SHIPS_ROUTE}
+              activeClassName="activeClicked"
+              style={{ textDecoration: 'none' }}
+              onClick={() => handleMenuClick('ships')}
+            >
+              <CDBSidebarMenuItem
+                icon="ship"
+                style={selectedMenu === 'ships' ? { backgroundColor: '#e8fddd', fontWeight: 'bold' } : {}}
+                className={selectedMenu === 'ships' ? 'hovered' : ''}
+              >
+                Судна
+              </CDBSidebarMenuItem>
             </NavLink>
-            <CDBSidebarMenuItem icon="times" onClick={exit}>
+            <CDBSidebarMenuItem
+              icon="times"
+              onClick={exit}
+              style={selectedMenu === 'exit' ? { backgroundColor: '#e8fddd', fontWeight: 'bold' } : {}}
+              className={selectedMenu === 'exit' ? 'hovered' : ''}
+            >
               Выйти
             </CDBSidebarMenuItem>
           </CDBSidebarMenu>

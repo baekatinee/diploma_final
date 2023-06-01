@@ -1,9 +1,7 @@
 import React from 'react';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
-const data = [{name: 'Page A', uv: 400, pv: 2400, amt: 2400}];
-
-const renderLineChart = () => {
+const LineChartWithXAxisPadding = ({ data }) => {
   return (
     <LineChart width={600} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
       <Line type="monotone" dataKey="uv" stroke="#8884d8" />
@@ -15,4 +13,4 @@ const renderLineChart = () => {
   );
 };
 
-export default renderLineChart;
+export default LineChartWithXAxisPadding;

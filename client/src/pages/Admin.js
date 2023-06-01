@@ -134,13 +134,13 @@ const styles = {
         padding: '10px',
     },
     containerHover1: {
-        backgroundColor: '#f6e9d6',
+        backgroundColor: '#f6e9d2',
     },
     containerHover2: {
-        backgroundColor: '#eaf7e3',
+        backgroundColor: '#eaf7e7',
     },
     containerHover3: {
-        backgroundColor: '#e2e8f8',
+        backgroundColor: '#e2e8f2',
     },
     containerHover4: {
         backgroundColor: '#f7eef7',

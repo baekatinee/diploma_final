@@ -1,6 +1,6 @@
-const { Client, Rental, Payment } = require('../models/models')
+const { Client, Rental, Payment, Ship } = require('../models/models')
 const apiError = require('../error/apiError')
-const { Op } = require('sequelize');
+
 
 class clientController {
     async create(req, res, next) {
@@ -63,6 +63,7 @@ class clientController {
     async updateHasPaidStatus(req, res, next) {
         try {
           const currentDate = new Date();
+          const isSummer = isSummerSeason(currentDate); // Функция, которая определяет, является ли текущая дата летним сезоном
       
           // Получаем всех клиентов
           const clients = await Client.findAll();
@@ -78,6 +79,9 @@ class clientController {
             });
       
             for (const rental of rentals) {
+              // Получаем судно, связанное с арендой
+              const ship = await Ship.findByPk(rental.shipId);
+      
               // Получаем все оплаты для аренды
               const payments = await Payment.findAll({
                 where: {
@@ -85,19 +89,18 @@ class clientController {
                 },
               });
       
-              // Проверяем даты аренды и оплаты
+              // Суммируем стоимость оплат для аренды
+              let totalPaymentAmount = 0;
               for (const payment of payments) {
-                if (
-                  payment.paidDate < rental.startDate ||
-                  payment.paidDate > rental.endDate ||
-                  rental.endDate < currentDate
-                ) {
-                  hasPaid = false;
-                  break;
-                }
+                totalPaymentAmount += payment.sum;
               }
       
-              if (!hasPaid) {
+              // Получаем стоимость аренды в зависимости от времени года
+              const rentalAmount = isSummer ? ship.priceSummer : ship.priceWinter;
+      
+              // Проверяем, равна ли сумма оплаты стоимости аренды
+              if (totalPaymentAmount !== rentalAmount) {
+                hasPaid = false;
                 break;
               }
             }
@@ -114,7 +117,8 @@ class clientController {
           next(apiError.badRequest(e.message));
         }
       }
-    
+
+      
 
     async updateOne(req, res, next) {
         try {

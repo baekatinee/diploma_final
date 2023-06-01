@@ -14,10 +14,10 @@ const App = observer(() => {
   const [loading, setLoading] = useState(true)
   useEffect(() => {
     check().then(data => {
-        user.setUser(true)
-        user.setIsAuth(true)
+      user.setUser(true)
+      user.setIsAuth(true)
     }).finally(() => setLoading(false))
-}, [])
+  }, [])
 
 
   if (loading) {
@@ -26,19 +26,23 @@ const App = observer(() => {
   return (
     <BrowserRouter>
       <Row>
-      <Col md={2} className={user.isAuth ? "me-4" : ""}>
+        <Col md={1} className={user.isAuth ? "me-4" : ""}>
           <SideMenu></SideMenu>
         </Col>
-        <Col md={user.isAuth ? 9 : 12}>
-          <Row className="mb-3">
-            <NavBar />
-          </Row>
-          <Row>
-            <AppRouter />
-          </Row>
+        <Col md={user.isAuth ? 10 : 12}>
+          <Container>
+            <Row className="mb-3">
+              <NavBar />
+            </Row>
+            <Row>
+              <AppRouter />
+            </Row>
+          </Container >
         </Col>
       </Row>
+
     </BrowserRouter>
+
   );
 });
 

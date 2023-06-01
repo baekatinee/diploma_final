@@ -11,13 +11,59 @@ import { fetchShips } from '../http/shipAPI';
 import RentalList from '../components/RentalList';
 import PaymentList from '../components/PaymentList';
 import { fetchPayments } from '../http/paymentAPI';
+
 import CustomRadialBarChart from '../components/diagramma/CustomRadialBarChart';
-import renderLineChart from '../components/diagramma/renderLineChart';
+import MyChart from '../components/diagramma/MyChart';
+
 
 const Dashboard = observer(() => {
   const { client, rental, ship, payment } = useContext(Context);
   const [clientVisible, setClientVisible] = useState(false);
   const [updateFlag, setUpdateFlag] = useState(false);
+  const data = [
+    {
+      name: 'Page A',
+      uv: 4000,
+      pv: 2400,
+      amt: 2400,
+    },
+    {
+      name: 'Page B',
+      uv: 3000,
+      pv: 1398,
+      amt: 2210,
+    },
+    {
+      name: 'Page C',
+      uv: 2000,
+      pv: 9800,
+      amt: 2290,
+    },
+    {
+      name: 'Page D',
+      uv: 2780,
+      pv: 3908,
+      amt: 2000,
+    },
+    {
+      name: 'Page E',
+      uv: 1890,
+      pv: 4800,
+      amt: 2181,
+    },
+    {
+      name: 'Page F',
+      uv: 2390,
+      pv: 3800,
+      amt: 2500,
+    },
+    {
+      name: 'Page G',
+      uv: 3490,
+      pv: 4300,
+      amt: 2100,
+    },
+  ];
   useEffect(() => {
     fetchPayments().then(data => {
       if (payment) {
@@ -70,28 +116,46 @@ const Dashboard = observer(() => {
   };
 
   return (
-    <Container>
-      <Card className="p-5" >
-        {/* <Row className="mb-4 d-flex">
-          <Col>
-          <CustomRadialBarChart />
-          </Col>
-          <Col>
-          <CustomRadialBarChart />
-          </Col>
-          <Col>
-          <CustomRadialBarChart />
-          </Col>
-        </Row> */}
+    <Container >
+      <Card className="p-5 border-0 border-radius-50" style={{backgroundColor:"#FFFF"}}>
         <Row>
-          <Col md={8}>
-            <renderLineChart/>
+          <Col md={7}>
+            <Row>
+              <h4 >
+                Выручка
+              </h4>
+            </Row>
+            <Row>
+              <h5 style={styles.title3}>
+                Общая выручка за сезон 2023
+              </h5>
+            </Row>
+            <Row>
+              <MyChart data={data} />
+            </Row>
+
           </Col>
+          <Col md={5}>
+            <Row>
+              <h4>
+                Клиенты
+              </h4>
+              <Row>
+                <h5 style={styles.title3}>
+                  Статистика по задолженностям
+                </h5>
+              </Row>
+            </Row>
+            <Row>
+              <CustomRadialBarChart />
+            </Row> </Col>
         </Row>
+        </Card>
+
         <Row className="mb-3">
-          <Col md={10}>
+          {/* <Col md={10}>
             <CardGroup className="justify-content-between">
-              <Card  className="shadow" style={{ flex: '1' }}>
+              <Card className="shadow" style={{ flex: '1' }}>
                 <Card.Header>Общая выручка за сезон</Card.Header>
                 <Card.Body>
                   <Card.Title>3000 BYN</Card.Title>
@@ -113,7 +177,7 @@ const Dashboard = observer(() => {
                 </Card.Body>
               </Card>
             </CardGroup>
-          </Col>
+          </Col> */}
           <Col md={2} className="d-flex align-items-center">
             <Button variant="outline-dark" onClick={handleAddClient}>
               Добавить клиента
@@ -123,7 +187,7 @@ const Dashboard = observer(() => {
         </Row>
         <Row className="my-3">
           <Col md={12}>
-            <Card className="shadow p-4 border-0" >
+            <Card className="p-4 border-0" >
               <Card.Title className="p-3">Клиенты с задолженностью</Card.Title>
               <ClientList updateFlag={updateFlag} />
             </Card>
@@ -131,21 +195,29 @@ const Dashboard = observer(() => {
         </Row>
         <Row>
           <Col md={6}>
-            <Card className="shadow p-4 border-0">
+            <Card className="p-4 border-0">
               <Card.Title className="p-3">Последние аренды</Card.Title>
               <RentalList />
             </Card>
           </Col>
           <Col md={6}>
-            <Card className="shadow p-4 border-0">
+            <Card className=" p-4 border-0">
               <Card.Title className="p-3">Последние оплаты</Card.Title>
               <PaymentList />
             </Card>
           </Col>
         </Row>
-      </Card>
+
     </Container>
   );
 });
 
+const styles = {
+
+  title3: {
+    color: "#A7A7A7",
+    fontWeight:"400"
+
+  }
+}
 export default Dashboard;

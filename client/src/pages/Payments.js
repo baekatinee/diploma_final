@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, Breadcrumb } from 'react-bootstrap';
 import { observer } from 'mobx-react-lite';
 import { Context } from '..';
 import PaymentList from '../components/PaymentList';
@@ -7,7 +7,7 @@ import { fetchPayments } from '../http/paymentAPI';
 import CreatePayment from '../components/modals/CreatePayment';
 import { fetchRentals } from '../http/rentalAPI';
 
-const Payments =observer(()=> {
+const Payments = observer(() => {
     const { payment, rental } = useContext(Context);
     const [paymentVisible, setPaymentVisible] = useState(false)
     useEffect(() => {
@@ -24,7 +24,13 @@ const Payments =observer(()=> {
     },);
     return (
         <Container>
-         <Row  className='mb-2'>
+             <Breadcrumb>
+                <Breadcrumb.Item href="/">Дашборд</Breadcrumb.Item>
+                <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
+                    Оплаты
+                </Breadcrumb.Item>
+            </Breadcrumb>
+            <Row className='mb-2'>
                 <Col md={10}>
                     <h1>
                         Все оплаты
