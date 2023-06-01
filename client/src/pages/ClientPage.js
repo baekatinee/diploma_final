@@ -133,7 +133,6 @@ const ClientPage = observer(() => {
                             </Col>
                             <Col md={4} className='d-flex align-items-center justify-content-end'>
 
-                                <Button style={{ marginRight: "1rem" }} variant="primary">Внести оплату</Button>{' '}
                                 <Button variant="outline-dark">Уведомить клиента</Button>{' '}
                             </Col>
                         </Row>

@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Container, Col, Row, Card, CardGroup, Button } from 'react-bootstrap';
-import StatusBar from '../components/StatusBar';
-import CreateClient from '../components/modals/CreateClient';
+import { Container, Col, Row, Card} from 'react-bootstrap';
 import ClientList from '../components/ClientList';
 import { observer } from 'mobx-react-lite';
 import { Context } from '..';
@@ -11,57 +9,49 @@ import { fetchShips } from '../http/shipAPI';
 import RentalList from '../components/RentalList';
 import PaymentList from '../components/PaymentList';
 import { fetchPayments } from '../http/paymentAPI';
-
 import CustomRadialBarChart from '../components/diagramma/CustomRadialBarChart';
 import MyChart from '../components/diagramma/MyChart';
+import GradientDiv from '../components/GradientDiv';
 
 
 const Dashboard = observer(() => {
   const { client, rental, ship, payment } = useContext(Context);
-  const [clientVisible, setClientVisible] = useState(false);
-  const [updateFlag, setUpdateFlag] = useState(false);
   const data = [
     {
-      name: 'Page A',
-      uv: 4000,
+      name: 'Апрель',
+      BYN: 4000,
       pv: 2400,
       amt: 2400,
     },
     {
-      name: 'Page B',
-      uv: 3000,
+      name: 'Май',
+      BYN: 3000,
       pv: 1398,
       amt: 2210,
     },
     {
-      name: 'Page C',
-      uv: 2000,
+      name: 'Июнь',
+      BYN: 2000,
       pv: 9800,
       amt: 2290,
     },
     {
-      name: 'Page D',
-      uv: 2780,
+      name: 'Июль',
+      BYN: 2780,
       pv: 3908,
       amt: 2000,
     },
     {
-      name: 'Page E',
-      uv: 1890,
+      name: 'Август',
+      BYN: 1890,
       pv: 4800,
       amt: 2181,
     },
     {
-      name: 'Page F',
-      uv: 2390,
+      name: 'Сентябрь',
+      BYN: 2390,
       pv: 3800,
       amt: 2500,
-    },
-    {
-      name: 'Page G',
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
     },
   ];
   useEffect(() => {
@@ -106,107 +96,63 @@ const Dashboard = observer(() => {
     );
   };
 
-  const handleAddClient = async () => {
-    setClientVisible(true);
-    setUpdateFlag(true); // Обновляем данные клиентов после добавления нового клиента
-  };
 
-  const handleCloseModal = () => {
-    setClientVisible(false);
-  };
 
   return (
     <Container >
-      <Card className="p-5 border-0 border-radius-50" style={{backgroundColor:"#FFFF"}}>
-        <Row>
-          <Col md={7}>
+      <Row className='mb-4'>
+        <GradientDiv colorLeft={"#ff8080"} colorRight={"#ffcc80"} number={"1000"} subtitle={"Общая выручка за сезон"} progress={60} />
+        <GradientDiv colorLeft={"#BE48B0"} colorRight={"#5E93F2"} number={"30"} subtitle={"Клиентов в яхт-клубе"} progress={50} />
+        <GradientDiv colorLeft={"#9D18AF"} colorRight={"#F551B9"} number={"60"} subtitle={"Арендованных мест"} progress={40} />
+        <GradientDiv colorLeft={"#32DCB2"} colorRight={"#3FFD91"} number={"3"} subtitle={"Клиентов с задолженностью"} progress={30} />
+      </Row>
+      <Row className="d-flex">
+        <Col style={{ flex: 1 }} md={7}>
+          <Card className="p-4 border-0 border-radius-50" style={{ backgroundColor: "#FFFF" }}>
             <Row>
-              <h4 >
+              <h4 style={styles.title3}>
                 Выручка
               </h4>
             </Row>
             <Row>
-              <h5 style={styles.title3}>
-                Общая выручка за сезон 2023
-              </h5>
-            </Row>
-            <Row>
               <MyChart data={data} />
             </Row>
-
-          </Col>
-          <Col md={5}>
+          </Card>
+        </Col>
+        <Col style={{ flex: 1}} md={5}>
+          <Card className="p-4 border-0 border-radius-50" style={{ backgroundColor: "#FFFF" }}>
             <Row>
-              <h4>
+              <h4 style={styles.title3}>
                 Клиенты
               </h4>
-              <Row>
-                <h5 style={styles.title3}>
-                  Статистика по задолженностям
-                </h5>
-              </Row>
+
             </Row>
             <Row>
               <CustomRadialBarChart />
-            </Row> </Col>
-        </Row>
-        </Card>
-
-        <Row className="mb-3">
-          {/* <Col md={10}>
-            <CardGroup className="justify-content-between">
-              <Card className="shadow" style={{ flex: '1' }}>
-                <Card.Header>Общая выручка за сезон</Card.Header>
-                <Card.Body>
-                  <Card.Title>3000 BYN</Card.Title>
-                  <Card.Text>+2.5% по сравнению с прошлым годом</Card.Text>
-                </Card.Body>
-              </Card>
-              <Card className="shadow" style={{ flex: '1' }}>
-                <Card.Header>Общая задолженность</Card.Header>
-                <Card.Body>
-                  <Card.Title>150 BYN</Card.Title>
-                  <Card.Text>-0.7% по сравнению с прошлым месяцем</Card.Text>
-                </Card.Body>
-              </Card>
-              <Card className="shadow " style={{ flex: '1' }}>
-                <Card.Header>Клиентов с долгом</Card.Header>
-                <Card.Body>
-                  <Card.Title>15</Card.Title>
-                  <Card.Text>+2.5% по сравнению с прошлым месяцем</Card.Text>
-                </Card.Body>
-              </Card>
-            </CardGroup>
-          </Col> */}
-          <Col md={2} className="d-flex align-items-center">
-            <Button variant="outline-dark" onClick={handleAddClient}>
-              Добавить клиента
-            </Button>
-            <CreateClient show={clientVisible} onHide={handleCloseModal} />
-          </Col>
-        </Row>
-        <Row className="my-3">
-          <Col md={12}>
-            <Card className="p-4 border-0" >
-              <Card.Title className="p-3">Клиенты с задолженностью</Card.Title>
-              <ClientList updateFlag={updateFlag} />
-            </Card>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={6}>
-            <Card className="p-4 border-0">
-              <Card.Title className="p-3">Последние аренды</Card.Title>
-              <RentalList />
-            </Card>
-          </Col>
-          <Col md={6}>
-            <Card className=" p-4 border-0">
-              <Card.Title className="p-3">Последние оплаты</Card.Title>
-              <PaymentList />
-            </Card>
-          </Col>
-        </Row>
+            </Row>      </Card></Col>
+      </Row>
+      <Row className="my-3">
+        <Col md={12}>
+          <Card className="p-4 border-0" >
+            <Card.Title className="p-3">Клиенты с задолженностью</Card.Title>
+            <ClientList />
+          </Card>
+        </Col>
+      </Row>
+      <Row>
+        <Col md={6}>
+          <Card className="p-4 border-0">
+            <Card.Title className="p-3">Последние аренды</Card.Title>
+            <RentalList />
+          </Card>
+        </Col>
+        <Col md={6}>
+          <Card className=" p-4 border-0">
+            <Card.Title className="p-3">Последние оплаты</Card.Title>
+            <PaymentList />
+          </Card>
+        </Col>
+      </Row>
 
     </Container>
   );
@@ -215,8 +161,8 @@ const Dashboard = observer(() => {
 const styles = {
 
   title3: {
-    color: "#A7A7A7",
-    fontWeight:"400"
+    fontSize: "1.25rem",
+    fontWeight: "600"
 
   }
 }
