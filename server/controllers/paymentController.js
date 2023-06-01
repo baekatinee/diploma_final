@@ -1,6 +1,7 @@
 const { Payment, Rental } = require('../models/models')
 const { Client } = require('../models/models')
 const apiError = require('../error/apiError')
+const clientController = require('./clientController')
 class paymentController {
     async create(req, res, next) {
         try {
@@ -9,6 +10,7 @@ class paymentController {
             if (!payment) {
                 res.status(404).send('Не удалось создать оплату из-за неверно введенных данных')
             }
+            clientController.updateHasPaidStatus(req, res, next);
             return res.json(payment)
         } catch (e) {
             next(apiError.badRequest(e.message))

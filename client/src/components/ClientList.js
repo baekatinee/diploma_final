@@ -4,13 +4,14 @@ import { Context } from '../index';
 import { Table } from 'react-bootstrap';
 import ClientItem from './ClientItem';
 import { fetchClients, deleteClient } from '../http/clientAPI';
-import { CLIENTS_ROUTE } from '../utils/consts';
+import { CLIENTS_ROUTE} from '../utils/consts';
 import { useLocation } from 'react-router-dom';
 
-const ClientList = observer(() => {
+const ClientList = observer(({ showOnlyDebt }) => {
   const { client } = useContext(Context);
   const location = useLocation();
   const isAllClients = location.pathname === CLIENTS_ROUTE;
+
 
   useEffect(() => {
     fetchClients().then(data => {
@@ -20,6 +21,7 @@ const ClientList = observer(() => {
     });
   }, [client]);
 
+  const filteredClients = showOnlyDebt ? client.clients.filter(client => !client.hasPaid) : client.clients;
   const handleDelete = async (id) => {
     try {
       await deleteClient(id);
@@ -34,7 +36,7 @@ const ClientList = observer(() => {
   };
 
   return (
-    <Table   hover>
+    <Table hover>
       <thead>
         <tr>
           <th>№</th>
@@ -43,12 +45,12 @@ const ClientList = observer(() => {
           <th>Отчество</th>
           <th>Номер телефона</th>
           <th>Email</th>
-          {isAllClients &&<th>Статус оплаты</th>}
+          {isAllClients && <th>Статус оплаты</th>}
           {isAllClients && <th>Действия</th>}
         </tr>
       </thead>
       <tbody>
-        {client.clients.map((client, index) => (
+        {filteredClients.map((client, index) => (
           <ClientItem
             key={client.id}
             isAllClients={isAllClients}

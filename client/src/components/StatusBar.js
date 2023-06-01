@@ -8,13 +8,14 @@ const StatusBar = observer(() => {
   const {ship} = useContext(Context)
 
     return (
-        <ListGroup horizontal>
+        <ListGroup horizontal style={{width:"50%"}}>
             {ship.types.map(type =>
                 <ListGroup.Item
                     style={{cursor: 'pointer'}}
                     active={type.id === ship.selectedType.id}
                     onClick={() =>ship.setSelectedType(type)}
                     key={type.id}
+                    action variant="light"
                 >
                     {type.name}
                 </ListGroup.Item>

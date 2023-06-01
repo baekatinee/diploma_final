@@ -2,6 +2,7 @@ const { Rental } = require('../models/models')
 const { Ship } = require('../models/models')
 const { Client } = require('../models/models')
 const apiError = require('../error/apiError')
+const clientController = require('./clientController')
 class rentalController {
     async create(req, res, next) {
         try {
@@ -85,6 +86,7 @@ class rentalController {
           if (!updatedRental) {
             return res.status(400).send('Не удалось сохранить изменения');
           }
+          await this.checkRentalExpiration();
           return res.json(updatedRental);
         } catch (e) {
           return next(apiError.badRequest(e.message));
@@ -109,6 +111,21 @@ class rentalController {
           });
         } catch (error) {
           next(apiError.badRequest(error.message));
+        }
+      } 
+      
+      async checkRentalExpiration() {
+        try {
+          const currentDate = new Date();
+          const rentals = await Rental.findAll();
+          for (const rental of rentals) {
+            const { dateEnd, clientId } = rental;
+            if (currentDate > dateEnd) {      
+              await clientController.updateHasPaidStatus(clientId);
+            }
+          }
+        } catch (error) {
+          console.error('An error occurred while checking rental expiration:', error);
         }
       }
 

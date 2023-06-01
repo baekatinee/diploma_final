@@ -64,16 +64,14 @@ const ClientPage = observer(() => {
                                 <div style={{ fontWeight: "bold", fontSize: "2rem", marginRight: "1rem" }}>{client.name} </div>
                                 <div style={{ fontWeight: "bold", fontSize: "2rem", marginRight: "1rem" }}>{client.fathersName}</div>
                                 {client.hasPaid ? (
-                                    <Badge pill bg="danger" style={{ width: "5rem" }}>
-                                        Долг
-                                    </Badge>
-
-                                ) : (
                                     <Badge pill bg="success">
                                         Оплачено
                                     </Badge>
+                                ) : (
+                                    <Badge pill bg="danger">
+                                        Долг
+                                    </Badge>
                                 )}
-
                             </Col>
                             <Col md={3} className='d-flex align-items-center justify-content-end'>
                                 <Button variant="outline-dark" onClick={() => setUpdateClientVisible(true)}>
@@ -91,7 +89,7 @@ const ClientPage = observer(() => {
                     <Card.Title border="primary" >
                     </Card.Title>
                     <Form className='d-flex justify-content-between'>
-                        <Table  hover style={{ width: "40vw" }} >
+                        <Table hover style={{ width: "40vw" }} >
                             <tbody>
                                 <tr>
                                     <td>Номер телефона</td>
@@ -108,34 +106,34 @@ const ClientPage = observer(() => {
                             </tbody>
                         </Table>
                     </Form>
-                        <Row>
-                            <Col className='d-flex ' md={8}>
-                                <Card className='border-0 p-1 d-flex align-items-center' style={{ width: "15vw",  marginRight: "1rem"  }}>
-                                    <Card.Img src={uncheckedStatus} variant="top" style={{ width: "3vw", height: "3vw" }} />
-                                    <Card.Body>
-                                        <Card.Title>Статус оплаты</Card.Title>
-                                        <Card.Text>
-                                            <Badge bg="danger">
-                                                Долг
-                                            </Badge>{' '}
-                                        </Card.Text>
-                                    </Card.Body>
-                                </Card>
-                                <Card className='border-0 p-1 d-flex align-items-center' style={{ width: "15vw" }}>
-                                    <Card.Img icon="ship" variant="top" src={debt} style={{ width: "3vw", height: "3vw" }} />
-                                    <Card.Body>
-                                        <Card.Title>Задолженность</Card.Title>
-                                        <Card.Text>
-                                            350 BYN
-                                        </Card.Text>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                            <Col md={4} className='d-flex align-items-center justify-content-end'>
+                    <Row>
+                        <Col className='d-flex ' md={8}>
+                            <Card className='border-0 p-1 d-flex align-items-center' style={{ width: "15vw", marginRight: "1rem" }}>
+                                <Card.Img src={uncheckedStatus} variant="top" style={{ width: "3vw", height: "3vw" }} />
+                                <Card.Body>
+                                    <Card.Title>Статус оплаты</Card.Title>
+                                    <Card.Text>
+                                        <Badge bg="danger">
+                                            Долг
+                                        </Badge>{' '}
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
+                            <Card className='border-0 p-1 d-flex align-items-center' style={{ width: "15vw" }}>
+                                <Card.Img icon="ship" variant="top" src={debt} style={{ width: "3vw", height: "3vw" }} />
+                                <Card.Body>
+                                    <Card.Title>Задолженность</Card.Title>
+                                    <Card.Text>
+                                        350 BYN
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                        <Col md={4} className='d-flex align-items-center justify-content-end'>
 
-                                <Button variant="outline-dark">Уведомить клиента</Button>{' '}
-                            </Col>
-                        </Row>
+                            <Button variant="outline-dark">Уведомить клиента</Button>{' '}
+                        </Col>
+                    </Row>
                 </Card>
                 <Card className=' border-0 p-4 mb-3'>
                     <Card.Title border="primary" className='d-flex justify-content-between align-items-center' >

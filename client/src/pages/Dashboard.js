@@ -125,7 +125,6 @@ const Dashboard = observer(() => {
               <h4 style={styles.title3}>
                 Клиенты
               </h4>
-
             </Row>
             <Row>
               <CustomRadialBarChart />
@@ -135,7 +134,7 @@ const Dashboard = observer(() => {
         <Col md={12}>
           <Card className="p-4 border-0" >
             <Card.Title className="p-3">Клиенты с задолженностью</Card.Title>
-            <ClientList />
+            <ClientList showOnlyDebt={true}/>
           </Card>
         </Col>
       </Row>
