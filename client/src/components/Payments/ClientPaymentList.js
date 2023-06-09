@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Context } from '../index';
+import { Context } from '../../index';
 import { Accordion } from 'react-bootstrap';
 import ClientPaymentItem from './ClientPaymentItem';
-import { fetchPayments, deletePayment } from '../http/paymentAPI';
+import { fetchPayments, deletePayment } from '../../http/paymentAPI';
 
 const ClientPaymentList = observer(({ clientId }) => {
   const { payment, client } = useContext(Context);

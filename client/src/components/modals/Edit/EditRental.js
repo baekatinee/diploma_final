@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Modal, Form, Button, FormControl, Col, Row } from 'react-bootstrap';
-import { Context } from '../..';
-import { updateRental } from '../../http/rentalAPI';
-import { fetchClients } from '../../http/clientAPI';
-import { fetchShips } from '../../http/shipAPI';
+import { Context } from '../../..';
+import { updateRental } from '../../../http/rentalAPI';
+import { fetchClients } from '../../../http/clientAPI';
+import { fetchShips } from '../../../http/shipAPI';
 
 const EditRental = ({ show, onHide, rental, clientId, shipId }) => {
     const { ship, client } = useContext(Context);

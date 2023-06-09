@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Accordion, Button, Table } from 'react-bootstrap';
-import { deletePayment, fetchPayments } from '../http/paymentAPI';
-import EditPayment from './modals/EditPayment';
+import { deletePayment, fetchPayments } from '../../http/paymentAPI';
+import EditPayment from '../modals/Edit/EditPayment';
 
 
 const ClientPaymentItem = ({ payment, clientObj, shipObj, onDeletePayment }) => {

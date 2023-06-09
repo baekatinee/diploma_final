@@ -9,7 +9,7 @@ import { registration, login } from '../http/userAPI';
 import { observer } from 'mobx-react-lite';
 import logo from '../img/logo.png'
 import { Context } from '..';
-import NavBar from '../components/NavBar';
+import NavBar from '../components/Menus/NavBar';
 import Dashboard from './Dashboard';
 
 const Auth = observer(() => {

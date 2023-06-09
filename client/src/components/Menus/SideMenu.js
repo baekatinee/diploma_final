@@ -7,8 +7,8 @@ import {
   CDBSidebarMenuItem,
 } from 'cdbreact';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Context } from '..';
-import { DASHBOARD_ROUTE, ADMIN_ROUTE, CLIENTS_ROUTE, PAYMENTS_ROUTE, SHIPS_ROUTE } from '../utils/consts';
+import { Context } from '../..';
+import { DASHBOARD_ROUTE, ADMIN_ROUTE, CLIENTS_ROUTE, PAYMENTS_ROUTE, SHIPS_ROUTE } from '../../utils/consts';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, Link } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';

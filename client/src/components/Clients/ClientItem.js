@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CLIENT_ROUTE } from '../utils/consts';
+import { CLIENT_ROUTE } from '../../utils/consts';
 import { Button, Modal, Badge } from 'react-bootstrap';
-import EditClient from './modals/EditClient';
-import EditButton from './EditButton';
-import DeleteButton from './DeleteButton';
+import EditClient from '../modals/Edit/EditClient';
+import EditButton from '../Buttons/EditButton';
+import DeleteButton from '../Buttons/DeleteButton';
 
 
 const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {

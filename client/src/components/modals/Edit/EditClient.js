@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Form, Button, Alert, Col, Row } from 'react-bootstrap';
-import { updateClient } from '../../http/clientAPI';
+import { updateClient } from '../../../http/clientAPI';
 import validator from 'validator';
 
 const EditClient = ({ show, onHide, client }) => {

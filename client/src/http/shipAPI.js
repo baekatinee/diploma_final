@@ -1,17 +1,19 @@
-import { $authHost} from "./index";
+import { $authHost } from "./index";
 
 export const createShip = async (ship) => {
     const { data } = await $authHost.post('api/ship', ship)
     return data
 }
 export const fetchOneShip = async (id) => {
-    const { data } = await $authHost.get('api/ship/' + id )
+    const { data } = await $authHost.get('api/ship/' + id)
     return data
 }
-export const fetchShips = async (typeId, page, limit=5) => {
-    const { data } = await $authHost.get('api/ship', {params:{
-        typeId,  page, limit
-    }})
+export const fetchShips = async (typeId, page, limit = 5) => {
+    const { data } = await $authHost.get('api/ship', {
+        params: {
+            typeId, page, limit
+        }
+    })
     return data
 }
 export const updateShip = async (id, updatedData) => {

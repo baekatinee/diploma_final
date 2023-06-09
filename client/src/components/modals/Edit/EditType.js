@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Form, Button, FormControl } from 'react-bootstrap';
-import { updateType } from '../../http/typeAPI';
+import { updateType } from '../../../http/typeAPI';
 
 const EditType = ({ show, onHide, type }) => {
   const [name, setName] = useState(type.name);

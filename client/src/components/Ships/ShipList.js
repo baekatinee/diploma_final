@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
 import { observer } from 'mobx-react-lite';
-import { Context } from '../index';
+import { Context } from '../../index';
 import ShipItem from './ShipItem';
-import { deleteShip, fetchShips } from '../http/shipAPI';
+import { deleteShip, fetchShips } from '../../http/shipAPI';
 
 const ShipList = observer(() => {
     const { ship } = useContext(Context);

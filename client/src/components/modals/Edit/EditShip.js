@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
-import { fetchShips, updateShip } from '../../http/shipAPI';
-import { fetchTypes } from '../../http/typeAPI';
-import { Context } from '../..';
+import { fetchShips, updateShip } from '../../../http/shipAPI';
+import { fetchTypes } from '../../../http/typeAPI';
+import { Context } from '../../..';
 
 const EditShip = ({ show, onHide, shipItem }) => {
   const { ship } = useContext(Context);

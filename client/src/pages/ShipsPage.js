@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Col, Container, Row, Button, Breadcrumb } from 'react-bootstrap';
-import StatusBar from '../components/StatusBar';
-import ShipList from '../components/ShipList';
+import StatusBar from '../components/Tabs/StatusBar';
+import ShipList from '../components/Ships/ShipList';
 import { fetchShips } from '../http/shipAPI';
 import { fetchTypes } from '../http/typeAPI';
 import CreateShip from '../components/modals/CreateShip';
-import Pages from '../components/Pages';
+import Pages from '../components/Pagination/Pages';
 import { Context } from '..';
 import { observer } from 'mobx-react-lite';
 const ShipsPage = observer(() => {

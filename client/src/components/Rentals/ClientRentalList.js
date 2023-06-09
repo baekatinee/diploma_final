@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Context } from '../index';
+import { Context } from '../../index';
 import { Accordion } from 'react-bootstrap';
 import ClientRentalItem from './ClientRentalItem';
-import {deleteRental, fetchRentals } from '../http/rentalAPI';
+import {deleteRental, fetchRentals } from '../../http/rentalAPI';
 
 const ClientRentalList = observer(({ clientId }) => {
   const { rental, client, ship } = useContext(Context);

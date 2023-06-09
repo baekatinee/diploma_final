@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite'
 import React, { useContext } from 'react'
 import { Pagination, PaginationItem } from '@mui/material'
-import { Context } from '..'
+import { Context } from '../..'
 
-const PagesClient = observer(() => {
-  const { client } = useContext(Context);
-  const pageCount = Math.ceil(client.totalCount / client.limit);
+const PagesRental= observer(() => {
+  const { rental } = useContext(Context);
+  const pageCount = Math.ceil(rental.totalCount / rental.limit);
   const pages = [];
 
   for (let i = 0; i < pageCount; i++) {
@@ -17,8 +17,8 @@ const PagesClient = observer(() => {
       {pages.map((page) => (
         <PaginationItem
           key={page}
-          selected={client.page === page}
-          onClick={() => client.setPage(page)}
+          selected={rental.page === page}
+          onClick={() => rental.setPage(page)}
         >
           {page}
         </PaginationItem>
@@ -27,4 +27,4 @@ const PagesClient = observer(() => {
   );
 });
 
-export default PagesClient;
+export default PagesRental;

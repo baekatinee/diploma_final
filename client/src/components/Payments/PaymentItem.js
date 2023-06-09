@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import EditShip from './modals/EditShip';
-import EditButton from './EditButton';
-import DeleteButton from './DeleteButton';
+import EditButton from '../Buttons/EditButton';
+import DeleteButton from '../Buttons/DeleteButton';
+import EditPayment from '../modals/Edit/EditPayment';
 
-const ShipItem = ({ ship, handleDelete, iterator}) => {
-  const [shipUpdateVisible, setUpdateShipVisible] = React.useState(false);
+const PaymentItem = ({isAllPAyments, payment, clientSurname, rentalObj, clientId, handleDelete, iterator }) => {
+  const rentalDateStart = rentalObj ? rentalObj.dateStart : '';
+  const [paymentUpdateVisible, setUpdatePaymentVisible] = useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
 
   const deleteOne = async (e) => {
 
     try {
-      await handleDelete(ship.id);
+      await handleDelete(payment.id);
       setConfirmDeleteVisible(false);
     } catch (error) {
       console.log(error);
@@ -19,7 +20,7 @@ const ShipItem = ({ ship, handleDelete, iterator}) => {
   };
 
   const openEditModal = (e) => {
-    setUpdateShipVisible(true);
+    setUpdatePaymentVisible(true);
   };
   const openConfirmDeleteModal = (e) => {
     setConfirmDeleteVisible(true);
@@ -33,26 +34,32 @@ const ShipItem = ({ ship, handleDelete, iterator}) => {
   return (
     <tr>
       <td>{iterator}</td>
-      <td>{ship.name}</td>
-      <td>{ship.number}</td>
-      <td>{ship.length}</td>
-      <td>{ship.priceSummer}</td>
-      <td>{ship.priceWinter}</td>
-      <td>{ship.parkingNumber}</td>
-      <td style={{ width: '100%' }} className="d-flex justify-content-around">
-        <EditButton onClick={openEditModal}/>
-        <EditShip
-          shipItem={ship}
-          show={shipUpdateVisible}
-          onHide={() => setUpdateShipVisible(false)}
+      <td>{payment.dateStart}</td>
+      <td>{payment.sum}</td>
+      {clientId ? (
+      " "
+      ) : (
+        <td>{clientSurname}</td>
+      )}
+      <td>{rentalDateStart}</td>
+      {isAllPAyments&&
+      <td  className="d-flex">
+        <div style={{marginRight:"1rem"}}>
+        <EditButton onClick={openEditModal} />
+        </div>
+        
+        <EditPayment
+          payment={payment}
+          show={paymentUpdateVisible}
+          onHide={() => setUpdatePaymentVisible(false)}
         />
         <DeleteButton onClick={openConfirmDeleteModal} />
         <Modal show={confirmDeleteVisible} onHide={closeConfirmDeleteModal}>
             <Modal.Header closeButton>
-              <Modal.Title>Удаление судна</Modal.Title>
+              <Modal.Title>Удаление оплаты</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <p>Вы уверены, что хотите удалить судно?</p>
+              <p>Вы уверены, что хотите удалить оплату?</p>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={closeConfirmDeleteModal}>
@@ -64,8 +71,9 @@ const ShipItem = ({ ship, handleDelete, iterator}) => {
             </Modal.Footer>
           </Modal>
       </td>
+}
     </tr>
   );
 };
 
-export default ShipItem;
+export default PaymentItem;

@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite'
 import React, { useContext } from 'react'
 import { Pagination, PaginationItem } from '@mui/material'
-import { Context } from '..'
+import { Context } from '../..'
 
-const Pages = observer(() => {
-  const { ship } = useContext(Context);
-  const pageCount = Math.ceil(ship.totalCount / ship.limit);
+const PagesPayment= observer(() => {
+  const { payment } = useContext(Context);
+  const pageCount = Math.ceil(payment.totalCount / payment.limit);
   const pages = [];
 
   for (let i = 0; i < pageCount; i++) {
@@ -17,8 +17,8 @@ const Pages = observer(() => {
       {pages.map((page) => (
         <PaginationItem
           key={page}
-          selected={ship.page === page}
-          onClick={() => ship.setPage(page)}
+          selected={payment.page === page}
+          onClick={() => payment.setPage(page)}
         >
           {page}
         </PaginationItem>
@@ -27,4 +27,4 @@ const Pages = observer(() => {
   );
 });
 
-export default Pages;
+export default PagesPayment;

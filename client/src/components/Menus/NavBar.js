@@ -1,13 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Context } from '..';
+import { Context } from '../..';
 import { Search } from 'react-bootstrap-icons';
 import { Button, Container, Form, Navbar, Row, Col } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
-import { fetchClients } from '../http/clientAPI';
+import { fetchClients } from '../../http/clientAPI';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { observer } from 'mobx-react-lite';
-import CreateClient from '../components/modals/CreateClient';
-import { CLIENT_ROUTE } from '../utils/consts';
+import CreateClient from '../modals/CreateClient';
+import { CLIENT_ROUTE } from '../../utils/consts';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 

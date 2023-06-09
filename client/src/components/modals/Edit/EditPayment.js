@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Modal, Form, Button, FormControl, Col, Row } from 'react-bootstrap';
-import { updatePayment } from '../../http/paymentAPI';
-import { fetchRentals } from '../../http/rentalAPI';
-import { fetchClients } from '../../http/clientAPI';
-import { Context } from '../..';
+import { updatePayment } from '../../../http/paymentAPI';
+import { fetchRentals } from '../../../http/rentalAPI';
+import { fetchClients } from '../../../http/clientAPI';
+import { Context } from '../../..';
 
 
 const EditPayment = ({ show, onHide, payment, clientId, rentalId }) => {

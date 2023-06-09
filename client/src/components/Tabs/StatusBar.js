@@ -1,37 +1,37 @@
 import React, { useContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Context } from '../index';
+import { Context } from '../../index';
 import { Tab, Tabs } from '@mui/material';
 
-const StatusClient = observer(() => {
-    const { client } = useContext(Context);
+const StatusBar = observer(() => {
+    const { ship } = useContext(Context);
 
     const handleTabChange = (event, newValue) => {
-        let selectedStatus;
+        let selectedType;
 
         if (newValue === '') {
-            selectedStatus = undefined;
+            selectedType = undefined;
         } else {
-            selectedStatus = client.status.find((status) => status.id === newValue);
+            selectedType = ship.types.find((type) => type.id === newValue);
         }
 
-        client.setSelectedStatus(selectedStatus);
+        ship.setSelectedType(selectedType);
     };
 
     return (
         <Tabs
-            value={client.selectedStatus?.id || ''}
+            value={ship.selectedType?.id || ''}
             onChange={handleTabChange}
             variant="scrollable"
             scrollButtons="auto"
-            aria-label="Client Status"
+            aria-label="Ship Types"
         >
             <Tab label="Все" value="" style={{ cursor: 'pointer' }} />
-            {client.status.map((status) => (
+            {ship.types.map((type) => (
                 <Tab
-                    key={status.id}
-                    label={status.name}
-                    value={status.id}
+                    key={type.id}
+                    label={type.name}
+                    value={type.id}
                     style={{ cursor: 'pointer' }}
                 />
             ))}
@@ -39,4 +39,4 @@ const StatusClient = observer(() => {
     );
 });
 
-export default StatusClient;
+export default StatusBar;

@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Container, Row, Col, Button, Breadcrumb } from 'react-bootstrap';
 import { observer } from 'mobx-react-lite';
 import { Context } from '..';
-import PaymentList from '../components/PaymentList';
+import PaymentList from '../components/Payments/PaymentList';
 import { fetchPayments } from '../http/paymentAPI';
 import CreatePayment from '../components/modals/CreatePayment';
 import { fetchRentals } from '../http/rentalAPI';
-import Pages from '../components/Pages';
+import Pages from '../components/Pagination/Pages';
 
 const Payments = observer(() => {
     const { payment, rental } = useContext(Context);

@@ -1,13 +1,13 @@
 import './App.css';
 import { BrowserRouter } from "react-router-dom"
 import AppRouter from './components/AppRouter';
-import NavBar from './components/NavBar';
+import NavBar from './components/Menus/NavBar';
 import { observer } from 'mobx-react-lite';
 import { useContext, useEffect, useState } from 'react';
 import { Context } from '.';
 import { check } from './http/userAPI';
 import { Container, Spinner, Row, Col } from 'react-bootstrap';
-import SideMenu from './components/SideMenu';
+import SideMenu from './components/Menus/SideMenu';
 
 const App = observer(() => {
   const { user } = useContext(Context)

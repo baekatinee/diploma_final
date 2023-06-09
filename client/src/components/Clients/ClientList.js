@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Context } from '../index';
+import { Context } from '../../index';
 import { Table } from 'react-bootstrap';
 import ClientItem from './ClientItem';
-import { fetchClients, deleteClient } from '../http/clientAPI';
-import { CLIENTS_ROUTE} from '../utils/consts';
+import { fetchClients, deleteClient } from '../../http/clientAPI';
+import { CLIENTS_ROUTE} from '../../utils/consts';
 import { useLocation } from 'react-router-dom';
 
 const ClientList = observer(({ showOnlyDebt }) => {

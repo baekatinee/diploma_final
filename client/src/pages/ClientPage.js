@@ -9,13 +9,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { deleteClient, fetchOneClient } from '../http/clientAPI';
 import { fetchRentals } from '../http/rentalAPI';
 import { fetchShips } from '../http/shipAPI';
-import EditClient from '../components/modals/EditClient';
-import ClientRentalList from '../components/ClientRentalList';
+import EditClient from '../components/modals/Edit/EditClient';
+import ClientRentalList from '../components/Rentals/ClientRentalList';
 import { fetchPayments } from '../http/paymentAPI';
 import CreateRental from '../components/modals/CreateRental';
-import ClientPaymentList from '../components/ClientPaymentList';
+import ClientPaymentList from '../components/Payments/ClientPaymentList';
 import { fetchTypes } from '../http/typeAPI';
-import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
+import ConfirmDeleteModal from '../components/modals/Confirm/ConfirmDeleteModal';
 
 const ClientPage = observer(() => {
     const { rental, ship, payment } = useContext(Context);

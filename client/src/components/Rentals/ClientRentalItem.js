@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Accordion, Button, Col, Row, Table } from 'react-bootstrap';
-import EditShip from './modals/EditShip';
-import CreatePayment from '../components/modals/CreatePayment';
-import { deleteRental, fetchRentals } from '../http/rentalAPI';
-import EditRental from './modals/EditRental';
-import EditButton from './EditButton';
-import DeleteButton from './DeleteButton';
+import EditShip from '../modals/Edit/EditShip';
+import CreatePayment from '../modals/CreatePayment';
+import { deleteRental, fetchRentals } from '../../http/rentalAPI';
+import EditRental from '../modals/Edit/EditRental';
+import EditButton from '../Buttons/EditButton';
+import DeleteButton from '../Buttons/DeleteButton';
 
 const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj }) => {
     const [isOpen, setIsOpen] = useState(false);

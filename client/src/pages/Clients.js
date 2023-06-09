@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Container, Row, Col, Breadcrumb } from 'react-bootstrap';
-import ClientList from '../components/ClientList';
+import ClientList from '../components/Clients/ClientList';
 import { observer } from 'mobx-react-lite';
 import { Context } from '..';
 import { fetchClients } from '../http/clientAPI';
-import StatusClient from '../components/StatusClient';
-import PagesClient from '../components/PagesClient';
+import StatusClient from '../components/Tabs/StatusClient';
+import PagesClient from '../components/Pagination/PagesClient';
 
 
 const Clients = observer(() => {
