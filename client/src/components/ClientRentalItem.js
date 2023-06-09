@@ -2,26 +2,43 @@ import React, { useState } from 'react';
 import { Accordion, Button, Col, Row, Table } from 'react-bootstrap';
 import EditShip from './modals/EditShip';
 import CreatePayment from '../components/modals/CreatePayment';
-import { deleteRental } from '../http/rentalAPI';
+import { deleteRental, fetchRentals } from '../http/rentalAPI';
 import EditRental from './modals/EditRental';
+import EditButton from './EditButton';
+import DeleteButton from './DeleteButton';
 
-const ClientRentalItem = ({ rental, clientObj, shipObj }) => {
+const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [shipUpdateVisible, setUpdateShipVisible] = useState(false);
     const [paymentVisible, setPaymentVisible] = useState(false);
     const [rentalVisible, setRentalVisible] = useState(false);
+    const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
     const toggleAccordion = () => {
         setIsOpen(!isOpen);
     };
 
-    const handleDeleteRental = async (id) => {
-        try {
-            await deleteRental(id);
-        } catch (e) {
-            console.log(e);
-        }
-    };
+    const deleteOne = async (e) => {
 
+        try {
+          await handleDelete(shipObj.id);
+          setConfirmDeleteVisible(false);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    
+      const openEditModal = (e) => {
+        setUpdateShipVisible(true);
+      };
+      const openConfirmDeleteModal = (e) => {
+        setConfirmDeleteVisible(true);
+      };
+      const closeConfirmDeleteModal = () => {
+        setConfirmDeleteVisible(false);
+      };
+      const confirmDelete = () => {
+        deleteOne();
+      };
     const handleUpdateShip = () => {
         setUpdateShipVisible(true);
     };
@@ -52,19 +69,16 @@ const ClientRentalItem = ({ rental, clientObj, shipObj }) => {
                             <td>{shipObj.parkingNumber}</td>
                             <td>{shipObj.priceWinter}</td>
                             <td>{shipObj.priceSummer}</td>
-                            <td>
-                                <Button variant="outline-dark" onClick={handleUpdateShip}>
-                                    Изменить
-                                </Button>{' '}
+                            <td className='d-flex justify-content-around'>
+                        
+                                <EditButton onClick={openEditModal} />
                                 <EditShip
-                                    key={shipObj.id}
                                     shipItem={shipObj}
-                                    onHide={() => setUpdateShipVisible(false)}
                                     show={shipUpdateVisible}
+                                    onHide={() => setUpdateShipVisible(false)}
                                 />
-                                <Button variant="outline-danger" onClick={handleDeleteRental}>
-                                    Удалить
-                                </Button>{' '}
+                                <DeleteButton onClick={openConfirmDeleteModal} />
+
                             </td>
                         </tr>
                     </tbody>
@@ -103,6 +117,7 @@ const ClientRentalItem = ({ rental, clientObj, shipObj }) => {
                         <Button
                             className='mt-2'
                             variant="outline-danger"
+                            onClick={deleteOne}
                         >
                             Удалить
                         </Button>{' '}</Col>

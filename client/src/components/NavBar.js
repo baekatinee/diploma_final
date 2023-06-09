@@ -17,12 +17,21 @@ const NavBar = observer(() => {
   const [selectedClient, setSelectedClient] = useState(null);
   const { client, user } = useContext(Context);
   const [clientVisible, setClientVisible] = useState(false);
-  const [updateFlag, setUpdateFlag] = useState(false);
+
   const navigate = useNavigate();
 
   const handleAddClient = async () => {
-    setClientVisible(true);
-    setUpdateFlag(true);
+    try {
+      setClientVisible(true);
+      await fetchClients().then(data => {
+        if (client) {
+          client.setClients(data.rows)
+        }
+      })
+    } catch (e) {
+      console.log(e);
+
+    }
   };
 
   const handleCloseModal = () => {

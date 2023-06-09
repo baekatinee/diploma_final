@@ -7,25 +7,25 @@ import { deleteShip, fetchShips } from '../http/shipAPI';
 
 const ShipList = observer(() => {
     const { ship } = useContext(Context);
-    // useEffect(() => {
-    //     fetchShips().then(data => {
-    //       if (ship) {
-    //         ship.setShips(data.rows);
-    //       }
-    //     });
-    //   }, [ship]);
-    //   const handleDelete = async (id) => {
-    //     try {
-    //       await deleteShip(id);
-    //       fetchShips().then(data => {
-    //         if (ship) {
-    //           ship.setShips(data.rows);
-    //         }
-    //       });
-    //     } catch (e) {
-    //       console.log(e);
-    //     }
-    //   };
+    useEffect(() => {
+        fetchShips().then(data => {
+          if (ship) {
+            ship.setShips(data.rows);
+          }
+        });
+      }, [ship]);
+      const handleDelete = async (id) => {
+        try {
+          await deleteShip(id);
+          fetchShips().then(data => {
+            if (ship) {
+              ship.setShips(data.rows);
+            }
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      };
     
     return (
     <Table hover>
@@ -38,7 +38,7 @@ const ShipList = observer(() => {
           <th>Стоимость лето</th>
           <th>Стоимость зима</th>
           <th>Парковочное место</th>
-          <th>Действия</th>
+          <th >Действия</th>
         </tr>
       </thead>
       <tbody>
@@ -47,7 +47,7 @@ const ShipList = observer(() => {
             key={ship.id}
             iterator={index + 1}
             ship={ship}
-            // handleDelete={handleDelete}
+            handleDelete={handleDelete}
           />
         ))}
       </tbody>

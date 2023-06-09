@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { CLIENT_ROUTE } from '../utils/consts';
 import { Button, Modal, Badge } from 'react-bootstrap';
 import EditClient from './modals/EditClient';
+import EditButton from './EditButton';
+import DeleteButton from './DeleteButton';
+
 
 const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
   const navigate = useNavigate();
@@ -57,31 +60,27 @@ const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
       <td>{client.phoneNumber}</td>
       <td>{client.email}</td>
       {isAllClients ? (
-      <td>
-        {client.hasPaid ? (
-          <Badge pill bg="success">
-            Оплачено
-          </Badge>
-        ) : (
-          <Badge pill bg="danger">
-            Долг
-          </Badge>
-        )}
-      </td>) : ( '')}
+        <td>
+          {client.hasPaid ? (
+            <Badge pill bg="success" style={{ width: "70%" }}>
+              Оплачено
+            </Badge>
+          ) : (
+            <Badge pill bg="danger" style={{ width: "70%" }}>
+              Долг
+            </Badge>
+          )}
+        </td>) : ('')}
       {isAllClients ? (
         <td style={{ width: '100%' }} className="d-flex justify-content-around">
-          <Button variant="outline-dark" onClick={openEditModal}>
-            Изменить
-          </Button>{' '}
-          <Button variant="outline-danger" onClick={openConfirmDeleteModal}>
-            Удалить
-          </Button>
+          <EditButton onClick={openEditModal} />
           <EditClient
             key={client.id}
             client={client}
             show={clientUpdateVisible}
             onHide={closeEditModal}
           />
+          <DeleteButton onClick={openConfirmDeleteModal} />
           <Modal show={confirmDeleteVisible} onHide={closeConfirmDeleteModal}>
             <Modal.Header closeButton>
               <Modal.Title>Подтвердить удаление</Modal.Title>

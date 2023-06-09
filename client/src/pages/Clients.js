@@ -16,7 +16,7 @@ const Clients = observer(() => {
                 client.setClients(data.rows);
             }
         });
-    },);
+    }, [client]);
     return (
         <Container>
             <Breadcrumb>

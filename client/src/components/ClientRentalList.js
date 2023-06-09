@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Context } from '../index';
 import { Accordion } from 'react-bootstrap';
 import ClientRentalItem from './ClientRentalItem';
-import { fetchRentals } from '../http/rentalAPI';
+import {deleteRental, fetchRentals } from '../http/rentalAPI';
 
 const ClientRentalList = observer(({ clientId }) => {
   const { rental, client, ship } = useContext(Context);
@@ -13,7 +13,7 @@ const ClientRentalList = observer(({ clientId }) => {
         rental.setRentals(data.rows);
       }
     });
-  }, [])
+  }, [rental]);
   const rentalsArray = Object.values(rental.rentals).filter(rental => typeof rental === 'object');
 
   let filteredRentals;
@@ -23,6 +23,18 @@ const ClientRentalList = observer(({ clientId }) => {
     filteredRentals = rentalsArray;
   }
 
+  const handleDelete = async (id) => {
+    try {
+      await deleteRental(id);
+      fetchRentals().then(data => {
+        if (rental) {
+          rental.setRentals(data.rows);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <Accordion>
       {filteredRentals.map(rental => {
@@ -39,6 +51,7 @@ const ClientRentalList = observer(({ clientId }) => {
             rental={rental}
             clientObj={clientObj}
             shipObj={shipObj}
+            handleDelete={handleDelete}
           />
         );
       })}

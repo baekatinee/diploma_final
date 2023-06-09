@@ -5,6 +5,7 @@ import CreateShip from '../components/modals/CreateShip';
 import CreateType from '../components/modals/CreateType';
 import CreateRental from '../components/modals/CreateRental';
 import { CreditCard, HouseAdd, ListUl, PersonAdd, TruckFront } from 'react-bootstrap-icons'
+import { RiShipLine } from 'react-icons/ri'
 import { Context } from '..';
 import { fetchClients } from '../http/clientAPI';
 import { fetchRentals } from '../http/rentalAPI';
@@ -76,19 +77,23 @@ const Admin = () => {
                 </div>
                 <div onClick={() => setShipVisible(true)} style={
                     styles.container}>
-                    <div style={{ ...styles.square, ...styles.squareShip, 
-                    ...(isHovered2 ? styles.containerHover2 : {}) }}
+                    <div style={{
+                        ...styles.square, ...styles.squareShip,
+                        ...(isHovered2 ? styles.containerHover2 : {})
+                    }}
                         onMouseEnter={() => setIsHovered2(true)}
                         onMouseLeave={() => setIsHovered2(false)}>
- 
-                        <div size={50} color="ForestGreen"  prefix={<i className="fa fa-ship"></i>}></div>
+                        <RiShipLine color="ForestGreen" size={50} />
+                       
                     </div>
                     <div style={styles.text}>Судно</div>
                 </div>
                 <div onClick={() => setPaymentVisible(true)} style={
                     styles.container}>
-                    <div style={{ ...styles.square, ...styles.squarePayment, 
-                    ...(isHovered3 ? styles.containerHover3 : {}) }}
+                    <div style={{
+                        ...styles.square, ...styles.squarePayment,
+                        ...(isHovered3 ? styles.containerHover3 : {})
+                    }}
                         onMouseEnter={() => setIsHovered3(true)}
                         onMouseLeave={() => setIsHovered3(false)}>
                         <CreditCard size={50} color="#5375c6" />
@@ -97,8 +102,10 @@ const Admin = () => {
                 </div>
                 <div onClick={() => setTypeVisible(true)} style={
                     styles.container}>
-                    <div style={{ ...styles.square, ...styles.squareType, 
-                    ...(isHovered4? styles.containerHover4 : {}) }}
+                    <div style={{
+                        ...styles.square, ...styles.squareType,
+                        ...(isHovered4 ? styles.containerHover4 : {})
+                    }}
                         onMouseEnter={() => setIsHovered4(true)}
                         onMouseLeave={() => setIsHovered4(false)}>
                         <ListUl size={50} color="#f287f8" />

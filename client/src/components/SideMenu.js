@@ -159,10 +159,10 @@ const Sidebar = observer(() => {
         </Modal.Header>
         <Modal.Body>Вы уверены, что хотите выйти?</Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleConfirm}>
+          <Button variant="danger" onClick={handleConfirm}>
             Выйти
           </Button>
-          <Button variant="secondary" onClick={handleCancel}>
+          <Button variant="outline-secondary" onClick={handleCancel}>
             Отмена
           </Button>
         </Modal.Footer>

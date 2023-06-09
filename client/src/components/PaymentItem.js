@@ -1,37 +1,77 @@
-import React from 'react';
-import { Button } from 'react-bootstrap';
+import React, {useState} from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import EditButton from './EditButton';
+import DeleteButton from './DeleteButton';
+import EditPayment from './modals/EditPayment';
 
-const PaymentItem = ({ payment, clientSurname, rentalObj, clientId }) => {
+const PaymentItem = ({isAllPAyments, payment, clientSurname, rentalObj, clientId, handleDelete, iterator }) => {
   const rentalDateStart = rentalObj ? rentalObj.dateStart : '';
+  const [paymentUpdateVisible, setUpdatePaymentVisible] = useState(false);
+  const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
 
-  const handleEditPayment = () => {
-    // Обработчик для кнопки "Изменить" оплаты
-    console.log('Edit payment:', payment.id);
+  const deleteOne = async (e) => {
+
+    try {
+      await handleDelete(payment.id);
+      setConfirmDeleteVisible(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleDeletePayment = () => {
-    // Обработчик для кнопки "Удалить" оплаты
-    console.log('Delete payment:', payment.id);
+  const openEditModal = (e) => {
+    setUpdatePaymentVisible(true);
   };
-
+  const openConfirmDeleteModal = (e) => {
+    setConfirmDeleteVisible(true);
+  };
+  const closeConfirmDeleteModal = () => {
+    setConfirmDeleteVisible(false);
+  };
+  const confirmDelete = () => {
+    deleteOne();
+  };
   return (
     <tr>
-      <td>{payment.id}</td>
+      <td>{iterator}</td>
       <td>{payment.dateStart}</td>
       <td>{payment.sum}</td>
       {clientId ? (
-        <td>
-          <Button variant="outline-dark" onClick={handleEditPayment}>
-            Изменить
-          </Button>{' '}
-          <Button variant="outline-danger" onClick={handleDeletePayment}>
-            Удалить
-          </Button>{' '}
-        </td>
+      " "
       ) : (
         <td>{clientSurname}</td>
       )}
       <td>{rentalDateStart}</td>
+      {isAllPAyments&&
+      <td  className="d-flex">
+        <div style={{marginRight:"1rem"}}>
+        <EditButton onClick={openEditModal} />
+        </div>
+        
+        <EditPayment
+          payment={payment}
+          show={paymentUpdateVisible}
+          onHide={() => setUpdatePaymentVisible(false)}
+        />
+        <DeleteButton onClick={openConfirmDeleteModal} />
+        <Modal show={confirmDeleteVisible} onHide={closeConfirmDeleteModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Удаление оплаты</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>Вы уверены, что хотите удалить оплату?</p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={closeConfirmDeleteModal}>
+                Отмена
+              </Button>
+              <Button variant="danger" onClick={confirmDelete}>
+                Удалить
+              </Button>
+            </Modal.Footer>
+          </Modal>
+      </td>
+}
     </tr>
   );
 };
