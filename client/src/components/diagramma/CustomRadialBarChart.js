@@ -1,5 +1,5 @@
 import React from 'react';
-import { BarChart, Bar,  ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, } from 'recharts';
 
 const data = [
   {
@@ -38,12 +38,6 @@ const data = [
     pv: 4800,
     fill: '#d0ed57',
   },
-  {
-    name: 'unknow',
-    BYN: 6.67,
-    pv: 4800,
-    fill: '#ffc658',
-  },
 ];
 
 
@@ -53,9 +47,11 @@ const CustomRadialBarChart = () => {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <div style={{ width: '500px', height: '250px' }}>
         <ResponsiveContainer>
-        <BarChart width={150} height={40} data={data}>
-          <Bar dataKey="BYN" fill="#8884d8" />
-        </BarChart>
+          <BarChart width={150} height={40} data={data}>
+            <Bar dataKey="BYN" fill="#8884d8" />
+            <XAxis dataKey="name" />
+            <YAxis />
+          </BarChart>
         </ResponsiveContainer>
       </div>
 

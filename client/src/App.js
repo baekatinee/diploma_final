@@ -26,7 +26,7 @@ const App = observer(() => {
   return (
     <BrowserRouter>
       <Row>
-        <Col md={1} >
+        <Col md={2} >
           <SideMenu></SideMenu>
         </Col>
         <Col md={user.isAuth ? 10 : 12}>

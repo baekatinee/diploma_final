@@ -25,11 +25,7 @@ export default class ShipCrm {
         this._ships = ships;
     }
     setPage(page) {
-        this._page = page;
-        fetchShips(this._selectedType.id, page, this._limit).then(data => {
-          this.setShips(data.rows);
-          this.setTotalCount(data.count);
-        });
+        this._page = page
       }
     setTotalCount(totalCount) {
         this._totalCount = totalCount;

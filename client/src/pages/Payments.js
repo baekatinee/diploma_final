@@ -6,6 +6,7 @@ import PaymentList from '../components/PaymentList';
 import { fetchPayments } from '../http/paymentAPI';
 import CreatePayment from '../components/modals/CreatePayment';
 import { fetchRentals } from '../http/rentalAPI';
+import Pages from '../components/Pages';
 
 const Payments = observer(() => {
     const { payment, rental } = useContext(Context);
@@ -44,6 +45,7 @@ const Payments = observer(() => {
                 </Col>
             </Row>
             <PaymentList></PaymentList>
+            <Pages></Pages>
         </Container>
     )
 })

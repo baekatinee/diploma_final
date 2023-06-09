@@ -7,39 +7,40 @@ import { DASHBOARD_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from '../utils/const
 import { useLocation, NavLink, useNavigate } from 'react-router-dom';
 import { registration, login } from '../http/userAPI';
 import { observer } from 'mobx-react-lite';
+import logo from '../img/logo.png'
 import { Context } from '..';
 import NavBar from '../components/NavBar';
 import Dashboard from './Dashboard';
 
 const Auth = observer(() => {
-    
+
     const { user } = useContext(Context);
     const location = useLocation();
     const navigate = useNavigate();
     const isLogin = location.pathname === LOGIN_ROUTE;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-  
+
     const click = async () => {
         try {
-          let data;
-          if (isLogin) {
-            data = await login(email, password);
-          } else {
-            data = await registration(email, password);
-          }
-          user.setUser(data); // Установить данные пользователя
-          user.setIsAuth(true); // Установить флаг авторизации
-          navigate(DASHBOARD_ROUTE);
-          console.log(user.isAuth);
+            let data;
+            if (isLogin) {
+                data = await login(email, password);
+            } else {
+                data = await registration(email, password);
+            }
+            user.setUser(data); // Установить данные пользователя
+            user.setIsAuth(true); // Установить флаг авторизации
+            navigate(DASHBOARD_ROUTE);
+            console.log(user.isAuth);
         } catch (e) {
-          alert(e.response.data.message);
+            alert(e.response.data.message);
         }
-      };
+    };
 
     return (
-        <Container className='d-flex justify-content-center align-items-center' style={{ height: window.innerHeight - 54 }}>
-            <Card style={{ width: 600 }} className='p-5 mt-5'>
+        <Container className='d-flex flex-column justify-content-center align-items-center' style={{ height: window.innerHeight - 54 }}>
+            <Card style={{ width: 600 }} className='p-5 mt-5 border-0'>
                 <h2 className="m-auto">{isLogin ? "Авторизация" : "Регистрация"}</h2>
                 <Form className='d-flex flex-column'>
                     <Form.Control
@@ -64,14 +65,14 @@ const Auth = observer(() => {
                             </div>
                         }
                         <Button
-                            variant='outline-success'
+                            variant='primary'
                             onClick={click}
 
                         >
                             {isLogin ? "Войти" : "Регистрация"}
                         </Button>
                     </div>
-              
+
                 </Form>
             </Card>
         </Container>

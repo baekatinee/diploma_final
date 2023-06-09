@@ -15,6 +15,7 @@ import { fetchPayments } from '../http/paymentAPI';
 import CreateRental from '../components/modals/CreateRental';
 import PaymentList from '../components/PaymentList';
 import ClientPaymentList from '../components/ClientPaymentList';
+import { fetchTypes } from '../http/typeAPI'
 
 const ClientPage = observer(() => {
     const { rental, ship, payment } = useContext(Context);
@@ -30,17 +31,23 @@ const ClientPage = observer(() => {
                 rental.setRentals(data.rows);
             }
         });
-        fetchShips().then(data => {
-            if (ship) {
-                ship.setShips(data.rows);
-            }
+        fetchShips(null, 1, 5).then((data) => {
+            ship.setShips(data.rows);
+            ship.setTotalCount(data.count);
         });
+        fetchTypes().then((data) => ship.setTypes(data));
         fetchPayments().then(data => {
             if (payment) {
                 payment.setPayments(data.rows);
             }
         });
     }, []);
+    useEffect(() => {
+        fetchShips(ship.selectedType.id, ship.page, 5).then((data) => {
+            ship.setShips(data.rows);
+            ship.setTotalCount(data.count);
+        });
+    }, [ship.page, ship.selectedType]);
 
     const deleteOne = async () => {
         try {
@@ -109,26 +116,37 @@ const ClientPage = observer(() => {
                     <Row>
                         <Col className='d-flex ' md={8}>
                             <Card className='border-0 p-1 d-flex align-items-center' style={{ width: "15vw", marginRight: "1rem" }}>
-                                <Card.Img src={uncheckedStatus} variant="top" style={{ width: "3vw", height: "3vw" }} />
+                                {client.hasPaid ? (
+                                    <Card.Img src={checkedStatus} variant="top" style={{ width: "3vw", height: "3vw" }} />
+                                ) : (<Card.Img src={uncheckedStatus} variant="top" style={{ width: "3vw", height: "3vw" }} />)}
                                 <Card.Body>
                                     <Card.Title>Статус оплаты</Card.Title>
                                     <Card.Text>
-                                        <Badge bg="danger">
-                                            Долг
-                                        </Badge>{' '}
+                                        {client.hasPaid ? (
+                                            <Badge pill bg="success">
+                                                Оплачено
+                                            </Badge>
+                                        ) : (
+                                            <Badge pill bg="danger">
+                                                Долг
+                                            </Badge>
+                                        )}
                                     </Card.Text>
                                 </Card.Body>
                             </Card>
-                            <Card className='border-0 p-1 d-flex align-items-center' style={{ width: "15vw" }}>
-                                <Card.Img icon="ship" variant="top" src={debt} style={{ width: "3vw", height: "3vw" }} />
-                                <Card.Body>
-                                    <Card.Title>Задолженность</Card.Title>
-                                    <Card.Text>
-                                        350 BYN
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
+                            {client.hasPaid ? (
+                                <Card className='border-0 p-1 d-flex align-items-center' style={{ width: "15vw" }}>
+                                    <Card.Img variant="top" src={debt} style={{ width: "3vw", height: "3vw" }} />
+                                    <Card.Body>
+                                        <Card.Title>Задолженность</Card.Title>
+                                        <Card.Text>
+                                            350 BYN
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>) : ('')
+                            }
                         </Col>
+
                         <Col md={4} className='d-flex align-items-center justify-content-end'>
 
                             <Button variant="outline-dark">Уведомить клиента</Button>{' '}

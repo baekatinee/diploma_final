@@ -72,7 +72,7 @@ const Admin = () => {
                         <PersonAdd size={50} color="Coral" />
 
                     </div>
-                    <div style={styles.text}>Клиенты</div>
+                    <div style={styles.text}>Клиент</div>
                 </div>
                 <div onClick={() => setShipVisible(true)} style={
                     styles.container}>
@@ -80,10 +80,10 @@ const Admin = () => {
                     ...(isHovered2 ? styles.containerHover2 : {}) }}
                         onMouseEnter={() => setIsHovered2(true)}
                         onMouseLeave={() => setIsHovered2(false)}>
-
-                        <TruckFront size={50} color="ForestGreen" />
+ 
+                        <div size={50} color="ForestGreen"  prefix={<i className="fa fa-ship"></i>}></div>
                     </div>
-                    <div style={styles.text}>Судна</div>
+                    <div style={styles.text}>Судно</div>
                 </div>
                 <div onClick={() => setPaymentVisible(true)} style={
                     styles.container}>
@@ -93,7 +93,7 @@ const Admin = () => {
                         onMouseLeave={() => setIsHovered3(false)}>
                         <CreditCard size={50} color="#5375c6" />
                     </div>
-                    <div style={styles.text}>Оплаты</div>
+                    <div style={styles.text}>Оплата</div>
                 </div>
                 <div onClick={() => setTypeVisible(true)} style={
                     styles.container}>

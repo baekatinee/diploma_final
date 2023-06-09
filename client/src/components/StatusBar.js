@@ -1,26 +1,39 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../index';
-import { Button, ListGroup} from 'react-bootstrap';
-
+import { Tab, Tabs } from '@mui/material';
 
 const StatusBar = observer(() => {
-  const {ship} = useContext(Context)
+    const { ship } = useContext(Context);
+    const handleTabChange = (event, newValue) => {
+        if (newValue !== ship.selectedType?.id) {
+            const selectedType = newValue === '' ? undefined : ship.types.find((type) => type.id === newValue);
+            ship.setSelectedType(selectedType);
+        }
+    };
 
     return (
-        <ListGroup horizontal style={{width:"50%"}}>
-            {ship.types.map(type =>
-                <ListGroup.Item
-                    style={{cursor: 'pointer'}}
-                    active={type.id === ship.selectedType.id}
-                    onClick={() =>ship.setSelectedType(type)}
+        <Tabs
+            value={ship.selectedType?.id || ''}
+            onChange={handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            aria-label="Ship Types"
+        >
+            <Tab
+                label="Все типы"
+                value=""
+                style={{ cursor: 'pointer' }}
+            />
+            {ship.types.map((type) => (
+                <Tab
                     key={type.id}
-                    action variant="light"
-                >
-                    {type.name}
-                </ListGroup.Item>
-            )}
-        </ListGroup>
+                    label={type.name}
+                    value={type.id}
+                    style={{ cursor: 'pointer' }}
+                />
+            ))}
+        </Tabs>
     );
 });
 

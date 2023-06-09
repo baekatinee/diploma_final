@@ -12,7 +12,9 @@ import { fetchPayments } from '../http/paymentAPI';
 import CustomRadialBarChart from '../components/diagramma/CustomRadialBarChart';
 import MyChart from '../components/diagramma/MyChart';
 import GradientDiv from '../components/GradientDiv';
-
+import { fetchTypes } from '../http/typeAPI';
+import { NavLink } from 'react-router-dom';
+import { CLIENTS_ROUTE, PAYMENTS_ROUTE, RENTAL_ROUTE } from '../utils/consts';
 
 const Dashboard = observer(() => {
   const { client, rental, ship, payment } = useContext(Context);
@@ -55,6 +57,12 @@ const Dashboard = observer(() => {
     },
   ];
   useEffect(() => {
+    fetchShips(ship.selectedType.id, ship.page, 5).then((data) => {
+        ship.setShips(data.rows);
+        ship.setTotalCount(data.count);
+    });
+}, [ship.page,ship.selectedType ]);
+  useEffect(() => {
     fetchPayments().then(data => {
       if (payment) {
         payment.setPayments(data.rows);
@@ -70,31 +78,13 @@ const Dashboard = observer(() => {
         client.setClients(data.rows);
       }
     });
-    fetchShips().then(data => {
-      if (ship) {
-        ship.setShips(data.rows);
-      }
-    });
+    fetchShips(null, 1, 5).then((data) => {
+      ship.setShips(data.rows);
+      ship.setTotalCount(data.count);
+  });
+  fetchTypes().then((data) => ship.setTypes(data));
   },);
 
-  const fetchData = async () => {
-    await Promise.all([fetchClients(), fetchPayments(), fetchRentals(), fetchShips()]).then(
-      ([clientsData, paymentsData, rentalsData, shipsData]) => {
-        if (client) {
-          client.setClients(clientsData.rows);
-        }
-        if (payment) {
-          payment.setPayments(paymentsData.rows);
-        }
-        if (rental) {
-          rental.setRentals(rentalsData.rows);
-        }
-        if (ship) {
-          ship.setShips(shipsData.rows);
-        }
-      }
-    );
-  };
 
 
 
@@ -135,6 +125,7 @@ const Dashboard = observer(() => {
           <Card className="p-4 border-0" >
             <Card.Title className="p-3">Клиенты с задолженностью</Card.Title>
             <ClientList showOnlyDebt={true}/>
+            <NavLink to={CLIENTS_ROUTE}>Все клиенты</NavLink>
           </Card>
         </Col>
       </Row>
@@ -149,6 +140,7 @@ const Dashboard = observer(() => {
           <Card className=" p-4 border-0">
             <Card.Title className="p-3">Последние оплаты</Card.Title>
             <PaymentList />
+            <NavLink to={PAYMENTS_ROUTE}>Все оплаты</NavLink>
           </Card>
         </Col>
       </Row>

@@ -1,27 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import React, {useState} from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import { deleteShip } from '../http/shipAPI';
 import EditShip from './modals/EditShip';
 
-const ShipItem = ({ ship, handleDelete, iterator }) => {
-  const [shipUpdateVisible, setUpdateShipVisible] = useState(false);
+const ShipItem = ({ ship, handleDelete, iterator}) => {
+  const [shipUpdateVisible, setUpdateShipVisible] = React.useState(false);
+  const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
 
   const deleteOne = async (e) => {
-    e.stopPropagation(); // Остановить распространение события клика
-    try {
-      await handleDelete(ship.id);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
+    // try {
+    //   await handleDelete(ship.id);
+    //   setConfirmDeleteVisible(false);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  };
 
   const openEditModal = (e) => {
-    e.stopPropagation(); // Остановить распространение события клика
-    setUpdateShipVisible(true);
+    // setUpdateShipVisible(true);
   };
-
+  const openConfirmDeleteModal = (e) => {
+    // setConfirmDeleteVisible(true);
+  };
+  const closeConfirmDeleteModal = () => {
+    // setConfirmDeleteVisible(false);
+  };
+  const confirmDelete = () => {
+    // deleteOne();
+  };
   return (
     <tr>
       <td>{iterator}</td>
@@ -31,20 +38,34 @@ const ShipItem = ({ ship, handleDelete, iterator }) => {
       <td>{ship.priceSummer}</td>
       <td>{ship.priceWinter}</td>
       <td>{ship.parkingNumber}</td>
-
       <td style={{ width: '100%' }} className="d-flex justify-content-around">
         <Button variant="outline-dark" onClick={openEditModal}>
           Изменить
-        </Button>{' '}
+        </Button>
         <EditShip
-          key={ship.id}
           shipItem={ship}
           show={shipUpdateVisible}
           onHide={() => setUpdateShipVisible(false)}
         />
-        <Button variant="outline-danger" onClick={deleteOne}>
+        <Button variant="outline-danger"  onClick={openConfirmDeleteModal}>
           Удалить
         </Button>
+        <Modal show={confirmDeleteVisible} onHide={closeConfirmDeleteModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Подтвердить удаление</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>Вы уверены, что хотите удалить клиента?</p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={closeConfirmDeleteModal}>
+                Отмена
+              </Button>
+              <Button variant="danger" onClick={confirmDelete}>
+                Удалить
+              </Button>
+            </Modal.Footer>
+          </Modal>
       </td>
     </tr>
   );

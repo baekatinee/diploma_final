@@ -1,52 +1,58 @@
-import React, { useContext, useEffect } from 'react'
-import { observer } from "mobx-react-lite"
-import { Context } from "../index"
+import React, { useContext, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
+import { observer } from 'mobx-react-lite';
+import { Context } from '../index';
 import ShipItem from './ShipItem';
-import { fetchShips } from '../http/shipAPI';
-import { deleteShip } from '../http/shipAPI';
+import { deleteShip, fetchShips } from '../http/shipAPI';
 
 const ShipList = observer(() => {
-    const { ship } = useContext(Context)
-    useEffect(() => {
-        fetchShips().then(data => {
-            if (ship) {
-                ship.setShips(data.rows);
-            }
-        });
-    }, []);
-    const handleDelete = async (id) => {
-        try {
-            await deleteShip(id);
-            fetchShips();
-        } catch (e) {
-            console.log(e);
-        }
-    }
-    let iterator = 1;
+    const { ship } = useContext(Context);
+    // useEffect(() => {
+    //     fetchShips().then(data => {
+    //       if (ship) {
+    //         ship.setShips(data.rows);
+    //       }
+    //     });
+    //   }, [ship]);
+    //   const handleDelete = async (id) => {
+    //     try {
+    //       await deleteShip(id);
+    //       fetchShips().then(data => {
+    //         if (ship) {
+    //           ship.setShips(data.rows);
+    //         }
+    //       });
+    //     } catch (e) {
+    //       console.log(e);
+    //     }
+    //   };
+    
     return (
-        <Table hover>
-            <thead>
-                <tr>
-                    <th>№</th>
-                    <th>Название</th>
-                    <th>Бортовой номер</th>
-                    <th>Длина</th>
-                    <th>Стоимость лето</th>
-                    <th>Стоиость зима</th>
-                    <th>Парковочное место</th>
-                    <th>Действия</th>
-                </tr>
-            </thead>
-            <tbody>
-             
-                {ship.Ships.map(shipItem =>
-                    <ShipItem key={shipItem.id}  iterator={iterator++} ship={shipItem} handleDelete={handleDelete}>
-                    </ShipItem>
-                )}
-            </tbody>
-        </Table>
-    )
+    <Table hover>
+      <thead>
+        <tr>
+          <th>№</th>
+          <th>Название</th>
+          <th>Бортовой номер</th>
+          <th>Длина</th>
+          <th>Стоимость лето</th>
+          <th>Стоимость зима</th>
+          <th>Парковочное место</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {ship.Ships.map((ship, index) => (
+          <ShipItem
+            key={ship.id}
+            iterator={index + 1}
+            ship={ship}
+            // handleDelete={handleDelete}
+          />
+        ))}
+      </tbody>
+    </Table>
+  );
 })
 
-export default ShipList
+export default ShipList;

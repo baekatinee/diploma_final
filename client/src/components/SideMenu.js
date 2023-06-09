@@ -59,7 +59,11 @@ const Sidebar = observer(() => {
   // prefix={<i className="fa fa-bars fa-large"></i>}
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <CDBSidebar className="" textColor="black" backgroundColor="#F6F8FC">
+    <CDBSidebar
+      textColor="black"
+      backgroundColor="#F6F8FC"
+      style={{ width: '30vh', minWidth: '30vh' }}
+    >
         <CDBSidebarHeader >
           <Link style={{ textDecoration: 'none', color: '#000' }} to={user.isAuth ? DASHBOARD_ROUTE : '/'}>
             Sailing Center
