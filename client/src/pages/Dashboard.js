@@ -63,12 +63,12 @@ const Dashboard = observer(() => {
     });
 }, [ship.page,ship.selectedType ]);
   useEffect(() => {
-    fetchPayments().then(data => {
+    fetchPayments(1,5).then(data => {
       if (payment) {
         payment.setPayments(data.rows);
       }
     });
-    fetchRentals().then(data => {
+    fetchRentals(1,5).then(data => {
       if (rental) {
         rental.setRentals(data.rows);
       }
