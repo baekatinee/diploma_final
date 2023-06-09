@@ -16,7 +16,7 @@ import CreateRental from '../components/modals/CreateRental';
 import ClientPaymentList from '../components/Payments/ClientPaymentList';
 import { fetchTypes } from '../http/typeAPI';
 import ConfirmDeleteModal from '../components/modals/Confirm/ConfirmDeleteModal';
-
+import PagesRentals from '../components/Pagination/PagesRentals'
 const ClientPage = observer(() => {
     const { rental, ship, payment } = useContext(Context);
     const { id } = useParams();
@@ -54,7 +54,21 @@ const ClientPage = observer(() => {
                 payment.setPayments(data.rows);
             }
         });
-    }, [rental]);
+    }, [rental, payment, ship, client.id]);
+    useEffect(() => {
+        fetchRentals(rental.page, 5).then(data => {
+            if (rental) {
+                rental.setRentals(data.rows);
+                rental.setTotalCount(data.count)
+            }
+        });
+        fetchPayments(payment.page, 5).then(data => {
+            if (payment) {
+                payment.setPayments(data.rows);
+                payment.setTotalCount(data.count)
+            }
+        });
+    }, [rental.page, payment.page]);
 
     useEffect(() => {
         fetchShips(ship.selectedType.id, ship.page, 5).then(data => {
@@ -166,7 +180,7 @@ const ClientPage = observer(() => {
                                     <Card.Img variant='top' src={debt} style={{ width: '3vw', height: '3vw' }} />
                                     <Card.Body className='d-flex flex-column align-items-center'>
                                         <Card.Title>Задолженность</Card.Title>
-                                        <Card.Text style={{ fontWeight:'bold', fontSize:'1.5rem' }}>350 BYN</Card.Text>
+                                        <Card.Text style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>350 BYN</Card.Text>
                                     </Card.Body>
                                 </Card>
                             )}
@@ -184,6 +198,7 @@ const ClientPage = observer(() => {
                         <CreateRental clientId={client.id} show={rentalVisible} onHide={() => setRentalVisible(false)}></CreateRental>
                     </Card.Title>
                     <ClientRentalList clientId={client.id} ></ClientRentalList>
+                    <PagesRentals/>
                 </Card>
                 <Card className=' border-0 p-4 mb-3'>
                     <Card.Title border='primary'>История оплат</Card.Title>
