@@ -3,10 +3,10 @@ export default class ClientCrm {
     constructor() {
         this._status = [
             {
-                id: 1, name: "Оплачено"
+                id: 1, name: "Оплачено", definition:true
             },
             {
-                id: 2, name: "Долг"
+                id: 2, name: "Долг", definition:false
             },
 
         ]

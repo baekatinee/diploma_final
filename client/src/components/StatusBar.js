@@ -5,11 +5,17 @@ import { Tab, Tabs } from '@mui/material';
 
 const StatusBar = observer(() => {
     const { ship } = useContext(Context);
+
     const handleTabChange = (event, newValue) => {
-        if (newValue !== ship.selectedType?.id) {
-            const selectedType = newValue === '' ? undefined : ship.types.find((type) => type.id === newValue);
-            ship.setSelectedType(selectedType);
+        let selectedType;
+
+        if (newValue === '') {
+            selectedType = undefined;
+        } else {
+            selectedType = ship.types.find((type) => type.id === newValue);
         }
+
+        ship.setSelectedType(selectedType);
     };
 
     return (
@@ -20,11 +26,7 @@ const StatusBar = observer(() => {
             scrollButtons="auto"
             aria-label="Ship Types"
         >
-            <Tab
-                label="Все типы"
-                value=""
-                style={{ cursor: 'pointer' }}
-            />
+            <Tab label="Все" value="" style={{ cursor: 'pointer' }} />
             {ship.types.map((type) => (
                 <Tab
                     key={type.id}

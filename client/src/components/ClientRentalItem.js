@@ -20,7 +20,7 @@ const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj }) => {
     const deleteOne = async (e) => {
 
         try {
-          await handleDelete(shipObj.id);
+          await handleDelete(rental.id);
           setConfirmDeleteVisible(false);
         } catch (error) {
           console.log(error);

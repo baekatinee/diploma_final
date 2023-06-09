@@ -1,22 +1,46 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Container, Row, Col, Button, Breadcrumb } from 'react-bootstrap';
+import { Container, Row, Col, Breadcrumb } from 'react-bootstrap';
 import ClientList from '../components/ClientList';
-import Pages from '../components/Pages';
 import { observer } from 'mobx-react-lite';
 import { Context } from '..';
 import { fetchClients } from '../http/clientAPI';
 import StatusClient from '../components/StatusClient';
+import PagesClient from '../components/PagesClient';
 
 
 const Clients = observer(() => {
     const { client } = useContext(Context)
     useEffect(() => {
-        fetchClients().then(data => {
+        fetchClients(null, 1, 10).then(data => {
             if (client) {
                 client.setClients(data.rows);
+                client.setTotalCount(data.count);
             }
         });
     }, [client]);
+    useEffect(() => {
+        if (client.selectedStatus && client.selectedStatus.id) {
+            fetchClients(client.selectedStatus.definition, client.page, 10)
+                .then((data) => {
+                    if (client) {
+                        client.setClients(data.rows);
+                        client.setTotalCount(data.count);
+                    }
+                })
+        } else {
+         
+            fetchClients(null, client.page, 10)
+                .then((data) => {
+                    if (client) {
+                        client.setClients(data.rows);
+                        client.setTotalCount(data.count);
+                    }
+                })
+                .catch((error) => {
+                    
+                });
+        }
+    }, [client.page, client.selectedStatus]);
     return (
         <Container>
             <Breadcrumb>
@@ -40,7 +64,7 @@ const Clients = observer(() => {
             </Row>
             <ClientList>
             </ClientList>
-            <Pages></Pages>
+            <PagesClient />
         </Container>
 
     )

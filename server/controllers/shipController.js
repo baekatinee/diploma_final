@@ -1,4 +1,4 @@
-const { Ship,  Rental, Payment } = require('../models/models')
+const { Ship, Rental, Payment } = require('../models/models')
 const { Type } = require('../models/models')
 const apiError = require('../error/apiError')
 class shipController {
@@ -73,57 +73,60 @@ class shipController {
     }
     async updateOne(req, res, next) {
         try {
-          const { id } = req.params;
-          const { length, name, typeId, priceSummer, priceWinter, number, parkingNumber } = req.body;
-      
-          const findShipById = await Ship.findOne({ where: { id } });
-      
-          if (!findShipById) {
-            return res.status(404).send('Такого судна не существует в базе');
-          }
-      
-          if (name) findShipById.name = name;
-          if (length) findShipById.length = length;
-          if (typeId) findShipById.typeId = typeId;
-          if (number) findShipById.number = number;
-          if (priceSummer) findShipById.priceSummer = priceSummer;
-          if (priceWinter) findShipById.priceWinter = priceWinter;
-          if (parkingNumber) findShipById.parkingNumber = parkingNumber;
-      
-          const updatedShip = await findShipById.save();
-      
-          if (!updatedShip) {
-            return res.status(400).send('Не удалось сохранить изменения');
-          }
-      
-          return res.json(updatedShip);
-        } catch (e) {
-          next(apiError.badRequest(e.message));
-        }
-      }
-    async destroy(req, res, next) {
-        try {
             const { id } = req.params;
-            const ship = await Ship.findOne({
-                where: { id },
-                include: [{ model: Rental },]
-            });
-            if (!ship) {
-                res.status(404).send('Нет судна с указанным id');
-            } else {
-                for (const rental of ship.rentals) {
-                    await rental.destroy({ cascade: true });
-                }
-                await ship.destroy({ cascade: true });
-                res.status(200).send({
-                    status: "success",
-                    message: "successfully"
-                });
+            const { length, name, typeId, priceSummer, priceWinter, number, parkingNumber } = req.body;
+
+            const findShipById = await Ship.findOne({ where: { id } });
+
+            if (!findShipById) {
+                return res.status(404).send('Такого судна не существует в базе');
             }
+
+            if (name) findShipById.name = name;
+            if (length) findShipById.length = length;
+            if (typeId) findShipById.typeId = typeId;
+            if (number) findShipById.number = number;
+            if (priceSummer) findShipById.priceSummer = priceSummer;
+            if (priceWinter) findShipById.priceWinter = priceWinter;
+            if (parkingNumber) findShipById.parkingNumber = parkingNumber;
+
+            const updatedShip = await findShipById.save();
+
+            if (!updatedShip) {
+                return res.status(400).send('Не удалось сохранить изменения');
+            }
+
+            return res.json(updatedShip);
         } catch (e) {
             next(apiError.badRequest(e.message));
         }
     }
+    async destroy(req, res, next) {
+        try {
+          const { id } = req.params;
+          const rentals = await Rental.findAll({
+            where: { shipId: id },
+          });
+      
+          if (rentals.length === 0) {
+            res.status(404).send('Нет аренд, связанных с указанным судном');
+          } else {
+            for (const rental of rentals) {
+              await rental.destroy();
+            }
+      
+            await Ship.destroy({ where: { id } });
+      
+            res.status(200).send({
+              status: "success",
+              message: "successfully",
+            });
+          }
+        } catch (e) {
+          next(apiError.badRequest(e.message));
+        }
+      }
+      
 
 }
 

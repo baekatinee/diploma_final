@@ -125,12 +125,7 @@ class paymentController {
     async destroy(req, res, next) {
         try {
             const { id } = req.params
-            const payment = await Payment.findOne(
-                {
-                    where: { id },
-  
-                }
-            )
+            const payment = await Payment.findByPk(id);
             if (!payment) {
                 res.status(404).send('Такой оплаты не существует в базе')
             }

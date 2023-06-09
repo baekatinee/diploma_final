@@ -16,7 +16,9 @@ export const deleteClient = async (id) => {
     const { data } = await $authHost.delete(`api/client/${id}`)
     return data
 }
-export const fetchClients = async () => {
-    const { data } = await $authHost.get('api/client')
+export const fetchClients = async (hasPaid, page, limit=5) => {
+    const { data } = await $authHost.get('api/client', {params:{
+        hasPaid,  page, limit
+    }})
     return data
 }

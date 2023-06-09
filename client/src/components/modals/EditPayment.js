@@ -157,7 +157,7 @@ const EditPayment = ({ show, onHide, payment, clientId, rentalId }) => {
                 <option>Выберите аренду</option>
                 {clientRentals.map((rental) => (
                   <option key={rental.id} value={rental.id}>
-                    с {rental.dateStart} по {rental.dateEnd} {rental.ship.name} {rental.ship.number}
+                    с {rental.dateStart} по {rental.dateEnd} 
                   </option>
                 ))}
               </Form.Select>

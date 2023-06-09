@@ -11,22 +11,28 @@ import { observer } from 'mobx-react-lite';
 const ShipsPage = observer(() => {
     const {ship}=useContext(Context)
     const [shipVisible, setShipVisible] = useState(false);
-
     useEffect(() => {
-        fetchShips(null, 1, 5).then((data) => {
-            ship.setShips(data.rows);
-            ship.setTotalCount(data.count);
-        });
-        fetchTypes().then((data) => ship.setTypes(data));
-    }, []);
-
-    useEffect(() => {
-        fetchShips(ship.selectedType.id, ship.page, 5).then((data) => {
-            ship.setShips(data.rows);
-            ship.setTotalCount(data.count);
-        });
-    }, [ship.page,ship.selectedType ]);
-
+        if (!ship.selectedType) {
+          fetchShips(null, ship.page, 10)
+            .then((data) => {
+              ship.setShips(data.rows);
+              ship.setTotalCount(data.count);
+            })
+            .catch((error) => {
+              // Handle the error here
+            });
+        } else {
+          fetchShips(ship.selectedType.id, ship.page, 10)
+            .then((data) => {
+              ship.setShips(data.rows);
+              ship.setTotalCount(data.count);
+            })
+            .catch((error) => {
+              // Handle the error here
+            });
+        }
+      }, [ship.page, ship.selectedType]);
+      
     return (
         <Container>
             <Breadcrumb>

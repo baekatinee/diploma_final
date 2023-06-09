@@ -50,15 +50,15 @@ Type.hasMany(Ship);
 Ship.belongsTo(Type);
 
 Client.hasMany(Rental, { onDelete: 'CASCADE' });
-Rental.belongsTo(Client, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+Rental.belongsTo(Client, { foreignKey: 'clientId', onDelete: 'CASCADE' });
 
 Ship.hasMany(Rental, { onDelete: 'CASCADE' });
-Rental.belongsTo(Ship, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+Rental.belongsTo(Ship, { foreignKey:'shipId', onDelete: 'CASCADE' });
 
 Rental.hasMany(Payment, { onDelete: 'CASCADE' });
-Payment.belongsTo(Rental, { onDelete: 'CASCADE' });
+Payment.belongsTo(Rental, {foreignKey:'rentalId', onDelete: 'CASCADE' });
 
-Payment.belongsTo(Client, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+Payment.belongsTo(Client, { foreignKey: 'clientId', onDelete: 'CASCADE' });
 Client.hasMany(Payment, { onDelete: 'CASCADE' });
 
 
@@ -66,15 +66,15 @@ Type.hasMany(Ship)
 Ship.belongsTo(Type)
 
 Client.hasMany(Rental, { onDelete: 'CASCADE' })
-Rental.belongsTo(Client,  { foreignKey: { allowNull: false }, onDelete: 'CASCADE' })
+Rental.belongsTo(Client,  { foreignKey:'clientId', onDelete: 'CASCADE' })
 
 Ship.hasMany(Rental,{ onDelete: 'CASCADE' })
-Rental.belongsTo(Ship,  { foreignKey: { allowNull: false }, onDelete: 'CASCADE' })
+Rental.belongsTo(Ship,  { foreignKey:'shipId', onDelete: 'CASCADE' })
 
 Rental.hasMany(Payment, { onDelete: 'CASCADE' })
-Payment.belongsTo(Rental, {foreignKey: { allowNull: false }, onDelete: 'CASCADE'})
+Payment.belongsTo(Rental, {foreignKey:'rentalId', onDelete: 'CASCADE'})
 
-Payment.belongsTo(Client,  { foreignKey: { allowNull: false }, onDelete: 'CASCADE' })
+Payment.belongsTo(Client,  { foreignKey: 'clientId', onDelete: 'CASCADE' })
 Client.hasMany(Payment, { onDelete: 'CASCADE' })
 
 
