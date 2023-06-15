@@ -6,7 +6,6 @@ import EditClient from '../modals/Edit/EditClient';
 import EditButton from '../Buttons/EditButton';
 import DeleteButton from '../Buttons/DeleteButton';
 
-
 const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
   const navigate = useNavigate();
   const [clientUpdateVisible, setUpdateClientVisible] = useState(false);
@@ -21,10 +20,8 @@ const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
     }
   };
 
-  const goToClientPage = (e) => {
-    if (!e.target.closest('button')) {
-      navigate(CLIENT_ROUTE + '/' + client.id);
-    }
+  const goToClientPage = () => {
+    navigate(CLIENT_ROUTE + '/' + client.id);
   };
 
   const openEditModal = (e) => {
@@ -51,35 +48,34 @@ const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
   const confirmDelete = () => {
     deleteOne();
   };
+
   return (
-    <tr onClick={goToClientPage}>
+    <tr>
       <td>{iterator}</td>
-      <td>{client.surname}</td>
-      <td>{client.name}</td>
-      <td>{client.fathersName}</td>
+      <td onClick={goToClientPage} style={{ cursor: 'pointer' }}>
+        {client.surname}
+      </td>
+      <td onClick={goToClientPage} style={{ cursor: 'pointer' }}>{client.name}</td>
+      <td onClick={goToClientPage} style={{ cursor: 'pointer' }}>{client.fathersName}</td>
       <td>{client.phoneNumber}</td>
       <td>{client.email}</td>
-      {isAllClients ? (
+      {isAllClients && (
         <td>
           {client.hasPaid ? (
-            <Badge pill bg="success" style={{ width: "70%" }}>
+            <Badge pill bg="success" style={{ width: '70%' }}>
               Оплачено
             </Badge>
           ) : (
-            <Badge pill bg="danger" style={{ width: "70%" }}>
+            <Badge pill bg="danger" style={{ width: '70%' }}>
               Долг
             </Badge>
           )}
-        </td>) : ('')}
-      {isAllClients ? (
+        </td>
+      )}
+      {isAllClients && (
         <td style={{ width: '100%' }} className="d-flex justify-content-around">
           <EditButton onClick={openEditModal} />
-          <EditClient
-            key={client.id}
-            client={client}
-            show={clientUpdateVisible}
-            onHide={closeEditModal}
-          />
+          <EditClient key={client.id} client={client} show={clientUpdateVisible} onHide={closeEditModal} />
           <DeleteButton onClick={openConfirmDeleteModal} />
           <Modal show={confirmDeleteVisible} onHide={closeConfirmDeleteModal}>
             <Modal.Header closeButton>
@@ -98,8 +94,6 @@ const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
             </Modal.Footer>
           </Modal>
         </td>
-      ) : (
-        ''
       )}
     </tr>
   );
