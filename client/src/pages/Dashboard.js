@@ -80,16 +80,16 @@ const Dashboard = observer(() => {
   fetchTypes().then((data) => ship.setTypes(data));
   },[]);
 
-
+  const progress = (client.totalCount / 100) * 100;
 
 
   return (
     <Container >
       <Row className='mb-4'>
         <GradientDiv colorLeft={"#ff8080"} colorRight={"#ffcc80"} number={"1000"} subtitle={"Общая выручка за сезон"} progress={60} />
-        <GradientDiv colorLeft={"#BE48B0"} colorRight={"#5E93F2"} number={"30"} subtitle={"Клиентов в яхт-клубе"} progress={50} />
+        <GradientDiv colorLeft={"#BE48B0"} colorRight={"#5E93F2"} number={client.totalCount} subtitle={"Клиентов в яхт-клубе"} progress={progress} />
         <GradientDiv colorLeft={"#9D18AF"} colorRight={"#F551B9"} number={"60"} subtitle={"Арендованных мест"} progress={40} />
-        <GradientDiv colorLeft={"#32DCB2"} colorRight={"#3FFD91"} number={"3"} subtitle={"Клиентов с задолженностью"} progress={30} />
+        <GradientDiv colorLeft={"#32DCB2"} colorRight={"#3FFD91"} number={"4"} subtitle={"Клиентов с задолженностью"} progress={30} />
       </Row>
       <Row className="d-flex">
         <Col style={{ flex: 1 }} md={7}>
