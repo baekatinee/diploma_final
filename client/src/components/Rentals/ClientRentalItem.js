@@ -44,7 +44,7 @@ const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj }) => {
     };
 
     return (
-        <Accordion.Item eventKey={rental.id}>
+        <Accordion.Item className='border-0' eventKey={rental.id}>
             <Accordion.Header onClick={toggleAccordion}>
                 Аренда # {rental.id} {rental.dateStart} {rental.dateEnd}
             </Accordion.Header>

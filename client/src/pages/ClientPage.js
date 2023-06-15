@@ -17,6 +17,8 @@ import ClientPaymentList from '../components/Payments/ClientPaymentList';
 import { fetchTypes } from '../http/typeAPI';
 import ConfirmDeleteModal from '../components/modals/Confirm/ConfirmDeleteModal';
 import PagesRentals from '../components/Pagination/PagesRentals'
+import BreadСrumbs from '../components/BreadCrumbs';
+import { CLIENTS_ROUTE, CLIENT_ROUTE, DASHBOARD_ROUTE } from '../utils/consts';
 const ClientPage = observer(() => {
     const { rental, ship, payment } = useContext(Context);
     const { id } = useParams();
@@ -30,7 +32,7 @@ const ClientPage = observer(() => {
     const deleteClientAndRedirect = async () => {
         try {
             await deleteClient(client.id);
-            navigate('/dashboard');
+            navigate(DASHBOARD_ROUTE);
         } catch (error) {
             console.error(error);
             alert('Произошла ошибка при удалении клиента');
@@ -39,17 +41,17 @@ const ClientPage = observer(() => {
 
     useEffect(() => {
         fetchOneClient(id).then(data => setClientData(data));
-        fetchRentals().then(data => {
+        fetchRentals(null,null,null).then(data => {
             if (rental) {
                 rental.setRentals(data.rows);
             }
         });
-        fetchShips(null, 1, 5).then(data => {
+        fetchShips().then(data => {
             ship.setShips(data.rows);
             ship.setTotalCount(data.count);
         });
         fetchTypes().then(data => ship.setTypes(data));
-        fetchPayments().then(data => {
+        fetchPayments(null,null,null).then(data => {
             if (payment) {
                 payment.setPayments(data.rows);
             }
@@ -60,6 +62,7 @@ const ClientPage = observer(() => {
             if (rental) {
                 rental.setRentals(data.rows);
                 rental.setTotalCount(data.count)
+       
             }
         });
         fetchPayments(payment.page, 5).then(data => {
@@ -88,15 +91,14 @@ const ClientPage = observer(() => {
             console.log(e);
         }
     };
-
+    const breadcrumbsLinks = [
+ 
+        { text: 'Клиенты', url: CLIENTS_ROUTE },
+        { text: client.surname+' '+client.name+' ' + client.fathersName, url: CLIENT_ROUTE },
+      ];
     return (
         <Container>
-            <Breadcrumb>
-                <Breadcrumb.Item href="/">Дашборд</Breadcrumb.Item>
-                <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-                    Медник Давид Гедальевич
-                </Breadcrumb.Item>
-            </Breadcrumb>
+          <BreadСrumbs links={breadcrumbsLinks} />
             <Card className='border-0 bg-light mt-2 p-2'>
                 <Card className='border-0 p-4 mb-3'>
                     <Card.Header className='d-flex justify-content-between align-items-center'>
@@ -124,6 +126,7 @@ const ClientPage = observer(() => {
                                     client={client}
                                     onHide={() => setUpdateClientVisible(false)}
                                     show={clientUpdateVisible}
+                                    
                                 />
                                 <Button variant='outline-danger' style={{ marginLeft: '1rem' }} onClick={() => setConfirmDeleteVisible(true)}>
                                     Удалить
@@ -180,7 +183,7 @@ const ClientPage = observer(() => {
                                     <Card.Img variant='top' src={debt} style={{ width: '3vw', height: '3vw' }} />
                                     <Card.Body className='d-flex flex-column align-items-center'>
                                         <Card.Title>Задолженность</Card.Title>
-                                        <Card.Text style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>350 BYN</Card.Text>
+                                        <Card.Text style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>{client.debtAmount} BYN</Card.Text>
                                     </Card.Body>
                                 </Card>
                             )}

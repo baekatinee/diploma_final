@@ -10,7 +10,7 @@ class paymentController {
             if (!payment) {
                 res.status(404).send('Не удалось создать оплату из-за неверно введенных данных')
             }
-            clientController.updateHasPaidStatus(req, res, next);
+            clientController.updateHasPaidStatus(clientId);
             return res.json(payment)
         } catch (e) {
             next(apiError.badRequest(e.message))
@@ -98,7 +98,7 @@ class paymentController {
     async updateOne(req, res, next) {
         try {
             const { id } = req.params;
-            const { sum, dateStart, clientId, rentalId,  hasPaid } = req.body
+            const { sum, dateStart, clientId, rentalId } = req.body
             const findPaymentById = await Payment.findOne(
                 {
                     where: { id }
@@ -111,7 +111,8 @@ class paymentController {
             if (dateStart) findPaymentById.dateStart = dateStart;
             if (rentalId) findPaymentById.rentalId = rentalId;
             if ( clientId) findPaymentById. clientId=  clientId;
-            if ( hasPaid) findPaymentById.  hasPaid=   hasPaid;
+            clientController.updateHasPaidStatus(clientId);
+            console.log("UPDATED PAYMENT HASPAID")
             const updatedPayment = await findPaymentById.save()
             if (!updatedPayment) {
                 res.status(400).send('Не удалось сохранить изменения')
@@ -130,6 +131,7 @@ class paymentController {
                 res.status(404).send('Такой оплаты не существует в базе')
             }
             await payment.destroy();
+            clientController.updateHasPaidStatus(payment.clientId);
             if (!payment) {
                 res.status(400).send('Не удалось сохранить изменения')
             }

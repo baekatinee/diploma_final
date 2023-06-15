@@ -26,7 +26,7 @@ const ClientPaymentItem = ({ payment, clientObj, shipObj, onDeletePayment }) => 
   };
 
   return (
-    <Accordion.Item eventKey={payment.id}>
+    <Accordion.Item className='border-0' eventKey={payment.id}>
       <Accordion.Header onClick={toggleAccordion}>Оплата № {payment.id}</Accordion.Header>
       <Accordion.Body>
         <Table striped bordered hover>

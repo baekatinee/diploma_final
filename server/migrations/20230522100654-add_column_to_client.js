@@ -8,9 +8,12 @@ module.exports = {
       allowNull: true,
       defaultValue: true,
     });
+   
   },
+  
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.removeColumn('clients', 'hasPaid');
+   
   },
 };

@@ -4,7 +4,7 @@ export const createPayment = async (payment) => {
   const { data } = await $authHost.post('api/payment', payment)
   return data
 }
-export const fetchPayments = async (page, limit = 5) => {
+export const fetchPayments = async (page,limit) => {
   const { data } = await $authHost.get('api/payment', {
     params: {
       page, limit

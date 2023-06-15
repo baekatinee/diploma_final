@@ -34,6 +34,7 @@ export default class ClientCrm {
         this._clients = clients;
     }
     setSelectedStatus(status) {
+        this.setPage(1)
         this._selectedStatus = status;
     }
     get selectedStatus() {

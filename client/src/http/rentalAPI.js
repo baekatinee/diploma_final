@@ -5,7 +5,7 @@ export const createRental = async (rental) => {
   const { data } = await $authHost.post('api/rental', rental)
   return data
 }
-export const fetchRentals = async (page, limit = 5) => {
+export const fetchRentals = async (page, limit ) => {
   const { data } = await $authHost.get('api/rental', {
     params: {
       page, limit

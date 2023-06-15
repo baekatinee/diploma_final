@@ -7,29 +7,37 @@ import { fetchPayments } from '../http/paymentAPI';
 import CreatePayment from '../components/modals/CreatePayment';
 import { fetchRentals } from '../http/rentalAPI';
 import Pages from '../components/Pagination/Pages';
-
+import BreadСrumbs from '../components/BreadCrumbs';
+import { DASHBOARD_ROUTE, PAYMENTS_ROUTE } from '../utils/consts';
+import { fetchClients } from '../http/clientAPI';
 const Payments = observer(() => {
-    const { payment, rental } = useContext(Context);
+    const { payment, rental, client } = useContext(Context);
     const [paymentVisible, setPaymentVisible] = useState(false)
     useEffect(() => {
-        fetchPayments().then(data => {
+        fetchPayments(payment.page,10).then(data => {
             if (payment) {
                 payment.setPayments(data.rows);
             }
         });
-        fetchRentals().then(data => {
+        fetchRentals(null, null, null).then(data => {
             if (rental) {
                 rental.setRentals(data.rows);
             }
         });
+        fetchClients(null, null, null).then(data => {
+            if (client) {
+              client.setClients(data.rows);
+            }
+          });
     },);
+    const breadcrumbsLinks = [
+        { text: 'Дашборд', url: DASHBOARD_ROUTE },
+        { text: 'Оплаты', url: PAYMENTS_ROUTE },
+      ];
     return (
         <Container>
              <Breadcrumb>
-                <Breadcrumb.Item href="/">Дашборд</Breadcrumb.Item>
-                <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-                    Оплаты
-                </Breadcrumb.Item>
+         <BreadСrumbs links={breadcrumbsLinks} />
             </Breadcrumb>
             <Row className='mb-2'>
                 <Col md={10}>

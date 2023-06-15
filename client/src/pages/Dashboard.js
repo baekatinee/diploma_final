@@ -56,34 +56,29 @@ const Dashboard = observer(() => {
       amt: 2500,
     },
   ];
+
   useEffect(() => {
-    fetchShips(ship.selectedType.id, ship.page, 5).then((data) => {
-        ship.setShips(data.rows);
-        ship.setTotalCount(data.count);
-    });
-}, [ship.page,ship.selectedType ]);
-  useEffect(() => {
-    fetchPayments(1,5).then(data => {
+    fetchPayments(null, null, null).then(data => {
       if (payment) {
         payment.setPayments(data.rows);
       }
     });
-    fetchRentals(1,5).then(data => {
+    fetchRentals(null, null, null).then(data => {
       if (rental) {
         rental.setRentals(data.rows);
       }
     });
-    fetchClients().then(data => {
+    fetchClients(null, null, null).then(data => {
       if (client) {
         client.setClients(data.rows);
       }
     });
-    fetchShips(null, 1, 5).then((data) => {
+    fetchShips(null, null, null).then((data) => {
       ship.setShips(data.rows);
       ship.setTotalCount(data.count);
   });
   fetchTypes().then((data) => ship.setTypes(data));
-  },);
+  },[]);
 
 
 

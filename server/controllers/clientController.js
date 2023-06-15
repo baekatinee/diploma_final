@@ -1,6 +1,6 @@
 const { Client, Rental, Payment, Ship } = require('../models/models')
 const apiError = require('../error/apiError')
-
+const { Op } = require('sequelize');
 
 class clientController {
     async create(req, res, next) {
@@ -27,9 +27,8 @@ class clientController {
             if (name) whereClause.name = name;
             if (hasPaid !== undefined) whereClause.hasPaid = hasPaid;
 
-            const clients = await Client.findAndCountAll({
-                where: whereClause,
-                page,
+            let clients = await Client.findAndCountAll({
+                where: whereClause,         
                 limit,
                 offset,
             });
@@ -59,57 +58,69 @@ class clientController {
 
     }
 
-    async updateHasPaidStatus(rental) {
+    async updateHasPaidStatus(clientId) {
         try {
-            const currentDate = new Date();
-            const isSummer = isSummerSeason(currentDate);
-
-            // Объявление функции isSummerSeason
-            function isSummerSeason(date) {
-                const month = date.getMonth();
-
-                if (month >= 5 && month <= 7) {
-                    return true;
-                }
-
-                return false;
+          const currentDate = new Date();
+          const isSummer = isSummerSeason(currentDate);
+      
+          // Объявление функции isSummerSeason
+          function isSummerSeason(date) {
+            const month = date.getMonth();
+      
+            if (month >= 5 && month <= 7) {
+              return true;
             }
-
-            const { clientId } = rental;
-            let hasPaid = true;
-
-            // Получаем все оплаты для аренды
+      
+            return false;
+          }
+      
+          const rentals = await Rental.findAll({
+            where: {
+              clientId: clientId,
+            },
+          });
+      
+          for (const rental of rentals) {
+            const { shipId } = rental;
+      
             const payments = await Payment.findAll({
-                where: {
-                    rentalId: rental.id,
+              where: {
+                rentalId: rental.id,
+                createdAt: {
+                  [Op.lte]: currentDate,
                 },
+              },
             });
-
-            // Суммируем стоимость оплат для аренды
+      
             let totalPaymentAmount = 0;
+            const paymentMonths = [];
+      
             for (const payment of payments) {
+              const paymentMonth = payment.createdAt.getMonth();
+      
+              if (!paymentMonths.includes(paymentMonth)) {
                 totalPaymentAmount += payment.sum;
+                paymentMonths.push(paymentMonth);
+              }
             }
-
-            // Получаем судно, связанное с арендой
-            const ship = await Ship.findByPk(rental.shipId);
-
-            // Получаем стоимость аренды в зависимости от времени года
+      
+            const ship = await Ship.findByPk(shipId);
             const rentalAmount = isSummer ? ship.priceSummer : ship.priceWinter;
-
-            // Проверяем, равна ли сумма оплаты стоимости аренды
-            if (totalPaymentAmount !== rentalAmount) {
-                hasPaid = false;
-            }
-
-            // Обновляем поле hasPaid для клиента
-            await Client.update({ hasPaid }, { where: { id: clientId } });
-
+            const hasPaid = totalPaymentAmount >= rentalAmount;
+            const debtAmount = hasPaid ? 0 : rentalAmount - totalPaymentAmount;
+      
+            await Client.update({ hasPaid, debtAmount }, { where: { id: clientId } });
+      
             console.log(`HasPaid status updated for rental with ID ${rental.id}`);
+          }
+      
+          console.log(`HasPaid status updated for all rentals of client with ID ${clientId}`);
         } catch (error) {
-            console.error('An error occurred while updating hasPaid status:', error);
+          console.error('An error occurred while updating hasPaid status:', error);
         }
-    }
+      }
+      
+      
 
 
     async updateOne(req, res, next) {

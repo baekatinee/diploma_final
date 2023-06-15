@@ -4,7 +4,7 @@ import EditButton from '../Buttons/EditButton';
 import DeleteButton from '../Buttons/DeleteButton';
 import EditPayment from '../modals/Edit/EditPayment';
 
-const PaymentItem = ({isAllPAyments, payment, clientSurname, rentalObj, clientId, handleDelete, iterator }) => {
+const PaymentItem = ({isAllPayments, payment, clientSurname, rentalObj, clientId, handleDelete, iterator }) => {
   const rentalDateStart = rentalObj ? rentalObj.dateStart : '';
   const [paymentUpdateVisible, setUpdatePaymentVisible] = useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
@@ -42,7 +42,7 @@ const PaymentItem = ({isAllPAyments, payment, clientSurname, rentalObj, clientId
         <td>{clientSurname}</td>
       )}
       <td>{rentalDateStart}</td>
-      {isAllPAyments&&
+      {isAllPayments&&
       <td  className="d-flex">
         <div style={{marginRight:"1rem"}}>
         <EditButton onClick={openEditModal} />

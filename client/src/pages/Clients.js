@@ -6,12 +6,13 @@ import { Context } from '..';
 import { fetchClients } from '../http/clientAPI';
 import StatusClient from '../components/Tabs/StatusClient';
 import PagesClient from '../components/Pagination/PagesClient';
-
+import BreadСrumbs from '../components/BreadCrumbs';
+import { CLIENTS_ROUTE, DASHBOARD_ROUTE } from '../utils/consts';
 
 const Clients = observer(() => {
     const { client } = useContext(Context)
     useEffect(() => {
-        fetchClients(null, 1, 10).then(data => {
+        fetchClients(null, null, 10).then(data => {
             if (client) {
                 client.setClients(data.rows);
                 client.setTotalCount(data.count);
@@ -28,7 +29,6 @@ const Clients = observer(() => {
                     }
                 })
         } else {
-         
             fetchClients(null, client.page, 10)
                 .then((data) => {
                     if (client) {
@@ -37,19 +37,17 @@ const Clients = observer(() => {
                     }
                 })
                 .catch((error) => {
-                    
+
                 });
         }
-    }, [client.page, client.selectedStatus]);
+    }, [client.page, client.selectedStatus,]);
+    const breadcrumbsLinks = [
+        { text: 'Дашборд', url: DASHBOARD_ROUTE },
+        { text: 'Клиенты', url: CLIENTS_ROUTE },
+      ];
     return (
         <Container>
-            <Breadcrumb>
-                <Breadcrumb.Item href="/">Дашборд</Breadcrumb.Item>
-                <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-                    Клиенты
-                </Breadcrumb.Item>
-            </Breadcrumb>
-
+            <BreadСrumbs links={breadcrumbsLinks} />
             <Row className='mb-2'>
                 <Col md={10}>
                     <h1>
