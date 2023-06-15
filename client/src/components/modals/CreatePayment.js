@@ -6,7 +6,7 @@ import { createPayment } from '../../http/paymentAPI';
 import { fetchRentals } from '../../http/rentalAPI';
 import { fetchClients } from '../../http/clientAPI';
 
-const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
+const CreatePayment = ({ show, onHide, clientId, rentalId, handleCreate }) => {
   const { rental, client } = useContext(Context);
   const [dateStart, setStartDate] = useState('');
   const [sum, setSum] = useState('');
@@ -74,6 +74,7 @@ const CreatePayment = ({ show, onHide, clientId, rentalId }) => {
       };
 
       const data = await createPayment(formData);
+      handleCreate()
       onHide();
     } catch (error) {
       console.error(error);

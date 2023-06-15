@@ -6,7 +6,7 @@ import { fetchClients } from '../../../http/clientAPI';
 import { Context } from '../../..';
 
 
-const EditPayment = ({ show, onHide, payment, clientId, rentalId }) => {
+const EditPayment = ({ handleUpdate,show, onHide, payment, clientId, rentalId }) => {
   const { rental, client } = useContext(Context);
   const [dateStart, setStartDate] = useState(payment.dateStart);
   const [sum, setSum] = useState(payment.sum);
@@ -65,7 +65,7 @@ const EditPayment = ({ show, onHide, payment, clientId, rentalId }) => {
     if (!validateForm()) {
       return;
     }
-
+  
     try {
       const formData = {
         dateStart,
@@ -73,18 +73,16 @@ const EditPayment = ({ show, onHide, payment, clientId, rentalId }) => {
         selectedClient,
         selectedRental,
       };
-
-      const data = await updatePayment(payment.id,formData).then((data) => {
-        onHide();
-      });
-
+  
+      await updatePayment(payment.id, formData);
+      handleUpdate(); // Обновление оплаты в родительском компоненте
+      onHide();
     } catch (error) {
       console.error(error);
     }
-
+  
     setIsAddingPayment(false);
   };
-
 
   return (
     <Modal show={show} onHide={onHide} size="lg" centered>

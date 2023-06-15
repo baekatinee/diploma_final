@@ -6,8 +6,9 @@ import PaymentItem from './PaymentItem';
 import { deletePayment, fetchPayments } from '../../http/paymentAPI';
 import { useLocation } from 'react-router-dom';
 import { PAYMENTS_ROUTE } from '../../utils/consts';
+import EditPayment from '../modals/Edit/EditPayment';
 
-const PaymentList = observer(({ clientId }) => {
+const PaymentList = observer(({ handleCreate,clientId }) => {
   const { payment, client, rental } = useContext(Context);
   const location = useLocation();
   const isAllPayments = location.pathname === PAYMENTS_ROUTE;
@@ -32,6 +33,17 @@ const PaymentList = observer(({ clientId }) => {
   const handleDelete = async (id) => {
     try {
       await deletePayment(id);
+      fetchPayments().then((data) => {
+        if (payment) {
+          payment.setPayments(data.rows);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleUpdate = async () => {
+    try {
       fetchPayments().then((data) => {
         if (payment) {
           payment.setPayments(data.rows);
@@ -68,6 +80,7 @@ const PaymentList = observer(({ clientId }) => {
             return (
               <PaymentItem
                 key={payment.id}
+                handleUpdate={handleUpdate}
                 payment={payment}
                 rentalObj={rentalObj}
                 clientSurname={clientSurname}
@@ -76,6 +89,7 @@ const PaymentList = observer(({ clientId }) => {
                 iterator={index + 1}
                 isAllPayments={isAllPayments} 
               />
+
             );
           })}
       </tbody>

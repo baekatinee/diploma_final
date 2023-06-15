@@ -22,15 +22,17 @@ import { CLIENTS_ROUTE, CLIENT_ROUTE, DASHBOARD_ROUTE } from '../utils/consts';
 import EditButton from '../components/Buttons/EditButton';
 import DeleteButton from '../components/Buttons/DeleteButton';
 const ClientPage = observer(() => {
-    const { rental, ship, payment } = useContext(Context);
+    const { rental} = useContext(Context);
     const { id } = useParams();
     const navigate = useNavigate();
-
     const [client, setClientData] = useState('');
     const [clientUpdateVisible, setUpdateClientVisible] = useState(false);
     const [rentalVisible, setRentalVisible] = useState(false);
     const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
-
+ 
+    useEffect(() => {
+        fetchOneClient(id).then(data => setClientData(data));
+      }, []);
     const deleteClientAndRedirect = async () => {
         try {
             await deleteClient(client.id);
@@ -40,55 +42,20 @@ const ClientPage = observer(() => {
             alert('Произошла ошибка при удалении клиента');
         }
     };
-
-    useEffect(() => {
-        fetchOneClient(id).then(data => setClientData(data));
-        fetchRentals(null, null, null).then(data => {
-            if (rental) {
-                rental.setRentals(data.rows);
-            }
-        });
-        fetchShips().then(data => {
-            ship.setShips(data.rows);
-            ship.setTotalCount(data.count);
-        });
-        fetchTypes().then(data => ship.setTypes(data));
-        fetchPayments(null, null, null).then(data => {
-            if (payment) {
-                payment.setPayments(data.rows);
-            }
-        });
-    }, [rental, payment, ship, client.id]);
-    useEffect(() => {
-        fetchRentals(rental.page, 5).then(data => {
-            if (rental) {
-                rental.setRentals(data.rows);
-                rental.setTotalCount(data.count)
-
-            }
-        });
-        fetchPayments(payment.page, 5).then(data => {
-            if (payment) {
-                payment.setPayments(data.rows);
-                payment.setTotalCount(data.count)
-            }
-        });
-    }, [rental.page, payment.page]);
-
-    useEffect(() => {
-        fetchShips(ship.selectedType.id, ship.page, 5).then(data => {
-            ship.setShips(data.rows);
-            ship.setTotalCount(data.count);
-        });
-    }, [ship.page, ship.selectedType]);
     const handleCreateRental = async () => {
         try {
-            setRentalVisible(true);
-            await fetchRentals().then(data => {
+            fetchRentals().then((data) => {
                 if (rental) {
-                    rental.setRentals(data.rows);
+                  rental.setRentals(data.rows);
                 }
-            });
+              });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const handleUpdateClient = async () => {
+        try {
+            fetchOneClient(id).then(data => setClientData(data));
         } catch (e) {
             console.log(e);
         }
@@ -120,9 +87,10 @@ const ClientPage = observer(() => {
                                 )}
                             </Col>
                             <Col md={3} className='d-flex align-items-center justify-content-end'>
-                                <div style={{marginRight:'1rem'}}>
+                                <div style={{ marginRight: '1rem' }}>
                                     <EditButton onClick={() => setUpdateClientVisible(true)} />
                                     <EditClient
+                                    handleUpdateClient={handleUpdateClient}
                                         key={client.id}
                                         client={client}
                                         onHide={() => setUpdateClientVisible(false)}
@@ -195,10 +163,10 @@ const ClientPage = observer(() => {
                 <Card className=' border-0 p-4 mb-3'>
                     <Card.Title border='primary' className='d-flex justify-content-between align-items-center'>
                         <div>Текущие аренды</div>
-                        <Button className='mt-2' variant='outline-dark' onClick={() => handleCreateRental()}>
+                        <Button className='mt-2' variant='outline-dark' onClick={() => setRentalVisible(true)}>
                             Добавить аренду
                         </Button>{' '}
-                        <CreateRental clientId={client.id} show={rentalVisible} onHide={() => setRentalVisible(false)}></CreateRental>
+                        <CreateRental clientId={client.id} show={rentalVisible} handleCreateRental={handleCreateRental} onHide={() => setRentalVisible(false)}></CreateRental>
                     </Card.Title>
                     <ClientRentalList clientId={client.id} ></ClientRentalList>
                     <PagesRentals />

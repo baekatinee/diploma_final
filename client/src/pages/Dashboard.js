@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Container, Col, Row, Card} from 'react-bootstrap';
+import { Container, Col, Row, Card } from 'react-bootstrap';
 import ClientList from '../components/Clients/ClientList';
 import { observer } from 'mobx-react-lite';
 import { Context } from '..';
@@ -58,28 +58,37 @@ const Dashboard = observer(() => {
   ];
 
   useEffect(() => {
-    fetchPayments(null, null, null).then(data => {
-      if (payment) {
-        payment.setPayments(data.rows);
-      }
-    });
-    fetchRentals(null, null, null).then(data => {
-      if (rental) {
-        rental.setRentals(data.rows);
-      }
-    });
     fetchClients(null, null, null).then(data => {
       if (client) {
         client.setClients(data.rows);
       }
     });
+    fetchTypes().then((data) => ship.setTypes(data));
+  }, []);
+  useEffect(() => {
+    fetchPayments(null, null, null).then(data => {
+      if (payment) {
+        payment.setPayments(data.rows);
+      }
+    });
+  }, []);
+  useEffect(() => {
+    fetchRentals(null, null, null).then(data => {
+      if (rental) {
+        rental.setRentals(data.rows);
+      }
+    });
     fetchShips(null, null, null).then((data) => {
       ship.setShips(data.rows);
       ship.setTotalCount(data.count);
-  });
-  fetchTypes().then((data) => ship.setTypes(data));
-  },[]);
-
+    });
+  }, []);
+  useEffect(() => {
+    fetchShips(null, null, null).then((data) => {
+      ship.setShips(data.rows);
+      ship.setTotalCount(data.count);
+    });
+  }, []);
   const progress = (client.totalCount / 100) * 100;
 
 
@@ -104,7 +113,7 @@ const Dashboard = observer(() => {
             </Row>
           </Card>
         </Col>
-        <Col style={{ flex: 1}} md={5}>
+        <Col style={{ flex: 1 }} md={5}>
           <Card className="p-4 border-0 border-radius-50" style={{ backgroundColor: "#FFFF" }}>
             <Row>
               <h4 style={styles.title3}>
@@ -119,7 +128,7 @@ const Dashboard = observer(() => {
         <Col md={12}>
           <Card className="p-4 border-0" >
             <Card.Title className="p-3">Клиенты с задолженностью</Card.Title>
-            <ClientList showOnlyDebt={true}/>
+            <ClientList showOnlyDebt={true} />
             <NavLink to={CLIENTS_ROUTE}>Все клиенты</NavLink>
           </Card>
         </Col>

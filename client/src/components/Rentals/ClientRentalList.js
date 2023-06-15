@@ -3,10 +3,11 @@ import { observer } from 'mobx-react-lite';
 import { Context } from '../../index';
 import { Accordion } from 'react-bootstrap';
 import ClientRentalItem from './ClientRentalItem';
-import {deleteRental, fetchRentals } from '../../http/rentalAPI';
+import { deleteRental, fetchRentals } from '../../http/rentalAPI';
+import { fetchPayments } from '../../http/paymentAPI';
 
 const ClientRentalList = observer(({ clientId }) => {
-  const { rental, client, ship } = useContext(Context);
+  const { rental, client, ship, payment } = useContext(Context);
   useEffect(() => {
     fetchRentals().then(data => {
       if (rental) {
@@ -14,13 +15,51 @@ const ClientRentalList = observer(({ clientId }) => {
       }
     });
   }, [rental]);
-  const rentalsArray = Object.values(rental.rentals).filter(rental => typeof rental === 'object');
-
+  useEffect(() => {
+    fetchPayments().then((data) => {
+      if (payment) {
+        payment.setPayments(data.rows);
+      }
+    });
+  }, [payment]);
+  const handleCreatePayment = async () => {
+    try {
+      fetchPayments().then((data) => {
+        if (payment) {
+          payment.setPayments(data.rows);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleUpdateRental = async () => {
+    try {
+      fetchRentals().then((data) => {
+        if (rental) {
+         rental.setRentals(data.rows);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  // const handleCreateRental = async () => {
+  //   try {
+  //     fetchPayments().then((data) => {
+  //       if (payment) {
+  //         payment.setPayments(data.rows);
+  //       }
+  //     });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
   let filteredRentals;
   if (clientId) {
-    filteredRentals = rentalsArray.filter(rental => rental.clientId === clientId);
+    filteredRentals = rental.rentals.filter(rental => rental.clientId === clientId);
   } else {
-    filteredRentals = rentalsArray;
+    filteredRentals = rental.rentals;
   }
 
   const handleDelete = async (id) => {
@@ -47,6 +86,8 @@ const ClientRentalList = observer(({ clientId }) => {
 
         return (
           <ClientRentalItem
+            handleCreate={handleCreatePayment}
+            handleUpdateRental={handleUpdateRental}
             key={rental.id}
             rental={rental}
             clientObj={clientObj}

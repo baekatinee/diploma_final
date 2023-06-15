@@ -3,7 +3,7 @@ import { Modal, Form, Button, Alert, Col, Row } from 'react-bootstrap';
 import { updateClient } from '../../../http/clientAPI';
 import validator from 'validator';
 
-const EditClient = ({ show, onHide, client }) => {
+const EditClient = ({ handleUpdateClient,show, onHide, client }) => {
   const [surname, setSurname] = useState(client.surname);
   const [name, setName] = useState(client.name);
   const [fathersName, setFathersName] = useState(client.fathersName);
@@ -59,6 +59,7 @@ const EditClient = ({ show, onHide, client }) => {
         comment,
       };
       await updateClient(client.id, formData);
+      handleUpdateClient();
       onHide();
     } catch (error) {
       setErrorMessage('Ошибка при обновлении клиента');

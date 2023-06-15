@@ -5,7 +5,7 @@ import { updateRental } from '../../../http/rentalAPI';
 import { fetchClients } from '../../../http/clientAPI';
 import { fetchShips } from '../../../http/shipAPI';
 
-const EditRental = ({ show, onHide, rental, clientId, shipId }) => {
+const EditRental = ({handleUpdateRental, show, onHide, rental, clientId, shipId }) => {
     const { ship, client } = useContext(Context);
     const [dateStart, setStartDate] = useState(rental.dateStart);
     const [dateEnd, setEndDate] = useState(rental.dateEnd);
@@ -76,6 +76,7 @@ const EditRental = ({ show, onHide, rental, clientId, shipId }) => {
             formData.append('shipId', selectedShip);
 
             await updateRental(rental.id, formData).then((data) => {
+                handleUpdateRental();
                 onHide();
             });
 

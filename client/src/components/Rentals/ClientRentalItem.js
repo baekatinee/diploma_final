@@ -7,7 +7,7 @@ import EditRental from '../modals/Edit/EditRental';
 import EditButton from '../Buttons/EditButton';
 import DeleteButton from '../Buttons/DeleteButton';
 
-const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj }) => {
+const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj, handleUpdateRental }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [shipUpdateVisible, setUpdateShipVisible] = useState(false);
     const [paymentVisible, setPaymentVisible] = useState(false);
@@ -16,9 +16,7 @@ const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj }) => {
     const toggleAccordion = () => {
         setIsOpen(!isOpen);
     };
-
     const deleteOne = async (e) => {
-
         try {
             await handleDelete(rental.id);
             setConfirmDeleteVisible(false);
@@ -26,22 +24,13 @@ const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj }) => {
             console.log(error);
         }
     };
-
     const openEditModal = (e) => {
         setUpdateShipVisible(true);
     };
     const openConfirmDeleteModal = (e) => {
         setConfirmDeleteVisible(true);
     };
-    const closeConfirmDeleteModal = () => {
-        setConfirmDeleteVisible(false);
-    };
-    const confirmDelete = () => {
-        deleteOne();
-    };
-    const handleUpdateShip = () => {
-        setUpdateShipVisible(true);
-    };
+
     let date = new Date(rental.dateStart);
     const formattedDateStart = date.toLocaleDateString();
     date = new Date(rental.dateEnd);
@@ -103,6 +92,7 @@ const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj }) => {
                         Добавить оплату
                     </Button>{' '}
                         <CreatePayment
+                            handleCreate={handleDelete}
                             show={paymentVisible}
                             clientId={clientObj.id}
                             rentalId={rental.id}
@@ -118,6 +108,7 @@ const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj }) => {
                             Изменить
                         </Button>{' '}
                         <EditRental
+                        handleUpdateRental={handleUpdateRental}
                             show={rentalVisible}
                             rental={rental}
                             clientId={clientObj.id}

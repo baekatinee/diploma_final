@@ -5,7 +5,7 @@ import { createRental } from '../../http/rentalAPI';
 import { fetchClients } from '../../http/clientAPI';
 import { fetchShips } from '../../http/shipAPI';
 
-const CreateRental = ({ show, onHide, clientId }) => {
+const CreateRental = ({ handleCreateRental,show, onHide, clientId }) => {
   const { ship, client } = useContext(Context);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -73,6 +73,7 @@ const CreateRental = ({ show, onHide, clientId }) => {
       formData.append('shipId', selectedShip);
 
       await createRental(formData);
+      handleCreateRental();
       onHide();
       // Дополнительные действия после создания аренды
     } catch (error) {

@@ -14,7 +14,7 @@ const Payments = observer(() => {
     const { payment, rental, client } = useContext(Context);
     const [paymentVisible, setPaymentVisible] = useState(false)
     useEffect(() => {
-        fetchPayments(payment.page,10).then(data => {
+        fetchPayments(payment.page, 10).then(data => {
             if (payment) {
                 payment.setPayments(data.rows);
             }
@@ -26,18 +26,29 @@ const Payments = observer(() => {
         });
         fetchClients(null, null, null).then(data => {
             if (client) {
-              client.setClients(data.rows);
+                client.setClients(data.rows);
             }
-          });
+        });
     },);
     const breadcrumbsLinks = [
         { text: 'Дашборд', url: DASHBOARD_ROUTE },
         { text: 'Оплаты', url: PAYMENTS_ROUTE },
-      ];
+    ];
+    const handleCreate = async () => {
+        try {
+            fetchPayments().then((data) => {
+                if (payment) {
+                    payment.setPayments(data.rows);
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    };
     return (
         <Container>
-             <Breadcrumb>
-         <BreadСrumbs links={breadcrumbsLinks} />
+            <Breadcrumb>
+                <BreadСrumbs links={breadcrumbsLinks} />
             </Breadcrumb>
             <Row className='mb-2'>
                 <Col md={10}>
@@ -49,7 +60,7 @@ const Payments = observer(() => {
                     <Button variant="outline-primary" onClick={() => setPaymentVisible(true)}>
                         Добавить оплату
                     </Button>
-                    <CreatePayment show={paymentVisible} onHide={() => setPaymentVisible(false)} />
+                    <CreatePayment handleCreate={handleCreate} show={paymentVisible} onHide={() => setPaymentVisible(false)} />
                 </Col>
             </Row>
             <PaymentList></PaymentList>

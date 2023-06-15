@@ -4,7 +4,7 @@ import EditButton from '../Buttons/EditButton';
 import DeleteButton from '../Buttons/DeleteButton';
 import EditPayment from '../modals/Edit/EditPayment';
 
-const PaymentItem = ({ isAllPayments, payment, clientSurname, rentalObj, clientId, handleDelete, iterator }) => {
+const PaymentItem = ({ isAllPayments, payment,handleUpdate, clientSurname, rentalObj, clientId, handleDelete, iterator }) => {
   const rentalDateStart = rentalObj ? rentalObj.dateStart : '';
   const [paymentUpdateVisible, setUpdatePaymentVisible] = useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
@@ -13,17 +13,15 @@ const PaymentItem = ({ isAllPayments, payment, clientSurname, rentalObj, clientI
   date = new Date(rentalDateStart);
   const formattedDateRental = date.toLocaleDateString();
   const deleteOne = async (e) => {
-
     try {
       await handleDelete(payment.id);
       setConfirmDeleteVisible(false);
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const openEditModal = (e) => {
-    setUpdatePaymentVisible(true);
+  };  
+  const openEditModal = async (e) => {
+  setUpdatePaymentVisible(true);
   };
   const openConfirmDeleteModal = (e) => {
     setConfirmDeleteVisible(true);
@@ -55,7 +53,8 @@ const PaymentItem = ({ isAllPayments, payment, clientSurname, rentalObj, clientI
             payment={payment}
             show={paymentUpdateVisible}
             onHide={() => setUpdatePaymentVisible(false)}
-          />
+            handleUpdate={handleUpdate}
+         />
           <DeleteButton onClick={openConfirmDeleteModal} />
           <Modal show={confirmDeleteVisible} onHide={closeConfirmDeleteModal}>
             <Modal.Header closeButton>
