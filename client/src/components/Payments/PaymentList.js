@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom';
 import { PAYMENTS_ROUTE } from '../../utils/consts';
 import EditPayment from '../modals/Edit/EditPayment';
 
-const PaymentList = observer(({ handleCreate,clientId }) => {
+const PaymentList = observer(({ clientId }) => {
   const { payment, client, rental } = useContext(Context);
   const location = useLocation();
   const isAllPayments = location.pathname === PAYMENTS_ROUTE;

@@ -22,7 +22,7 @@ import { CLIENTS_ROUTE, CLIENT_ROUTE, DASHBOARD_ROUTE } from '../utils/consts';
 import EditButton from '../components/Buttons/EditButton';
 import DeleteButton from '../components/Buttons/DeleteButton';
 const ClientPage = observer(() => {
-    const { rental} = useContext(Context);
+    const { rental, payment} = useContext(Context);
     const { id } = useParams();
     const navigate = useNavigate();
     const [client, setClientData] = useState('');
@@ -44,9 +44,20 @@ const ClientPage = observer(() => {
     };
     const handleCreateRental = async () => {
         try {
-            fetchRentals().then((data) => {
-                if (rental) {
-                  rental.setRentals(data.rows);
+            fetchPayments().then((data) => {
+              if (payment) {
+                payment.setPayments(data.rows);
+              }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const handleCreatePayment = async () => {
+        try {
+            fetchPayments().then((data) => {
+                if (payment) {
+                  payment.setPayments(data.rows);
                 }
               });
         } catch (e) {
@@ -168,12 +179,12 @@ const ClientPage = observer(() => {
                         </Button>{' '}
                         <CreateRental clientId={client.id} show={rentalVisible} handleCreateRental={handleCreateRental} onHide={() => setRentalVisible(false)}></CreateRental>
                     </Card.Title>
-                    <ClientRentalList clientId={client.id} ></ClientRentalList>
+                    <ClientRentalList handleCreatePayment={handleCreatePayment} clientId={client.id} ></ClientRentalList>
                     <PagesRentals />
                 </Card>
                 <Card className=' border-0 p-4 mb-3'>
                     <Card.Title border='primary'>История оплат</Card.Title>
-                    <ClientPaymentList clientId={client.id}></ClientPaymentList>
+                    <ClientPaymentList handleCreatePayment={handleCreatePayment} clientId={client.id}></ClientPaymentList>
                 </Card>
             </Card>
             <ConfirmDeleteModal

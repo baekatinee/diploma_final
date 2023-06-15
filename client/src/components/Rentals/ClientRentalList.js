@@ -6,7 +6,7 @@ import ClientRentalItem from './ClientRentalItem';
 import { deleteRental, fetchRentals } from '../../http/rentalAPI';
 import { fetchPayments } from '../../http/paymentAPI';
 
-const ClientRentalList = observer(({ clientId }) => {
+const ClientRentalList = observer(({ handleCreatePayment, clientId }) => {
   const { rental, client, ship, payment } = useContext(Context);
   useEffect(() => {
     fetchRentals().then(data => {
@@ -22,17 +22,17 @@ const ClientRentalList = observer(({ clientId }) => {
       }
     });
   }, [payment]);
-  const handleCreatePayment = async () => {
-    try {
-      fetchPayments().then((data) => {
-        if (payment) {
-          payment.setPayments(data.rows);
-        }
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const handleCreatePayment = async () => {
+  //   try {
+  //     fetchPayments().then((data) => {
+  //       if (payment) {
+  //         payment.setPayments(data.rows);
+  //       }
+  //     });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
   const handleUpdateRental = async () => {
     try {
       fetchRentals().then((data) => {
@@ -86,7 +86,7 @@ const ClientRentalList = observer(({ clientId }) => {
 
         return (
           <ClientRentalItem
-            handleCreate={handleCreatePayment}
+            handleCreatePayment={handleCreatePayment}
             handleUpdateRental={handleUpdateRental}
             key={rental.id}
             rental={rental}

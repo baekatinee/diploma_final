@@ -6,24 +6,22 @@ import EditButton from '../Buttons/EditButton';
 import DeleteButton from '../Buttons/DeleteButton';
 
 
-const ClientPaymentItem = ({ payment, clientObj, shipObj, onDeletePayment }) => {
+const ClientPaymentItem = ({ payment, clientObj, shipObj, onDeletePayment, handleUpdate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [paymentUpdateVisible, setPaymentUpdateVisible] = useState(false);
-  const date = new Date(payment.dateStart); 
-  const formattedDate = date.toLocaleDateString(); 
+  const date = new Date(payment.dateStart);
+  const formattedDate = date.toLocaleDateString();
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleDeletePayment = async (id) => {
+  const deleteOne = async (e) => {
     try {
-      await deletePayment(id);
-      onDeletePayment(id);
-    } catch (e) {
-      console.log(e);
+      await onDeletePayment(payment.id);
+    } catch (error) {
+      console.log(error);
     }
-  };
-
+  };  
   const handleUpdatePayment = () => {
     setPaymentUpdateVisible(true);
   };
@@ -49,15 +47,16 @@ const ClientPaymentItem = ({ payment, clientObj, shipObj, onDeletePayment }) => 
               <td>{payment.rentalId}</td>
               <td className='d-flex'>
                 <div style={{ marginRight: '1rem' }}>
-                  <EditButton onClick={()=>handleUpdatePayment} />
+                  <EditButton onClick={ handleUpdatePayment} />
                   <EditPayment
+                    handleUpdate={ handleUpdate}
                     key={payment.id}
                     payment={payment}
                     onHide={() => setPaymentUpdateVisible(false)}
                     show={paymentUpdateVisible}
                   />
                 </div>
-                <DeleteButton onClick={()=>handleDeletePayment(payment.id)} />
+                <DeleteButton onClick={deleteOne} />
               </td>
             </tr>
           </tbody>

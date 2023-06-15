@@ -5,7 +5,7 @@ import { Accordion } from 'react-bootstrap';
 import ClientPaymentItem from './ClientPaymentItem';
 import { fetchPayments, deletePayment } from '../../http/paymentAPI';
 
-const ClientPaymentList = observer(({ clientId }) => {
+const ClientPaymentList = observer(({handleCreatePayment, clientId }) => {
   const { payment, client } = useContext(Context);
   const [loading, setLoading] = useState(true);
 
@@ -24,12 +24,26 @@ const ClientPaymentList = observer(({ clientId }) => {
   const handleDeletePayment = async (paymentId) => {
     try {
       await deletePayment(paymentId);
-      payment.removePayment(paymentId);
+      fetchPayments().then(data => {
+        if (payment) {
+          payment.setPayments(data.rows);
+        }
+      });
     } catch (error) {
       console.error(error);
     }
   };
-
+  const handleUpdate = async () => {
+    try {
+      fetchPayments().then((data) => {
+        if (payment) {
+          payment.setPayments(data.rows);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -44,6 +58,7 @@ const ClientPaymentList = observer(({ clientId }) => {
 
         return (
           <ClientPaymentItem
+          handleUpdate={handleUpdate}
             key={payment.id}
             payment={payment}
             clientObj={clientObj}

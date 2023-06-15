@@ -7,7 +7,7 @@ import EditRental from '../modals/Edit/EditRental';
 import EditButton from '../Buttons/EditButton';
 import DeleteButton from '../Buttons/DeleteButton';
 
-const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj, handleUpdateRental }) => {
+const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj,handleCreatePayment, handleUpdateRental }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [shipUpdateVisible, setUpdateShipVisible] = useState(false);
     const [paymentVisible, setPaymentVisible] = useState(false);
@@ -92,7 +92,7 @@ const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj, handleUpda
                         Добавить оплату
                     </Button>{' '}
                         <CreatePayment
-                            handleCreate={handleDelete}
+                            handleCreate={handleCreatePayment}
                             show={paymentVisible}
                             clientId={clientObj.id}
                             rentalId={rental.id}
