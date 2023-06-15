@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import EditShip from '../modals/Edit/EditShip';
 import EditButton from '../Buttons/EditButton';
 import DeleteButton from '../Buttons/DeleteButton';
+import { observer } from 'mobx-react-lite';
+import { Context } from '../..';
 
-const ShipItem = ({ ship, handleDelete, iterator}) => {
+const ShipItem = observer(({ ship, handleDelete, iterator }) => {
   const [shipUpdateVisible, setUpdateShipVisible] = React.useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
 
@@ -40,7 +42,7 @@ const ShipItem = ({ ship, handleDelete, iterator}) => {
       <td>{ship.priceWinter}</td>
       <td>{ship.parkingNumber}</td>
       <td style={{ width: '100%' }} className="d-flex justify-content-around">
-        <EditButton onClick={openEditModal}/>
+        <EditButton onClick={openEditModal} />
         <EditShip
           shipItem={ship}
           show={shipUpdateVisible}
@@ -48,24 +50,24 @@ const ShipItem = ({ ship, handleDelete, iterator}) => {
         />
         <DeleteButton onClick={openConfirmDeleteModal} />
         <Modal show={confirmDeleteVisible} onHide={closeConfirmDeleteModal}>
-            <Modal.Header closeButton>
-              <Modal.Title>Удаление судна</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <p>Вы уверены, что хотите удалить судно?</p>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={closeConfirmDeleteModal}>
-                Отмена
-              </Button>
-              <Button variant="danger" onClick={confirmDelete}>
-                Удалить
-              </Button>
-            </Modal.Footer>
-          </Modal>
+          <Modal.Header closeButton>
+            <Modal.Title>Удаление судна</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Вы уверены, что хотите удалить судно?</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={closeConfirmDeleteModal}>
+              Отмена
+            </Button>
+            <Button variant="danger" onClick={confirmDelete}>
+              Удалить
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </td>
     </tr>
   );
-};
+})
 
 export default ShipItem;

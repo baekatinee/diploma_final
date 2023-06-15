@@ -19,6 +19,8 @@ import ConfirmDeleteModal from '../components/modals/Confirm/ConfirmDeleteModal'
 import PagesRentals from '../components/Pagination/PagesRentals'
 import BreadСrumbs from '../components/BreadCrumbs';
 import { CLIENTS_ROUTE, CLIENT_ROUTE, DASHBOARD_ROUTE } from '../utils/consts';
+import EditButton from '../components/Buttons/EditButton';
+import DeleteButton from '../components/Buttons/DeleteButton';
 const ClientPage = observer(() => {
     const { rental, ship, payment } = useContext(Context);
     const { id } = useParams();
@@ -41,7 +43,7 @@ const ClientPage = observer(() => {
 
     useEffect(() => {
         fetchOneClient(id).then(data => setClientData(data));
-        fetchRentals(null,null,null).then(data => {
+        fetchRentals(null, null, null).then(data => {
             if (rental) {
                 rental.setRentals(data.rows);
             }
@@ -51,7 +53,7 @@ const ClientPage = observer(() => {
             ship.setTotalCount(data.count);
         });
         fetchTypes().then(data => ship.setTypes(data));
-        fetchPayments(null,null,null).then(data => {
+        fetchPayments(null, null, null).then(data => {
             if (payment) {
                 payment.setPayments(data.rows);
             }
@@ -62,7 +64,7 @@ const ClientPage = observer(() => {
             if (rental) {
                 rental.setRentals(data.rows);
                 rental.setTotalCount(data.count)
-       
+
             }
         });
         fetchPayments(payment.page, 5).then(data => {
@@ -92,13 +94,13 @@ const ClientPage = observer(() => {
         }
     };
     const breadcrumbsLinks = [
- 
+
         { text: 'Клиенты', url: CLIENTS_ROUTE },
-        { text: client.surname+' '+client.name+' ' + client.fathersName, url: CLIENT_ROUTE },
-      ];
+        { text: client.surname + ' ' + client.name + ' ' + client.fathersName, url: CLIENT_ROUTE },
+    ];
     return (
         <Container>
-          <BreadСrumbs links={breadcrumbsLinks} />
+            <BreadСrumbs links={breadcrumbsLinks} />
             <Card className='border-0 bg-light mt-2 p-2'>
                 <Card className='border-0 p-4 mb-3'>
                     <Card.Header className='d-flex justify-content-between align-items-center'>
@@ -118,19 +120,17 @@ const ClientPage = observer(() => {
                                 )}
                             </Col>
                             <Col md={3} className='d-flex align-items-center justify-content-end'>
-                                <Button variant='outline-dark' onClick={() => setUpdateClientVisible(true)}>
-                                    Изменить
-                                </Button>{' '}
-                                <EditClient
-                                    key={client.id}
-                                    client={client}
-                                    onHide={() => setUpdateClientVisible(false)}
-                                    show={clientUpdateVisible}
-                                    
-                                />
-                                <Button variant='outline-danger' style={{ marginLeft: '1rem' }} onClick={() => setConfirmDeleteVisible(true)}>
-                                    Удалить
-                                </Button>{' '}
+                                <div style={{marginRight:'1rem'}}>
+                                    <EditButton onClick={() => setUpdateClientVisible(true)} />
+                                    <EditClient
+                                        key={client.id}
+                                        client={client}
+                                        onHide={() => setUpdateClientVisible(false)}
+                                        show={clientUpdateVisible}
+
+                                    />
+                                </div>
+                                <DeleteButton onClick={() => setConfirmDeleteVisible(true)} />
                             </Col>
                         </Row>
                     </Card.Header>
@@ -201,7 +201,7 @@ const ClientPage = observer(() => {
                         <CreateRental clientId={client.id} show={rentalVisible} onHide={() => setRentalVisible(false)}></CreateRental>
                     </Card.Title>
                     <ClientRentalList clientId={client.id} ></ClientRentalList>
-                    <PagesRentals/>
+                    <PagesRentals />
                 </Card>
                 <Card className=' border-0 p-4 mb-3'>
                     <Card.Title border='primary'>История оплат</Card.Title>

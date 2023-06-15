@@ -1,14 +1,17 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import EditButton from '../Buttons/EditButton';
 import DeleteButton from '../Buttons/DeleteButton';
 import EditPayment from '../modals/Edit/EditPayment';
 
-const PaymentItem = ({isAllPayments, payment, clientSurname, rentalObj, clientId, handleDelete, iterator }) => {
+const PaymentItem = ({ isAllPayments, payment, clientSurname, rentalObj, clientId, handleDelete, iterator }) => {
   const rentalDateStart = rentalObj ? rentalObj.dateStart : '';
   const [paymentUpdateVisible, setUpdatePaymentVisible] = useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
-
+  let date = new Date(payment.dateStart);
+  const formattedDate = date.toLocaleDateString();
+  date = new Date(rentalDateStart);
+  const formattedDateRental = date.toLocaleDateString();
   const deleteOne = async (e) => {
 
     try {
@@ -34,27 +37,27 @@ const PaymentItem = ({isAllPayments, payment, clientSurname, rentalObj, clientId
   return (
     <tr>
       <td>{iterator}</td>
-      <td>{payment.dateStart}</td>
+      <td>{formattedDate}</td>
       <td>{payment.sum}</td>
       {clientId ? (
-      " "
+        " "
       ) : (
         <td>{clientSurname}</td>
       )}
-      <td>{rentalDateStart}</td>
-      {isAllPayments&&
-      <td  className="d-flex">
-        <div style={{marginRight:"1rem"}}>
-        <EditButton onClick={openEditModal} />
-        </div>
-        
-        <EditPayment
-          payment={payment}
-          show={paymentUpdateVisible}
-          onHide={() => setUpdatePaymentVisible(false)}
-        />
-        <DeleteButton onClick={openConfirmDeleteModal} />
-        <Modal show={confirmDeleteVisible} onHide={closeConfirmDeleteModal}>
+      <td>{formattedDateRental}</td>
+      {isAllPayments &&
+        <td className="d-flex">
+          <div style={{ marginRight: "1rem" }}>
+            <EditButton onClick={openEditModal} />
+          </div>
+
+          <EditPayment
+            payment={payment}
+            show={paymentUpdateVisible}
+            onHide={() => setUpdatePaymentVisible(false)}
+          />
+          <DeleteButton onClick={openConfirmDeleteModal} />
+          <Modal show={confirmDeleteVisible} onHide={closeConfirmDeleteModal}>
             <Modal.Header closeButton>
               <Modal.Title>Удаление оплаты</Modal.Title>
             </Modal.Header>
@@ -70,8 +73,8 @@ const PaymentItem = ({isAllPayments, payment, clientSurname, rentalObj, clientId
               </Button>
             </Modal.Footer>
           </Modal>
-      </td>
-}
+        </td>
+      }
     </tr>
   );
 };

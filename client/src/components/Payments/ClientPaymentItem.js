@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { Accordion, Button, Table } from 'react-bootstrap';
 import { deletePayment, fetchPayments } from '../../http/paymentAPI';
 import EditPayment from '../modals/Edit/EditPayment';
+import EditButton from '../Buttons/EditButton';
+import DeleteButton from '../Buttons/DeleteButton';
 
 
 const ClientPaymentItem = ({ payment, clientObj, shipObj, onDeletePayment }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [paymentUpdateVisible, setPaymentUpdateVisible] = useState(false);
-
+  const date = new Date(payment.dateStart); 
+  const formattedDate = date.toLocaleDateString(); 
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
   };
@@ -40,22 +43,21 @@ const ClientPaymentItem = ({ payment, clientObj, shipObj, onDeletePayment }) => 
           </thead>
           <tbody>
             <tr>
-              <td>{payment.dateStart}</td>
+
+              <td>{formattedDate}</td>
               <td>{payment.sum}</td>
               <td>{payment.rentalId}</td>
-              <td>
-                <Button style={{marginRight:"1rem"}} variant="outline-dark" onClick={handleUpdatePayment}>
-                  Изменить
-                </Button>{' '}
-                <EditPayment
-                  key={payment.id}
-                  payment={payment}
-                  onHide={() => setPaymentUpdateVisible(false)}
-                  show={paymentUpdateVisible}
-                />
-                <Button variant="outline-danger" onClick={() => handleDeletePayment(payment.id)}>
-                  Удалить
-                </Button>{' '}
+              <td className='d-flex'>
+                <div style={{ marginRight: '1rem' }}>
+                  <EditButton onClick={()=>handleUpdatePayment} />
+                  <EditPayment
+                    key={payment.id}
+                    payment={payment}
+                    onHide={() => setPaymentUpdateVisible(false)}
+                    show={paymentUpdateVisible}
+                  />
+                </div>
+                <DeleteButton onClick={()=>handleDeletePayment(payment.id)} />
               </td>
             </tr>
           </tbody>

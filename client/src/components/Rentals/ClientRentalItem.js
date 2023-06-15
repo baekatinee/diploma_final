@@ -20,33 +20,43 @@ const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj }) => {
     const deleteOne = async (e) => {
 
         try {
-          await handleDelete(rental.id);
-          setConfirmDeleteVisible(false);
+            await handleDelete(rental.id);
+            setConfirmDeleteVisible(false);
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
-    
-      const openEditModal = (e) => {
+    };
+
+    const openEditModal = (e) => {
         setUpdateShipVisible(true);
-      };
-      const openConfirmDeleteModal = (e) => {
+    };
+    const openConfirmDeleteModal = (e) => {
         setConfirmDeleteVisible(true);
-      };
-      const closeConfirmDeleteModal = () => {
+    };
+    const closeConfirmDeleteModal = () => {
         setConfirmDeleteVisible(false);
-      };
-      const confirmDelete = () => {
+    };
+    const confirmDelete = () => {
         deleteOne();
-      };
+    };
     const handleUpdateShip = () => {
         setUpdateShipVisible(true);
     };
-
+    let date = new Date(rental.dateStart);
+    const formattedDateStart = date.toLocaleDateString();
+    date = new Date(rental.dateEnd);
+    const formattedDateEnd = date.toLocaleDateString();
     return (
         <Accordion.Item className='border-0' eventKey={rental.id}>
-            <Accordion.Header onClick={toggleAccordion}>
-                Аренда # {rental.id} {rental.dateStart} {rental.dateEnd}
+            <Accordion.Header onClick={toggleAccordion} >
+                <div className='d-flex w-60 justify-content-between' style={{ width: "25%" }} >
+                    <div>
+                        Аренда №  {rental.id}
+                    </div>
+                    <div >
+                        с {formattedDateStart} по {formattedDateEnd}
+                    </div>
+                </div>
             </Accordion.Header>
             <Accordion.Body>
                 <Table striped bordered hover>
@@ -70,7 +80,7 @@ const ClientRentalItem = ({ rental, handleDelete, clientObj, shipObj }) => {
                             <td>{shipObj.priceWinter}</td>
                             <td>{shipObj.priceSummer}</td>
                             <td className='d-flex justify-content-around'>
-                        
+
                                 <EditButton onClick={openEditModal} />
                                 <EditShip
                                     shipItem={shipObj}
