@@ -4,6 +4,7 @@ import { Context } from '../../index';
 import { Accordion } from 'react-bootstrap';
 import ClientPaymentItem from './ClientPaymentItem';
 import { fetchPayments, deletePayment } from '../../http/paymentAPI';
+import { fetchOneClient } from '../../http/clientAPI';
 
 const ClientPaymentList = observer(({handleCreatePayment, clientId }) => {
   const { payment, client } = useContext(Context);

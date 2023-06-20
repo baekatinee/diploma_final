@@ -4,7 +4,7 @@ import { fetchShips, updateShip } from '../../../http/shipAPI';
 import { fetchTypes } from '../../../http/typeAPI';
 import { Context } from '../../..';
 
-const EditShip = ({ show, onHide, shipItem }) => {
+const EditShip = ({ handleUpdateShip, show, onHide, shipItem }) => {
   const { ship } = useContext(Context);
   const [name, setName] = useState(shipItem.name);
   const [number, setNumber] = useState(shipItem.number);
@@ -82,6 +82,7 @@ const EditShip = ({ show, onHide, shipItem }) => {
       };
 
       await updateShip(shipItem.id, formData).then((data) => {
+        handleUpdateShip()
         onHide();
       });
 

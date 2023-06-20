@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Container, Button, Breadcrumb, Row, Col } from 'react-bootstrap'
+import { Container,Breadcrumb, Row, Col } from 'react-bootstrap'
 import CreateClient from '../components/modals/CreateClient';
 import CreateShip from '../components/modals/CreateShip';
 import CreateType from '../components/modals/CreateType';
 import CreateRental from '../components/modals/CreateRental';
-import { CreditCard, HouseAdd, ListUl, PersonAdd, TruckFront } from 'react-bootstrap-icons'
+import { CreditCard, HouseAdd, ListUl, PersonAdd } from 'react-bootstrap-icons'
 import { RiShipLine } from 'react-icons/ri'
 import { Context } from '..';
 import { fetchClients } from '../http/clientAPI';
@@ -36,6 +36,56 @@ const Admin = () => {
             }
         });
     }, []);
+    const handleCreateShip = async () => {
+        try {
+            fetchShips()
+                .then((data) => {
+                    if (ship) {
+                        ship.setShips(data.rows);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const handleCreateRental = async () => {
+        try {
+
+            fetchRentals().then((data) => {
+                if (rental) {
+                    rental.setRentals(data.rows);
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const handleCreatePayment = async () => {
+        try {
+            fetchPayments().then((data) => {
+                if (payment) {
+                    payment.setPayments(data.rows);
+                }
+            });
+           
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const handleCreateClient = async () => {
+        try {
+          fetchClients().then(data => {
+            if (client) {
+              client.setClients(data.rows);
+            }
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      };
     const [typeVisible, setTypeVisible] = useState(false)
     const [clientVisible, setClientVisible] = useState(false)
     const [shipVisible, setShipVisible] = useState(false)
@@ -123,11 +173,11 @@ const Admin = () => {
                 </div>
             </div>
 
-            <CreateClient show={clientVisible} onHide={() => setClientVisible(false)}></CreateClient>
-            <CreateShip show={shipVisible} onHide={() => setShipVisible(false)}></CreateShip>
+            <CreateClient  handleCreate={handleCreateClient} show={clientVisible} onHide={() => setClientVisible(false)}></CreateClient>
+            <CreateShip  handleCreate={handleCreateShip} show={shipVisible} onHide={() => setShipVisible(false)}></CreateShip>
             <CreateType show={typeVisible} onHide={() => setTypeVisible(false)}></CreateType>
-            <CreateRental show={rentalVisible} onHide={() => setRentalVisible(false)}></CreateRental>
-            <CreatePayment show={paymentVisible} onHide={() => setPaymentVisible(false)}></CreatePayment>
+            <CreateRental handleCreateRental={handleCreateRental}  show={rentalVisible} onHide={() => setRentalVisible(false)}></CreateRental>
+            <CreatePayment  handleCreate={handleCreatePayment}  show={paymentVisible} onHide={() => setPaymentVisible(false)}></CreatePayment>
         </Container>
     )
 

@@ -6,7 +6,7 @@ import DeleteButton from '../Buttons/DeleteButton';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../..';
 
-const ShipItem = observer(({ ship, handleDelete, iterator }) => {
+const ShipItem = observer(({ ship, handleDelete, iterator,  handleUpdateShip }) => {
   const [shipUpdateVisible, setUpdateShipVisible] = React.useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
 
@@ -44,6 +44,7 @@ const ShipItem = observer(({ ship, handleDelete, iterator }) => {
       <td style={{ width: '100%' }} className="d-flex justify-content-around">
         <EditButton onClick={openEditModal} />
         <EditShip
+        handleUpdateShip={handleUpdateShip}
           shipItem={ship}
           show={shipUpdateVisible}
           onHide={() => setUpdateShipVisible(false)}

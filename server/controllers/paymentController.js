@@ -2,6 +2,8 @@ const { Payment, Rental } = require('../models/models')
 const { Client } = require('../models/models')
 const apiError = require('../error/apiError')
 const clientController = require('./clientController')
+const rentalController = require('./rentalController')
+
 class paymentController {
     async create(req, res, next) {
         try {
@@ -10,7 +12,8 @@ class paymentController {
             if (!payment) {
                 res.status(404).send('Не удалось создать оплату из-за неверно введенных данных')
             }
-            clientController.updateHasPaidStatus(clientId);
+            await clientController.updateHasPaidStatus(clientId);
+            await rentalController.checkRentalExpiration();
             return res.json(payment)
         } catch (e) {
             next(apiError.badRequest(e.message))
@@ -113,10 +116,13 @@ class paymentController {
             if ( clientId) findPaymentById. clientId=  clientId;
             clientController.updateHasPaidStatus(clientId);
             console.log("UPDATED PAYMENT HASPAID")
+            await clientController.updateHasPaidStatus(clientId);
+            await rentalController.checkRentalExpiration();
             const updatedPayment = await findPaymentById.save()
             if (!updatedPayment) {
                 res.status(400).send('Не удалось сохранить изменения')
             }
+   
             return res.json(updatedPayment);
 
         } catch (e) {
@@ -135,6 +141,8 @@ class paymentController {
             if (!payment) {
                 res.status(400).send('Не удалось сохранить изменения')
             }
+            await clientController.updateHasPaidStatus(clientId);
+            await rentalController.checkRentalExpiration();
             res.status(200).send({
                 status: "success",
                 message: "successfully"

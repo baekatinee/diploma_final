@@ -7,14 +7,14 @@ import { observer } from 'mobx-react-lite';
 import { Context } from '..';
 import { useParams, useNavigate } from 'react-router-dom';
 import { deleteClient, fetchOneClient } from '../http/clientAPI';
-import { fetchRentals } from '../http/rentalAPI';
-import { fetchShips } from '../http/shipAPI';
+import { deleteRental, fetchRentals } from '../http/rentalAPI';
+import { deleteShip, fetchShips } from '../http/shipAPI';
 import EditClient from '../components/modals/Edit/EditClient';
 import ClientRentalList from '../components/Rentals/ClientRentalList';
 import { fetchPayments } from '../http/paymentAPI';
 import CreateRental from '../components/modals/CreateRental';
 import ClientPaymentList from '../components/Payments/ClientPaymentList';
-import { fetchTypes } from '../http/typeAPI';
+
 import ConfirmDeleteModal from '../components/modals/Confirm/ConfirmDeleteModal';
 import PagesRentals from '../components/Pagination/PagesRentals'
 import BreadСrumbs from '../components/BreadCrumbs';
@@ -22,17 +22,25 @@ import { CLIENTS_ROUTE, CLIENT_ROUTE, DASHBOARD_ROUTE } from '../utils/consts';
 import EditButton from '../components/Buttons/EditButton';
 import DeleteButton from '../components/Buttons/DeleteButton';
 const ClientPage = observer(() => {
-    const { rental, payment} = useContext(Context);
+    const { rental, payment } = useContext(Context);
     const { id } = useParams();
     const navigate = useNavigate();
     const [client, setClientData] = useState('');
     const [clientUpdateVisible, setUpdateClientVisible] = useState(false);
     const [rentalVisible, setRentalVisible] = useState(false);
     const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
- 
+
     useEffect(() => {
         fetchOneClient(id).then(data => setClientData(data));
-      }, []);
+    }, [id]);
+
+    useEffect(() => {
+        fetchRentals().then(data => {
+            if (rental) {
+                rental.setRentals(data.rows);
+            }
+        });
+    }, [rental]);
     const deleteClientAndRedirect = async () => {
         try {
             await deleteClient(client.id);
@@ -44,10 +52,11 @@ const ClientPage = observer(() => {
     };
     const handleCreateRental = async () => {
         try {
-            fetchPayments().then((data) => {
-              if (payment) {
-                payment.setPayments(data.rows);
-              }
+
+            fetchRentals().then((data) => {
+                if (rental) {
+                    rental.setRentals(data.rows);
+                }
             });
         } catch (e) {
             console.log(e);
@@ -57,13 +66,15 @@ const ClientPage = observer(() => {
         try {
             fetchPayments().then((data) => {
                 if (payment) {
-                  payment.setPayments(data.rows);
+                    payment.setPayments(data.rows);
                 }
-              });
+            });
+            fetchOneClient(id).then(data => setClientData(data));
         } catch (e) {
             console.log(e);
         }
     };
+
     const handleUpdateClient = async () => {
         try {
             fetchOneClient(id).then(data => setClientData(data));
@@ -72,7 +83,6 @@ const ClientPage = observer(() => {
         }
     };
     const breadcrumbsLinks = [
-
         { text: 'Клиенты', url: CLIENTS_ROUTE },
         { text: client.surname + ' ' + client.name + ' ' + client.fathersName, url: CLIENT_ROUTE },
     ];
@@ -101,7 +111,7 @@ const ClientPage = observer(() => {
                                 <div style={{ marginRight: '1rem' }}>
                                     <EditButton onClick={() => setUpdateClientVisible(true)} />
                                     <EditClient
-                                    handleUpdateClient={handleUpdateClient}
+                                        handleUpdateClient={handleUpdateClient}
                                         key={client.id}
                                         client={client}
                                         onHide={() => setUpdateClientVisible(false)}
@@ -156,7 +166,13 @@ const ClientPage = observer(() => {
                                 </Card.Body>
                             </Card>
                             {client.hasPaid ? (
-                                ""
+                               <Card className='border-0 p-1 d-flex align-items-center' style={{ width: '15vw' }}>
+                               <Card.Img src={checkedStatus} variant='top' style={{ width: '3vw', height: '3vw' }}></Card.Img>
+                               <Card.Body className='d-flex flex-column align-items-center'>
+                                   <Card.Title>Баланс</Card.Title>
+                                   <Card.Text style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>{client.debtAmount} BYN</Card.Text>
+                               </Card.Body>
+                           </Card>
                             ) : (
                                 <Card className='border-0 p-1 d-flex align-items-center' style={{ width: '15vw' }}>
                                     <Card.Img variant='top' src={debt} style={{ width: '3vw', height: '3vw' }} />
@@ -176,15 +192,15 @@ const ClientPage = observer(() => {
                         <div>Текущие аренды</div>
                         <Button className='mt-2' variant='outline-dark' onClick={() => setRentalVisible(true)}>
                             Добавить аренду
-                        </Button>{' '}
+                        </Button>
                         <CreateRental clientId={client.id} show={rentalVisible} handleCreateRental={handleCreateRental} onHide={() => setRentalVisible(false)}></CreateRental>
                     </Card.Title>
-                    <ClientRentalList handleCreatePayment={handleCreatePayment} clientId={client.id} ></ClientRentalList>
+                    <ClientRentalList  handleCreatePayment={handleCreatePayment} clientId={client.id} ></ClientRentalList>
                     <PagesRentals />
                 </Card>
                 <Card className=' border-0 p-4 mb-3'>
                     <Card.Title border='primary'>История оплат</Card.Title>
-                    <ClientPaymentList handleCreatePayment={handleCreatePayment} clientId={client.id}></ClientPaymentList>
+                    <ClientPaymentList handleCreatePayment={handleCreatePayment}  clientId={client.id}></ClientPaymentList>
                 </Card>
             </Card>
             <ConfirmDeleteModal

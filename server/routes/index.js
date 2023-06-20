@@ -7,12 +7,12 @@ const shipRouter=require('./shipRouter')
 const typeRouter=require('./typeRouter')
 const paymentRouter=require('./paymentRouter')
 const rentalRouter=require('./rentalRouter')
-
+const searchRouter=require('./searchRouter')
 router.use('/user', userRouter)
 router.use('/client', clientRouter)
 router.use('/type', typeRouter)
 router.use('/ship', shipRouter)
 router.use('/payment', paymentRouter)
 router.use('/rental', rentalRouter)
-
+router.use('/search',searchRouter)
 module.exports=router

@@ -6,7 +6,7 @@ import EditClient from '../modals/Edit/EditClient';
 import EditButton from '../Buttons/EditButton';
 import DeleteButton from '../Buttons/DeleteButton';
 
-const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
+const ClientItem = ({ client, handleDelete, handleUpdateClient, iterator, isAllClients }) => {
   const navigate = useNavigate();
   const [clientUpdateVisible, setUpdateClientVisible] = useState(false);
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
@@ -25,14 +25,10 @@ const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
   };
 
   const openEditModal = (e) => {
-    e.stopPropagation();
     setUpdateClientVisible(true);
   };
 
   const closeEditModal = (e) => {
-    if (e) {
-      e.preventDefault();
-    }
     setUpdateClientVisible(false);
   };
 
@@ -75,7 +71,7 @@ const ClientItem = ({ client, handleDelete, iterator, isAllClients }) => {
       {isAllClients && (
         <td style={{ width: '100%' }} className="d-flex justify-content-around">
           <EditButton onClick={openEditModal} />
-          <EditClient key={client.id} client={client} show={clientUpdateVisible} onHide={closeEditModal} />
+          <EditClient handleUpdateClient={handleUpdateClient} key={client.id} client={client} show={clientUpdateVisible} onHide={closeEditModal} />
           <DeleteButton onClick={openConfirmDeleteModal} />
           <Modal show={confirmDeleteVisible} onHide={closeConfirmDeleteModal}>
             <Modal.Header closeButton>

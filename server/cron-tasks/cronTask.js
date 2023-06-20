@@ -19,6 +19,6 @@ const task = cron.schedule('* * * * *', async () => {
   }
 }, {
   scheduled: true,
-  timezone: 'Europe/Minsk' // Укажите ваш часовой пояс, например, 'Europe/Minsk' для Беларуси
+  timezone: 'Europe/Minsk' 
 });
 

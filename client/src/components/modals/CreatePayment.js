@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Modal, Form, Button, FormControl, Col, Row} from 'react-bootstrap';
+import { Modal, Form, Button, FormControl, Col, Row } from 'react-bootstrap';
 import { Context } from '../..';
 
 import { createPayment } from '../../http/paymentAPI';
@@ -70,7 +70,7 @@ const CreatePayment = ({ show, onHide, clientId, rentalId, handleCreate }) => {
         dateStart,
         sum,
         clientId: clientId || selectedClient,
-      rentalId: rentalId || selectedRental,
+        rentalId: rentalId || selectedRental,
       };
 
       const data = await createPayment(formData);
@@ -91,77 +91,77 @@ const CreatePayment = ({ show, onHide, clientId, rentalId, handleCreate }) => {
       </Modal.Header>
       <Modal.Body>
         <Form>
-        <Row className="mb-2">
+          <Row className="mb-2">
             <Col>
-            <FormControl
-              className="mb-2"
-              required
-              min={1}
-              type="date"
-              placeholder="Дата оплаты"
-              value={dateStart}
-              isInvalid={!!formErrors.dateStart}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
+              <FormControl
+                className="mb-2"
+                required
+                min={1}
+                type="date"
+                placeholder="Дата оплаты"
+                value={dateStart}
+                isInvalid={!!formErrors.dateStart}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
               <Form.Control.Feedback type="invalid">
                 {formErrors.dateStart}
               </Form.Control.Feedback>
-              </Col>
+            </Col>
             <Col>
-            <FormControl
-              className="mb-2"
-              required
-              min={1}
-              type="number"
-              placeholder="Сумма"
-              value={sum}
-              isInvalid={!!formErrors.sum}
-              onChange={(e) => setSum(e.target.value)}
-            />
+              <FormControl
+                className="mb-2"
+                required
+                min={1}
+                type="number"
+                placeholder="Сумма"
+                value={sum}
+                isInvalid={!!formErrors.sum}
+                onChange={(e) => setSum(e.target.value)}
+              />
               <Form.Control.Feedback type="invalid">
                 {formErrors.sum}
               </Form.Control.Feedback>
-              </Col>
+            </Col>
           </Row>
           <Row className="mb-2">
             <Col>
-            <Form.Select
-              aria-label="Default select example"
-              value={selectedClient}
-              onChange={(e) => setSelectedClient(e.target.value)}
-              disabled={clientId}
-              isInvalid={!!formErrors.selectedClient}
-            >
-              <option>Выберите клиента</option>
-              {client.clients.map((client) => (
-                <option key={client.id} value={client.id}>
-                  {client.surname} {client.name} {client.fathersName}
-                </option>
-              ))}
-            </Form.Select>
-            <Form.Control.Feedback type="invalid">
+              <Form.Select
+                aria-label="Default select example"
+                value={selectedClient}
+                onChange={(e) => setSelectedClient(e.target.value)}
+                disabled={clientId}
+                isInvalid={!!formErrors.selectedClient}
+              >
+                <option>Выберите клиента</option>
+                {client.clients.map((client) => (
+                  <option key={client.id} value={client.id}>
+                    {client.surname} {client.name} {client.fathersName}
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
                 {formErrors.clientId}
               </Form.Control.Feedback>
-              </Col>
+            </Col>
             <Col>
-            <Form.Select
-              aria-label="Default select example"
-              value={selectedRental}
-              onChange={(e) => setSelectedRental(e.target.value)}
-              disabled={!selectedClient}
-              isInvalid={!!formErrors.selectedRental}
-            >
-              <option>Выберите аренду</option>
-              {clientRentals.map((rental) => (
-                <option key={rental.id} value={rental.id}>
-                  с {rental.dateStart} по {rental.dateEnd}
-                </option>
-              ))}
-            </Form.Select>
-            <Form.Control.Feedback type="invalid">
+              <Form.Select
+                aria-label="Default select example"
+                value={selectedRental}
+                onChange={(e) => setSelectedRental(e.target.value)}
+                disabled={!selectedClient}
+                isInvalid={!!formErrors.selectedRental}
+              >
+                <option>Выберите аренду</option>
+                {clientRentals.map((rental) => (
+                  <option key={rental.id} value={rental.id}>
+                    с {rental.dateStart} по {rental.dateEnd}
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
                 {formErrors.rentalId}
               </Form.Control.Feedback>
-              </Col>
+            </Col>
           </Row>
         </Form>
       </Modal.Body>

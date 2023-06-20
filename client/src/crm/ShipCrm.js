@@ -9,7 +9,7 @@ export default class ShipCrm {
         this._selectedType={}
         this._page = 1
         this._totalCount = 0
-        this._limit = 5
+        this._limit = 10
         makeAutoObservable(this)//////будет следить за изменениями этих переменных
     }
     setTypes(types) {

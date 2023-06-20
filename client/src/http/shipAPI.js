@@ -8,7 +8,7 @@ export const fetchOneShip = async (id) => {
     const { data } = await $authHost.get('api/ship/' + id)
     return data
 }
-export const fetchShips = async (typeId, page, limit = 5) => {
+export const fetchShips = async (typeId, page, limit) => {
     const { data } = await $authHost.get('api/ship', {
         params: {
             typeId, page, limit

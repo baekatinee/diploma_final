@@ -8,9 +8,10 @@ const HomePage = () => {
 
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center vh-100">
-      <div className="text-center w-50 d-flex flex-column align-items-center justify-content-center">
-        <img src={logo} style={{ width: "15%" }} />
-        <h1 className=" mb-4">Веб-приложение для автоматизации бизнес-процессов яхт-клуба</h1>
+      <div className="text-center w-49 d-flex flex-column align-items-center justify-content-center">
+        <img src={logo} style={{ width: "20%" }} />
+        <h1 className=" mb-4" style={{ width: "60%" }}>Веб-приложение для автоматизации бизнес-процессов яхт-клуба</h1>
+        
         <div className="text-justify mb-4" style={{ fontSize: "1.25rem", width: "75%" }}>Система позволяет автоматически определить задолженников и
           рассчитать долг за неустойку,
           вести учет всех клиентов и выводить статистику</div>

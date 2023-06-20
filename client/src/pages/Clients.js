@@ -41,6 +41,7 @@ const Clients = observer(() => {
                 });
         }
     }, [client.page, client.selectedStatus,]);
+
     const breadcrumbsLinks = [
         { text: 'Дашборд', url: DASHBOARD_ROUTE },
         { text: 'Клиенты', url: CLIENTS_ROUTE },

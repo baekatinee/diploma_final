@@ -107,7 +107,7 @@ class clientController {
             const ship = await Ship.findByPk(shipId);
             const rentalAmount = isSummer ? ship.priceSummer : ship.priceWinter;
             const hasPaid = totalPaymentAmount >= rentalAmount;
-            const debtAmount = hasPaid ? 0 : rentalAmount - totalPaymentAmount;
+            const debtAmount = hasPaid ? Math.max(0, totalPaymentAmount - rentalAmount) : rentalAmount - totalPaymentAmount;
       
             await Client.update({ hasPaid, debtAmount }, { where: { id: clientId } });
       

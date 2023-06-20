@@ -4,7 +4,7 @@ import { Context } from '../..';
 import { fetchTypes } from '../../http/typeAPI';
 import { createShip, fetchShips } from '../../http/shipAPI';
 
-const CreateShip = ({ show, onHide }) => {
+const CreateShip = ({ handleCreate,  show, onHide }) => {
   const { ship } = useContext(Context);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
@@ -86,6 +86,7 @@ const CreateShip = ({ show, onHide }) => {
       };
 
       const data = await createShip(formData);
+      handleCreate()
       onHide();
     } catch (error) {
       console.error(error);

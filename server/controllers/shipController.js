@@ -1,6 +1,8 @@
 const { Ship, Rental, Payment } = require('../models/models')
 const { Type } = require('../models/models')
 const apiError = require('../error/apiError')
+const clientController = require('./clientController')
+
 class shipController {
     async create(req, res, next) {
         try {
@@ -95,7 +97,6 @@ class shipController {
             if (!updatedShip) {
                 return res.status(400).send('Не удалось сохранить изменения');
             }
-
             return res.json(updatedShip);
         } catch (e) {
             next(apiError.badRequest(e.message));
@@ -109,14 +110,21 @@ class shipController {
           });
       
           if (rentals.length === 0) {
+            // Удаление судна, даже если нет связанных аренд
+            await Ship.destroy({ where: { id } });
+          
             res.status(404).send('Нет аренд, связанных с указанным судном');
           } else {
             for (const rental of rentals) {
+              // Удаление связанных платежей для каждой аренды
+              await Payment.destroy({ where: { rentalId: rental.id } });
+              // Удаление аренды
               await rental.destroy();
             }
-      
+          
+            // Удаление судна
             await Ship.destroy({ where: { id } });
-      
+          
             res.status(200).send({
               status: "success",
               message: "successfully",
@@ -126,6 +134,7 @@ class shipController {
           next(apiError.badRequest(e.message));
         }
       }
+      
       
 
 }

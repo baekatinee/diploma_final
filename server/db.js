@@ -37,51 +37,43 @@ const task = cron.schedule('* * * * *', async () => {
 });
 
 
-// // Настройки для отправки почты
-// const transport = nodemailer.createTransport({
-//   service: 'mail',
-//   auth: {
-//     user: 'art.petr1302@mail.ru', // email адрес отправителя
-//     pass: 'htc3305509313', // пароль от email отправителя
-//   },
-// });
+// Настройки для отправки почты
+const transporter = nodemailer.createTransport({
+  service: 'mail',
+  auth: {
+    user: 'katezhuravlevich@gmail.com', // email адрес отправителя
+    pass: 'k5a6t5e6zhur8avlevich', // пароль от email отправителя
+  },
+});
 
-// Функция для выборки email адресов из базы данных
-// const getEmailsFromDB = async () => {
-//   const client = await sequelize.connect();
-//   const result = await client.query('SELECT email FROM clients'); // users - название таблицы с email адресами
-//   client.release();
-//   return result.rows.map(row => row.email);
-// };
+const sequelize = new Sequelize('database', 'username', 'password', {
+  host: 'localhost',
+  dialect: 'postgres',
+});
 
-// Функция для отправки письма на email адреса
-// const sendEmails = async () => {
-//  // const emails = await getEmailsFromDB();
-//   const message = {
-//     from: 'baekatineework@gmail.com', // email адрес отправителя
-//     to: 'hakekwork@gmail.com',
-//     //to: emails.join(','), // email адреса получателей, разделенные запятой
-//     subject: 'Тестовое письмо', // тема письма
-//     text: 'Привет, это тестовое письмо!', // текст письма
-//   };
-//   transporter.sendMail(message, (err, info) => {
-//     if (err) {
-//       console.error(err);
-//     } else {
-//       console.log('Письма отправлены: ' + info.response);
-//     }
-//   });
-// };
-// const message = {
-//     from: 'art.petr1302@mail.ru', // email адрес отправителя
-//     to: 'hakekwork@gmail.com',
-//     //to: emails.join(','), // email адреса получателей, разделенные запятой
-//     subject: 'Тестовое письмо', // тема письма
-//     text: 'Привет, это тестовое письмо!', // текст письма
-//   };
-//   transport.sendMail(message);
-// Запускаем таску cron для отправки писем каждый 10-й день месяца в 10:00
-// cron.schedule('58 21 4-31/4 * *', () => {
-//   console.log('Отправка писем...');
-//   transporter.sendMail(message);
-// });
+const getEmailsFromDB = async () => {
+  const result = await sequelize.query('SELECT email FROM clients', { type: Sequelize.QueryTypes.SELECT });
+  return result.map(row => row.email);
+};
+
+const sendEmails = async () => {
+  const emails = await getEmailsFromDB();
+  const message = {
+    from: 'katezhuravlevich@gmail.com', // email адрес отправителя
+    to: emails.join(','), // email адреса получателей, разделенные запятой
+    subject: 'Тестовое письмо', // тема письма
+    text: 'Привет, это тестовое письмо!', // текст письма
+  };
+  transporter.sendMail(message, (err, info) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log('Письма отправлены: ' + info.response);
+    }
+  });
+};
+
+cron.schedule('* * * * *', () => {
+  console.log('Отправка писем...');
+  sendEmails();
+});

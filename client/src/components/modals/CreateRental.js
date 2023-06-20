@@ -75,7 +75,7 @@ const CreateRental = ({ handleCreateRental,show, onHide, clientId }) => {
       await createRental(formData);
       handleCreateRental();
       onHide();
-      // Дополнительные действия после создания аренды
+
     } catch (error) {
       console.error(error);
     }

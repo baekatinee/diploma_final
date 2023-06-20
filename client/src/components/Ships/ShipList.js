@@ -5,29 +5,39 @@ import { Context } from '../../index';
 import ShipItem from './ShipItem';
 import { deleteShip, fetchShips } from '../../http/shipAPI';
 
-const ShipList = observer(() => {
-    const { ship } = useContext(Context);
-    useEffect(() => {
-        fetchShips().then(data => {
-          if (ship) {
-            ship.setShips(data.rows);
-          }
-        });
-      }, [ship]);
-      const handleDelete = async (id) => {
-        try {
-          await deleteShip(id);
-          fetchShips().then(data => {
-            if (ship) {
-              ship.setShips(data.rows);
-            }
-          });
-        } catch (e) {
-          console.log(e);
+const ShipList = observer((handleUpdateShip) => {
+  const { ship } = useContext(Context);
+  useEffect(() => {
+    fetchShips().then(data => {
+      if (ship) {
+        ship.setShips(data.rows);
+      }
+    });
+  }, [ship]);
+  const handleDelete = async (id) => {
+    try {
+      await deleteShip(id);
+      fetchShips().then(data => {
+        if (ship) {
+          ship.setShips(data.rows);
         }
-      };
-    
-    return (
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleUpdate = async () => {
+    try {
+      fetchShips().then((data) => {
+        if (ship) {
+          ship.setShips(data.rows);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  return (
     <Table hover>
       <thead>
         <tr>
@@ -44,6 +54,7 @@ const ShipList = observer(() => {
       <tbody>
         {ship.Ships.map((ship, index) => (
           <ShipItem
+            handleUpdateShip={handleUpdate}
             key={ship.id}
             iterator={index + 1}
             ship={ship}

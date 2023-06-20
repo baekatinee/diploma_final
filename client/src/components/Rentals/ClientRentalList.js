@@ -5,11 +5,12 @@ import { Accordion } from 'react-bootstrap';
 import ClientRentalItem from './ClientRentalItem';
 import { deleteRental, fetchRentals } from '../../http/rentalAPI';
 import { fetchPayments } from '../../http/paymentAPI';
+import { deleteShip, fetchShips } from '../../http/shipAPI';
 
-const ClientRentalList = observer(({ handleCreatePayment, clientId }) => {
+const ClientRentalList = observer(({  handleCreatePayment, clientId }) => {
   const { rental, client, ship, payment } = useContext(Context);
   useEffect(() => {
-    fetchRentals().then(data => {
+    fetchRentals(null, null, null).then(data => {
       if (rental) {
         rental.setRentals(data.rows);
       }
@@ -22,39 +23,49 @@ const ClientRentalList = observer(({ handleCreatePayment, clientId }) => {
       }
     });
   }, [payment]);
-  // const handleCreatePayment = async () => {
-  //   try {
-  //     fetchPayments().then((data) => {
-  //       if (payment) {
-  //         payment.setPayments(data.rows);
-  //       }
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  useEffect(() => {
+    fetchShips().then((data) => {
+      if (ship) {
+        ship.setShips(data.rows);
+      }
+    });
+  }, [ship]);
+
   const handleUpdateRental = async () => {
     try {
       fetchRentals().then((data) => {
         if (rental) {
-         rental.setRentals(data.rows);
+          rental.setRentals(data.rows);
         }
       });
     } catch (e) {
       console.log(e);
     }
   };
-  // const handleCreateRental = async () => {
-  //   try {
-  //     fetchPayments().then((data) => {
-  //       if (payment) {
-  //         payment.setPayments(data.rows);
-  //       }
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+
+  const handleUpdateShip = async () => {
+    try {
+      fetchShips().then((data) => {
+        if (ship) {
+          ship.setShips(data.rows);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleDeleteShip = async (id) => {
+    try {
+      await deleteShip(id)
+      fetchShips().then((data) => {
+        if (ship) {
+          ship.setShips(data.rows);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   let filteredRentals;
   if (clientId) {
     filteredRentals = rental.rentals.filter(rental => rental.clientId === clientId);
@@ -62,14 +73,14 @@ const ClientRentalList = observer(({ handleCreatePayment, clientId }) => {
     filteredRentals = rental.rentals;
   }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (rentalId) => {
     try {
-      await deleteRental(id);
-      fetchRentals().then(data => {
+      await deleteRental(rentalId)
+      fetchRentals().then((data) => {
         if (rental) {
-          rental.setRentals(data.rows);
+            rental.setRentals(data.rows);
         }
-      });
+    });
     } catch (e) {
       console.log(e);
     }
@@ -86,10 +97,12 @@ const ClientRentalList = observer(({ handleCreatePayment, clientId }) => {
 
         return (
           <ClientRentalItem
+            handleDeleteShip={handleDeleteShip}
             handleCreatePayment={handleCreatePayment}
             handleUpdateRental={handleUpdateRental}
             key={rental.id}
             rental={rental}
+            handleUpdateShip={handleUpdateShip}
             clientObj={clientObj}
             shipObj={shipObj}
             handleDelete={handleDelete}

@@ -3,7 +3,7 @@ import { Modal, Form, Button, Alert, Col, Row } from 'react-bootstrap';
 import { createClient } from '../../http/clientAPI';
 import validator from 'validator';
 
-const CreateClient = ({ show, onHide }) => {
+const CreateClient = ({ handleCreate,show, onHide }) => {
   const [surname, setSurname] = useState('');
   const [name, setName] = useState('');
   const [fathersName, setFathersName] = useState('');
@@ -59,6 +59,7 @@ const CreateClient = ({ show, onHide }) => {
         comment,
       };
       const data = await createClient(formData);
+      handleCreate()
       onHide();
     } catch (error) {
       setErrorMessage('Ошибка при добавлении клиента');

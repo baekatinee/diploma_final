@@ -9,30 +9,57 @@ import Pages from '../components/Pagination/Pages';
 import { Context } from '..';
 import { observer } from 'mobx-react-lite';
 const ShipsPage = observer(() => {
-    const {ship}=useContext(Context)
+    const { ship } = useContext(Context)
     const [shipVisible, setShipVisible] = useState(false);
+
+    useEffect(() => {
+        fetchShips()
+            .then((data) => {
+                if (ship) {
+                    ship.setShips(data.rows);
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+    }, [ship]);
     useEffect(() => {
         if (!ship.selectedType) {
-          fetchShips(null, ship.page, 10)
-            .then((data) => {
-              ship.setShips(data.rows);
-              ship.setTotalCount(data.count);
-            })
-            .catch((error) => {
-              // Handle the error here
-            });
+            fetchShips(null, ship.page, 10)
+                .then((data) => {
+                    ship.setShips(data.rows);
+                    ship.setTotalCount(data.count);
+                })
+                .catch((error) => {
+
+                });
         } else {
-          fetchShips(ship.selectedType.id, ship.page, 10)
-            .then((data) => {
-              ship.setShips(data.rows);
-              ship.setTotalCount(data.count);
-            })
-            .catch((error) => {
-              // Handle the error here
-            });
+            fetchShips(ship.selectedType.id, ship.page, 10)
+                .then((data) => {
+                    ship.setShips(data.rows);
+                    ship.setTotalCount(data.count);
+                })
+                .catch((error) => {
+                    // Handle the error here
+                });
         }
-      }, [ship.page, ship.selectedType]);
-      
+    }, [ship.page, ship.selectedType]);
+    const handleCreate = async () => {
+        try {
+            fetchShips()
+                .then((data) => {
+                    if (ship) {
+                        ship.setShips(data.rows);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
     return (
         <Container>
             <Breadcrumb>
@@ -49,10 +76,10 @@ const ShipsPage = observer(() => {
                     <Button variant="outline-primary" onClick={() => setShipVisible(true)}>
                         Добавить судно
                     </Button>
-                    <CreateShip show={shipVisible} onHide={() => setShipVisible(false)} />
+                    <CreateShip handleCreate={handleCreate} show={shipVisible} onHide={() => setShipVisible(false)} />
                 </Col>
             </Row>
-            
+
             <Row className="mb-2">
                 <Col>
                     <StatusBar />
@@ -60,7 +87,7 @@ const ShipsPage = observer(() => {
             </Row>
             <Row>
                 <Col>
-                    <ShipList/>
+                    <ShipList />
                 </Col>
             </Row>
             <Pages />

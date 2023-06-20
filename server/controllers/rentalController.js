@@ -11,6 +11,7 @@ class rentalController {
       if (!rental) {
         return res.status(404).send('Не удалось создать аренду из-за неверно введенных данных');
       }
+      await rentalController.checkRentalExpiration;
       return res.json(rental);
     } catch (e) {
       return next(apiError.badRequest(e.message));
@@ -86,7 +87,8 @@ class rentalController {
       if (!updatedRental) {
         return res.status(400).send('Не удалось сохранить изменения');
       }
-  
+      await clientController.updateHasPaidStatus(clientId);
+      await rentalController.checkRentalExpiration();
       return res.json(updatedRental);
     } catch (e) {
       return next(apiError.badRequest(e.message));
@@ -136,7 +138,42 @@ class rentalController {
           const client = await Client.findByPk(clientId);
   
           if (client) {
-            client.hasPaid = false;
+            const isSummer = isSummerSeason(currentDate);
+            const ship = await Ship.findByPk(rental.shipId);
+            const rentalAmount = isSummer ? ship.priceSummer : ship.priceWinter;
+  
+            const payments = await Payment.findAll({
+              where: {
+                rentalId: rental.id,
+              },
+            });
+  
+            let totalPaymentAmount = 0;
+            const paymentMonths = [];
+  
+            for (const payment of payments) {
+              const paymentMonth = payment.dateStart.getMonth();
+  
+              if (!paymentMonths.includes(paymentMonth)) {
+                totalPaymentAmount += payment.sum;
+                paymentMonths.push(paymentMonth);
+              }
+            }
+  
+            const hasPaid = totalPaymentAmount >= rentalAmount;
+            const debtAmount = hasPaid ? 0 : rentalAmount - totalPaymentAmount;
+  
+            if (!hasPaid) {
+              const interest = rentalAmount * 0.001; // 0.1% of rentalAmount
+              const missingPayment = rentalAmount / 30 + interest;
+  
+              client.debtAmount += missingPayment; // Увеличить сумму задолженности клиента на сумму пени
+              await client.save();
+  
+              totalPaymentAmount += missingPayment; // Увеличить общую сумму оплаты на сумму пени
+            }
+            client.hasPaid = totalPaymentAmount >= rentalAmount;
+            client.debtAmount = debtAmount;
             await client.save();
           }
         }
@@ -148,6 +185,8 @@ class rentalController {
     }
   }
   
+  
+     
 }
 
 module.exports = new rentalController()

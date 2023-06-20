@@ -1,12 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../../index';
-import { Table, Button } from 'react-bootstrap';
+import { Table} from 'react-bootstrap';
 import PaymentItem from './PaymentItem';
 import { deletePayment, fetchPayments } from '../../http/paymentAPI';
 import { useLocation } from 'react-router-dom';
 import { PAYMENTS_ROUTE } from '../../utils/consts';
-import EditPayment from '../modals/Edit/EditPayment';
 
 const PaymentList = observer(({ clientId }) => {
   const { payment, client, rental } = useContext(Context);

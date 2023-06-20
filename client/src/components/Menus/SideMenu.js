@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect  } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -59,14 +59,14 @@ const Sidebar = observer(() => {
   // prefix={<i className="fa fa-bars fa-large"></i>}
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-    <CDBSidebar
-      textColor="black"
-      backgroundColor="#F6F8FC"
-      style={{ width: '30vh', minWidth: '30vh' }}
-    >
+      <CDBSidebar
+        textColor="black"
+        backgroundColor="#F6F8FC"
+        style={{ width: '30vh', minWidth: '30vh' }}
+      >
         <CDBSidebarHeader >
           <Link style={{ textDecoration: 'none', color: '#000' }} to={user.isAuth ? DASHBOARD_ROUTE : '/'}>
-            Sailing Center
+            <img src={process.env.PUBLIC_URL + '/logo.svg'} alt="Logo" style={{ height: '20px', marginRight:'1rem' }} />Sailing Center
           </Link>
         </CDBSidebarHeader>
         <CDBSidebarContent className="sidebar-content">
