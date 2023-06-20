@@ -1,13 +1,13 @@
-const {Sequelize}=require('sequelize')
-module.exports=new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASSWORD,
-    {
-        dialect:'postgres',
-        host:process.env.DB_HOST,
-        port:process.env.DB_PORT,
-    }
+const { Sequelize } = require('sequelize')
+module.exports = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    dialect: 'postgres',
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+  }
 )
 
 const cron = require('node-cron');
@@ -35,45 +35,62 @@ const task = cron.schedule('* * * * *', async () => {
   scheduled: true,
   timezone: 'Europe/Minsk' // Укажите ваш часовой пояс, например, 'Europe/Minsk' для Беларуси
 });
-
-
-// Настройки для отправки почты
-const transporter = nodemailer.createTransport({
+let transporter = nodemailer.createTransport({
   service: 'mail',
+  host: 'smtp.mail.ru',
+  port: 587,
+  secure: false,
   auth: {
-    user: 'katezhuravlevich@gmail.com', // email адрес отправителя
-    pass: 'k5a6t5e6zhur8avlevich', // пароль от email отправителя
+    user: 'katezhuravlevich1@mail.ru', // email адрес отправителя
+    pass: 'zSVZbjeM3Wmq0vubs7At', // пароль от email отправителя
   },
+
 });
 
-const sequelize = new Sequelize('database', 'username', 'password', {
-  host: 'localhost',
-  dialect: 'postgres',
-});
+// const getEmailsFromDB = async () => {
+//   const clients = await Client.findAll();
+//   return clients.map(client => client.email);
+// };
 
-const getEmailsFromDB = async () => {
-  const result = await sequelize.query('SELECT email FROM clients', { type: Sequelize.QueryTypes.SELECT });
-  return result.map(row => row.email);
-};
 
-const sendEmails = async () => {
-  const emails = await getEmailsFromDB();
-  const message = {
-    from: 'katezhuravlevich@gmail.com', // email адрес отправителя
-    to: emails.join(','), // email адреса получателей, разделенные запятой
-    subject: 'Тестовое письмо', // тема письма
-    text: 'Привет, это тестовое письмо!', // текст письма
-  };
-  transporter.sendMail(message, (err, info) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('Письма отправлены: ' + info.response);
-    }
-  });
-};
+// const sendEmails = async () => {
+//   try {
+//     const emails = await getEmailsFromDB();
 
-cron.schedule('* * * * *', () => {
-  console.log('Отправка писем...');
-  sendEmails();
-});
+//     const message = {
+//       from: 'katezhuravlevich1@mail.ru', // Адрес электронной почты отправителя
+//       to: 'katezhuravlevich@gmail.com', // Адрес(а) электронной почты получателя(ей), разделенные запятой
+//       subject: 'Напоминание о задолженности за стоянку в РОО "БФПС"', // Тема письма
+//       html: `
+//           <div style="font-family: Arial, sans-serif;">
+  
+//             <h2 style="color: #333333;">Уважаемая Журавлевич Екатерина Александровна,</h2>
+  
+//             <p style="color: #333333;">Согласно нашим записям, мы хотели бы напомнить вам о задолженности перед РОО "БФПС", возникшей по договору №41 от 1 июня 2023 года.</p>
+  
+//             <p style="color: #333333;">Размер задолженности составляет <strong>103,00 белорусских рубля 00 копеек</strong>.</p>
+  
+//             <p style="color: #333333;">Просим вас внести оплату до <strong>12 июня 2023 года</strong>, чтобы избежать начисления пени за неуплату, согласно пункту 3.2 нашего договора.</p>
+  
+//             <p style="color: #333333;">Если у вас возникли вопросы или вам требуется дополнительная информация, пожалуйста, свяжитесь с нашим администратором:</p>
+  
+//             <p style="color: #333333;">Телефон: <strong>+375 44 789 89 25</strong></p>
+  
+//             <p style="color: #333333;">С уважением,<br>РОО "БФПС"</p>
+  
+//           </div>
+//         `, // HTML-код письма
+//     };
+
+//     await transporter.sendMail(message);
+//     console.log('Письма успешно отправлены');
+//   } catch (error) {
+//     console.error('Ошибка при отправке писем:', error);
+//   }
+// };
+
+// cron.schedule('* * * * *', () => {
+//   console.log('Отправка писем...');
+//   sendEmails();
+// });
+

@@ -76,7 +76,7 @@ const Auth = observer(() => {
           />
           <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
           <div className="d-flex justify-content-between align-items-center mt-2">
-            {isLogin ? (
+            {/* {isLogin ? (
               <div>
                 Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Создать</NavLink>
               </div>
@@ -84,7 +84,7 @@ const Auth = observer(() => {
               <div>
                 Уже зарегистрированы? <NavLink to={LOGIN_ROUTE}>Войти</NavLink>
               </div>
-            )}
+            )} */}
             <Button variant="primary" type="submit">
               {isLogin ? 'Войти' : 'Регистрация'}
             </Button>

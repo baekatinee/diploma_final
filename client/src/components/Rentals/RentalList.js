@@ -36,7 +36,7 @@ const RentalList = observer(({ clientId }) => {
         </tr>
       </thead>
       <tbody>
-        {filteredRentals.map(rental => {
+        {filteredRentals.map((rental, index) => {
           const clientObj = client.clients.find(c => c.id === rental.clientId);
           const clientSurname = clientObj ? clientObj.surname : '';
           const shipObj = ship.Ships.find(s => s.id === rental.shipId);
@@ -47,6 +47,7 @@ const RentalList = observer(({ clientId }) => {
               rental={rental}
               clientSurname={clientSurname}
               shipName={shipName}
+              iterator={index + 1}
             />
           );
         })}

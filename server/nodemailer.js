@@ -1,46 +1,43 @@
 const cron = require('node-cron');
 const nodemailer = require('nodemailer');
 const { Pool } = require('pg');
-
-
+const sequelize = require('./db'); // Путь к файлу с настройками базы данных
+const { QueryTypes } = require('sequelize');
 
 // Настройки для отправки почты
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: 'mail',
   auth: {
-    user: 'example@gmail.com', // email адрес отправителя
-    pass: 'password', // пароль от email отправителя
+    user: 'katezhuravlevich@gmail.com', // email адрес отправителя
+    pass: 'k5a6t5e6zhur8avlevich', // пароль от email отправителя
   },
 });
 
-// Функция для выборки email адресов из базы данных
 const getEmailsFromDB = async () => {
-  const client = await pool.connect();
-  const result = await client.query('SELECT email FROM users'); // users - название таблицы с email адресами
-  client.release();
-  return result.rows.map(row => row.email);
+  const clients = await Client.findAll();
+  return clients.map(client => client.email);
 };
 
-// Функция для отправки письма на email адреса
+
 const sendEmails = async () => {
-  const emails = await getEmailsFromDB();
-  const message = {
-    from: 'example@gmail.com', // email адрес отправителя
-    to: emails.join(','), // email адреса получателей, разделенные запятой
-    subject: 'Тестовое письмо', // тема письма
-    text: 'Привет, это тестовое письмо!', // текст письма
-  };
-  transporter.sendMail(message, (err, info) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('Письма отправлены: ' + info.response);
-    }
-  });
+
+  try {
+
+    const emails = await getEmailsFromDB();
+    const message = {
+      from: 'katezhuravlevich@gmail.com', // email адрес отправителя
+      to: emails.join(','), // email адреса получателей, разделенные запятой
+      subject: 'Тестовое письмо', // тема письма
+      text: 'Привет, это тестовое письмо!', // текст письма
+    };
+    await transporter.sendMail(message);
+    console.log('Письма отправлены');
+  } catch (error) {
+    console.error('Ошибка при отправке писем:', error);
+  }
 };
 
-// Запускаем таску cron для отправки писем каждый 10-й день месяца в 10:00
-cron.schedule('0 10 10 * *', () => {
+cron.schedule('* * * * *', () => {
   console.log('Отправка писем...');
   sendEmails();
 });
