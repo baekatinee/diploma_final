@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 const NavBar = observer(() => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const { client, ship } = useContext(Context);
+  const { client, ship, user} = useContext(Context);
   const [clientVisible, setClientVisible] = useState(false);
 
   const navigate = useNavigate();
@@ -58,6 +58,9 @@ const NavBar = observer(() => {
       navigate(CLIENT_ROUTE + '/' + itemId);
     }
   };
+  if (!user.isAuth) {
+    return null;
+  }
 
   return (
     <Navbar className="mb-3 mt-3">

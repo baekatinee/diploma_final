@@ -20,20 +20,17 @@ const { Client } = require('./models/models');
 const task = cron.schedule('* * * * *', async () => {
   try {
     await rentalController.checkRentalExpiration();
-    // Получаем список клиентов, для которых нужно обновить статус hasPaid
     const clients = await Client.findAll();
 
-    // Обновляем статус hasPaid для каждого клиента
     for (const client of clients) {
       await clientController.updateHasPaidStatus(client.id);
     }
-    console.log('Cron task executed at 12:36');
   } catch (error) {
     console.error('An error occurred while executing the cron task:', error);
   }
 }, {
   scheduled: true,
-  timezone: 'Europe/Minsk' // Укажите ваш часовой пояс, например, 'Europe/Minsk' для Беларуси
+  timezone: 'Europe/Minsk' 
 });
 let transporter = nodemailer.createTransport({
   service: 'mail',
@@ -41,8 +38,8 @@ let transporter = nodemailer.createTransport({
   port: 587,
   secure: false,
   auth: {
-    user: 'katezhuravlevich1@mail.ru', // email адрес отправителя
-    pass: 'zSVZbjeM3Wmq0vubs7At', // пароль от email отправителя
+    user: process.env.SEND_MAIL_LOGIN, 
+    pass:  process.env.MAIL_PASSWORD, 
   },
 
 });
@@ -58,9 +55,9 @@ let transporter = nodemailer.createTransport({
 //     const emails = await getEmailsFromDB();
 
 //     const message = {
-//       from: 'katezhuravlevich1@mail.ru', // Адрес электронной почты отправителя
-//       to: 'katezhuravlevich@gmail.com', // Адрес(а) электронной почты получателя(ей), разделенные запятой
-//       subject: 'Напоминание о задолженности за стоянку в РОО "БФПС"', // Тема письма
+//       from: 'katezhuravlevich1@mail.ru', 
+//       to: 'katezhuravlevich@gmail.com', 
+//       subject: 'Напоминание о задолженности за стоянку в РОО "БФПС"', 
 //       html: `
 //           <div style="font-family: Arial, sans-serif;">
   
@@ -79,7 +76,7 @@ let transporter = nodemailer.createTransport({
 //             <p style="color: #333333;">С уважением,<br>РОО "БФПС"</p>
   
 //           </div>
-//         `, // HTML-код письма
+//         `,
 //     };
 
 //     await transporter.sendMail(message);

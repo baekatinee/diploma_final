@@ -31,9 +31,12 @@ const App = observer(() => {
         </Col>
         <Col md={user.isAuth ? 10 : 12}>
           <Container>
+
             <Row className="mb-3">
+
               <NavBar />
             </Row>
+
             <Row>
               <AppRouter />
             </Row>
